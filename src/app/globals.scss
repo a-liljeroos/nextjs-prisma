@@ -1,0 +1,56 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  --foreground-rgb: 0, 0, 0;
+  --background-start-rgb: 214, 219, 220;
+  --background-end-rgb: 255, 255, 255;
+}
+
+@media (prefers-color-scheme: dark) {
+  :root {
+    --foreground-rgb: 255, 255, 255;
+    --background-start-rgb: 0, 0, 0;
+    --background-end-rgb: 0, 0, 0;
+  }
+}
+
+body {
+  color: rgb(var(--foreground-rgb));
+  background: linear-gradient(
+      to bottom,
+      transparent,
+      rgb(var(--background-end-rgb))
+    )
+    rgb(var(--background-start-rgb));
+}
+
+@layer utilities {
+  .text-balance {
+    text-wrap: balance;
+  }
+}
+
+label {
+  text-transform: capitalize;
+}
+
+input {
+  border-radius: 5px;
+  height: 38px;
+  padding-inline: 7px;
+  color: black;
+}
+
+button {
+  border-radius: 5px;
+  height: 38px;
+  padding-inline: 7px;
+  color: white;
+  background-color: rgb(58, 58, 58);
+}
+
+button[disabled] {
+  background-color: rgb(100, 100, 100);
+}
