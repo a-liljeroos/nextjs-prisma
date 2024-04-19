@@ -18,7 +18,11 @@
       }
     ],
     "paths": {
-      "@/*": ["./src/*"]
+      "@/*": ["./src/*"],
+      "@components/*": ["./src/app/_components/*"],
+      "@prisma/*": ["./prisma/*"],
+      "@react-query/*": ["./src/app/_react-query/*"],
+      "@bcrypt/*": ["./src/app/_bcrypt/*"]
     }
   },
   "include": ["next-env.d.ts", "**/*.ts", "**/*.tsx", ".next/types/**/*.ts"],
