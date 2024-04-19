@@ -34,8 +34,11 @@ model Profile {
 
 model User {
   id      Int      @id @default(autoincrement())
-  email   String   @unique
-  name    String?
+  email   String?   @db.VarChar(255) 
+  password String  @db.VarChar(255) @default("")
+  createdAt DateTime @default(now())
+  role    String   @default("USER")
+  name    String @db.VarChar(40)
   posts   Post[]
   profile Profile?
 }
