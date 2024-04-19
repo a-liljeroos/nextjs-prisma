@@ -17,7 +17,7 @@ export const options: NextAuthOptions = {
       // e.g. domain, username, password, 2FA token, etc.
       // You can pass any HTML attribute to the <input> tag through the object.
       credentials: {
-        username: { label: "Username", type: "text" },
+        name: { label: "Name / Username", type: "text" },
         password: { label: "Password", type: "password" },
       },
       async authorize(credentials, req) {
@@ -40,10 +40,7 @@ export const options: NextAuthOptions = {
           const user = await res.json();
           // If no error and we have user data, return it
           if (res.ok && user) {
-            return {
-              id: user.id,
-              name: user.username,
-            };
+            return user;
           }
         } catch (e) {
           console.error(e);
