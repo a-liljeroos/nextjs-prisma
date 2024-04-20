@@ -22,7 +22,8 @@
       "@components/*": ["./src/app/_components/*"],
       "@prisma/*": ["./prisma/*"],
       "@react-query/*": ["./src/app/_react-query/*"],
-      "@bcrypt/*": ["./src/app/_bcrypt/*"]
+      "@bcrypt/*": ["./src/app/_bcrypt/*"],
+      "@serverAuth": ["./src/app/api/auth/[...nextauth]/auth.ts"]
     }
   },
   "include": ["next-env.d.ts", "**/*.ts", "**/*.tsx", ".next/types/**/*.ts"],

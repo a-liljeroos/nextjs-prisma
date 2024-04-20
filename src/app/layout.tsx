@@ -1,7 +1,6 @@
 import type { Metadata } from "next";
 // auth
-import { getServerSession } from "next-auth";
-import { options } from "./api/auth/[...nextauth]/options";
+import { auth } from "@serverAuth";
 import SessionProvider from "@components/SessionProvider/SessionProvider";
 // react-query
 import { QueryClientProvider } from "@tanstack/react-query";
@@ -26,7 +25,7 @@ export default async function RootLayout({
 }: Readonly<{
   children: React.ReactNode;
 }>) {
-  const session = await getServerSession(options);
+  const session = await auth();
   return (
     <html lang="en">
       <body className={inter.className}>
