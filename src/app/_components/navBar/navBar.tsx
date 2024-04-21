@@ -20,11 +20,28 @@ const NavBar = () => {
             Home
           </Link>
         </li>
-        {session ? (
-          <li className={`p-2 cursor-pointer`} onClick={() => signOut()}>
-            Sign Out
-          </li>
-        ) : (
+
+        {session && (
+          <>
+            <li
+              className={`p-2 cursor-pointer  ${
+                pathname === "/user/profile"
+                  ? "underline underline-offset-4 decoration-emerald-500"
+                  : ""
+              }`}
+            >
+              <Link href="/user/profile">Profile</Link>
+            </li>
+            <li
+              className={`p-2 cursor-pointer ml-auto`}
+              onClick={() => signOut()}
+            >
+              Sign Out
+            </li>
+          </>
+        )}
+
+        {!session && (
           <>
             <li
               className={`p-2 ${
@@ -35,7 +52,10 @@ const NavBar = () => {
             >
               <Link href="/user/register">Register</Link>
             </li>
-            <li className={`p-2 cursor-pointer`} onClick={() => signIn()}>
+            <li
+              className={`p-2 ml-auto cursor-pointer`}
+              onClick={() => signIn()}
+            >
               Sign In
             </li>
           </>
