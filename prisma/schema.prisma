@@ -38,7 +38,7 @@ model User {
   password String  @db.VarChar(255) @default("")
   createdAt DateTime @default(now())
   role    String   @default("USER")
-  name    String @db.VarChar(40)
+  name    String @db.VarChar(40) @unique
   posts   Post[]
   profile Profile?
 }
