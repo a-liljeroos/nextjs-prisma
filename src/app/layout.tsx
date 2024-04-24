@@ -3,8 +3,8 @@ import type { Metadata } from "next";
 import { auth } from "@serverAuth";
 import SessionProvider from "@components/SessionProvider/SessionProvider";
 // react-query
-import { QueryClientProvider } from "@tanstack/react-query";
-import { queryClient } from "@react-query/QueryClient";
+import QueryProvider from "@react-query/QueryClient";
+import { ReactQueryDevtools } from "@tanstack/react-query-devtools";
 // font
 import { Inter } from "next/font/google";
 // components
@@ -30,11 +30,12 @@ export default async function RootLayout({
     <html lang="en">
       <body className={inter.className}>
         <SessionProvider session={session}>
-          <QueryClientProvider client={queryClient}>
+          <QueryProvider>
+            <ReactQueryDevtools initialIsOpen={false} />
             <NavBar />
             <Toaster />
             {children}
-          </QueryClientProvider>
+          </QueryProvider>
         </SessionProvider>
       </body>
     </html>
