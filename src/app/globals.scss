@@ -16,6 +16,12 @@
   }
 }
 
+html,
+body,
+main {
+  height: 100%;
+}
+
 body {
   color: rgb(var(--foreground-rgb));
   background: linear-gradient(
@@ -24,6 +30,12 @@ body {
       rgb(var(--background-end-rgb))
     )
     rgb(var(--background-start-rgb));
+}
+
+main {
+  @media (min-width: 950px) {
+    padding-inline: 20vw;
+  }
 }
 
 @layer utilities {
@@ -44,9 +56,9 @@ input {
 }
 
 button {
-  border-radius: 5px;
+  border-radius: 8px;
   height: 38px;
-  padding-inline: 7px;
+  padding-inline: 20px;
   color: white;
   background-color: rgb(58, 58, 58);
 }
