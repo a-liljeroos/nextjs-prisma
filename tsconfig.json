@@ -23,7 +23,8 @@
       "@prisma/*": ["./prisma/*"],
       "@react-query/*": ["./src/app/_react-query/*"],
       "@bcrypt/*": ["./src/app/_bcrypt/*"],
-      "@serverAuth": ["./src/app/api/auth/[...nextauth]/auth.ts"]
+      "@serverAuth": ["./src/app/api/auth/[...nextauth]/auth.ts"],
+      "@functions": ["./src/app/_functions/functions.ts"]
     }
   },
   "include": [
