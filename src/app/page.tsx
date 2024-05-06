@@ -1,6 +1,7 @@
 "use client";
 // auth
 import { useSession } from "next-auth/react";
+import GlitchText from "./_components/glitchText/GlitchText";
 
 export default function Home() {
   const { data: session, status } = useSession();
@@ -11,7 +12,11 @@ export default function Home() {
           <pre>{JSON.stringify(session, null, 2)}</pre>
         </div>
       )}
-      <pre>{status}</pre>
+      {/*   <pre>{status}</pre> */}
+      <GlitchText text="  " />
+      <GlitchText text="Hi       " />
+      <GlitchText text="There... " />
+      <GlitchText text="    " />
     </main>
   );
 }
