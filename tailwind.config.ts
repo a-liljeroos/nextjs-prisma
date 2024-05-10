@@ -15,6 +15,11 @@ const config: Config = {
       },
     },
   },
+  screens: {
+    sm: { max: "435px" },
+    md: { max: "768px" },
+    lg: { max: "1024px" },
+  },
   plugins: [],
 };
 export default config;
