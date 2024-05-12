@@ -46,7 +46,7 @@ const Profile = ({ name }: ProfileProps) => {
       <div className="profile-posts-cont">
         <div className="flex items-baseline ">
           <h1>Posts</h1>{" "}
-          <Link href="/user/profile/write-post">
+          <Link href="/user/post/write">
             <button>Write New</button>
           </Link>
         </div>
