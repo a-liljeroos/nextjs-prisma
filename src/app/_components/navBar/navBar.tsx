@@ -34,7 +34,7 @@ const NavBar = () => {
             </li>
             <li
               className={`p-2 cursor-pointer ml-auto`}
-              onClick={() => signOut()}
+              onClick={() => signOut({ callbackUrl: "/" })}
             >
               Sign Out
             </li>
@@ -54,7 +54,7 @@ const NavBar = () => {
             </li>
             <li
               className={`p-2 ml-auto cursor-pointer`}
-              onClick={() => signIn()}
+              onClick={() => signIn("credentials", { callbackUrl: "/" })}
             >
               Sign In
             </li>
