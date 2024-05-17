@@ -10,7 +10,7 @@ const PageContainer = ({ children }: PageContainerProps) => {
   return (
     <main style={{ margin: "0 auto" }}>
       <div
-        className="content-container px-5"
+        className="content-container"
         style={{
           minHeight: "100%",
         }}
