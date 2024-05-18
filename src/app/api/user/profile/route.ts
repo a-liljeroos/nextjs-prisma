@@ -12,13 +12,13 @@ const schema = z.object({
 
 export async function POST(req: NextRequest) {
   try {
-    const session = await auth();
+    /* const session = await auth();
     if (!session) {
       return NextResponse.json(
         { message: "You must be logged in." },
         { status: 401 }
       );
-    }
+    } */
 
     const body = await req.json();
     const result = schema.safeParse(body);
@@ -32,11 +32,8 @@ export async function POST(req: NextRequest) {
     const userAndProfile = await prisma.user.findUnique({
       where: { name: name },
       select: {
-        createdAt: true,
-        email: true,
         id: true,
         name: true,
-        role: true,
         profile: true,
         posts: {
           select: {
