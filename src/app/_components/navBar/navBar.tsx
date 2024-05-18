@@ -25,12 +25,12 @@ const NavBar = () => {
           <>
             <li
               className={`p-2 cursor-pointer  ${
-                pathname === "/user/profile"
+                pathname === `/${session.user?.name}`
                   ? "underline underline-offset-4 decoration-emerald-500"
                   : ""
               }`}
             >
-              <Link href="/user/profile">Profile</Link>
+              <Link href={`/${session.user?.name}`}>Profile</Link>
             </li>
             <li
               className={`p-2 cursor-pointer ml-auto`}
@@ -45,12 +45,12 @@ const NavBar = () => {
           <>
             <li
               className={`p-2 ${
-                pathname === "/user/register"
+                pathname === "/register"
                   ? "underline underline-offset-4 decoration-emerald-500"
                   : ""
               }`}
             >
-              <Link href="/user/register">Register</Link>
+              <Link href="/register">Register</Link>
             </li>
             <li
               className={`p-2 ml-auto cursor-pointer`}
