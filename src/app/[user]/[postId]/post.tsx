@@ -9,7 +9,7 @@ import formatDate from "@functions";
 // types
 import { Post as TPost } from "@types";
 // components
-import PostOperations from "./postOperations";
+import PostOperations from "../../_components/post/postOperations";
 import PageContainer from "@components/pageContainer/pageContainer";
 // styles
 import "./post.scss";
