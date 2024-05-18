@@ -10,9 +10,7 @@ async function main() {
       name: "Alice",
       email: "alice@prisma.io",
       password: "password",
-      posts: {
-        create: { title: "Hello World" },
-      },
+      posts: {},
       profile: {
         create: { bio: "I like turtles" },
       },
