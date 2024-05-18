@@ -24,7 +24,9 @@
       "@react-query/*": ["./src/app/_react-query/*"],
       "@bcrypt/*": ["./src/app/_bcrypt/*"],
       "@serverAuth": ["./src/app/api/auth/[...nextauth]/auth.ts"],
-      "@functions": ["./src/app/_functions/functions.ts"]
+      "@functions": ["./src/app/_functions/functions.ts"],
+      "@crudFunctions": ["./src/app/_functions/crudFunctions.ts"],
+      "@types": ["./src/app/_types/types.ts"]
     }
   },
   "include": [
