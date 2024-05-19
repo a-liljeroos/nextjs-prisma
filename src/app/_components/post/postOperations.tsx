@@ -7,7 +7,7 @@ import { TiDelete } from "react-icons/ti";
 import { AiOutlineEdit } from "react-icons/ai";
 
 interface PostOperationsProps {
-  user: string;
+  user: string | undefined;
   postId: string;
 }
 
@@ -19,6 +19,11 @@ const PostOperations = ({ postId, user }: PostOperationsProps) => {
       window.location.href = `/${user}`;
     });
   };
+
+  if (!user) {
+    return <></>;
+  }
+
   return (
     <div className="p-3 flex gap-2">
       {!showModal ? (
