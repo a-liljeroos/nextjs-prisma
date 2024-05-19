@@ -30,6 +30,10 @@
           align-items: baseline;
           h2 {
             font-size: 1.1em;
+            text-wrap: pretty;
+            @media (max-width: 410px) {
+              font-size: 1em;
+            }
           }
         }
       }
