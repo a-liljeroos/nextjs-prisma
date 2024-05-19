@@ -69,26 +69,30 @@ interface DisplayPostProps {
 }
 
 const DisplayPost = ({ post }: DisplayPostProps) => {
-  const content = post.content.sort((a, b) => a.index - b.index);
-  return (
-    <div className="display-post">
-      <Title content={post.title} />
-      {content.map((item, index) => {
-        if (index === 0) {
-          return <FirstParagraph key={item.index} content={item.content} />;
-        } else if (item.type === "Subheader") {
-          return <SubHeader key={item.index} content={item.content} />;
-        } else {
-          return <Paragraph key={item.index} content={item.content} />;
-        }
-      })}
-      {content.length > 1 && (
-        <div style={{ marginBlock: 20, paddingInline: 10 }}>
-          <hr />
-        </div>
-      )}
-    </div>
-  );
+  try {
+    const content = post.content.sort((a, b) => a.index - b.index);
+    return (
+      <div className="display-post">
+        <Title content={post.title} />
+        {content.map((item, index) => {
+          if (index === 0) {
+            return <FirstParagraph key={item.index} content={item.content} />;
+          } else if (item.type === "Subheader") {
+            return <SubHeader key={item.index} content={item.content} />;
+          } else {
+            return <Paragraph key={item.index} content={item.content} />;
+          }
+        })}
+        {content.length > 1 && (
+          <div style={{ marginBlock: 20, paddingInline: 10 }}>
+            <hr />
+          </div>
+        )}
+      </div>
+    );
+  } catch (error) {
+    return <div className="p-3">Could not load post.</div>;
+  }
 };
 
 const Title = ({ content }: { content: string }) => {
