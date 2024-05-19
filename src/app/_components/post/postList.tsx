@@ -3,52 +3,53 @@ import Link from "next/link";
 import { useSession } from "next-auth/react";
 // components
 import PostOperations from "./postOperations";
+// styles
+import "./postList.scss";
 
 interface PostListProps {
-  name: string;
+  name?: string;
   posts:
     | {
         id: number;
         createdAt: Date;
         title: string;
         published: boolean;
+        author?: { name: string };
       }[]
     | null
     | undefined;
+  children?: React.ReactNode;
 }
 
-const PostList = ({ posts, name }: PostListProps) => {
+const PostList = ({ posts, name, children }: PostListProps) => {
   const { data: session } = useSession();
-  const isOwner = session?.user?.name === name;
+  const isOwner = name ? session?.user?.name === name : false;
 
   return (
-    <div className="profile-posts-cont">
-      <div className="flex items-baseline ">
-        <h1>Posts</h1>{" "}
-        {isOwner && (
-          <Link href={`/post/write`}>
-            <button>Write New</button>
-          </Link>
-        )}
-      </div>
+    <div className="posts-cont">
+      {children}
       {posts && posts.length === 0 && (
         <div className="text-center p-24 select-none text-xl">No posts 🙄</div>
       )}
       {posts && (
         <ul>
           {posts.map((post) => {
+            const authorName = name ? name : post.author?.name;
             return (
               <li
                 key={post.id}
                 className="flex items-center justify-between px-3"
               >
-                <Link href={`/${name}/${post.id}`}>
+                <Link href={`/${authorName}/${post.id}`}>
                   <div className="flex items-baseline">
                     <h2>{post.title}</h2>
                   </div>
                 </Link>
                 {isOwner && (
-                  <PostOperations postId={post.id.toString()} user={name} />
+                  <PostOperations
+                    postId={post.id.toString()}
+                    user={authorName}
+                  />
                 )}
               </li>
             );
