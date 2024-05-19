@@ -37,3 +37,33 @@ export const deletePost = async (postId: number) => {
   });
   return deletedPost;
 };
+
+type TGetPostReturn =
+  | {
+      id: number;
+      title: string;
+      createdAt: Date;
+      published: boolean;
+      author: {
+        name: string;
+      };
+    }[]
+  | null
+  | undefined;
+
+export const getPosts = async (): Promise<TGetPostReturn> => {
+  const posts = await prisma.post.findMany({
+    select: {
+      id: true,
+      title: true,
+      createdAt: true,
+      published: true,
+      author: {
+        select: {
+          name: true,
+        },
+      },
+    },
+  });
+  return posts;
+};
