@@ -91,3 +91,16 @@ button[disabled] {
   background-color: rgb(167, 105, 105);
   color: rgb(212, 212, 212);
 }
+
+.fade-in {
+  animation: fadeIn 0.2s ease-in-out;
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
