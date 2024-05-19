@@ -11,6 +11,7 @@ import { Post as TPost } from "@types";
 // components
 import PostOperations from "../../_components/post/postOperations";
 import PageContainer from "@components/pageContainer/pageContainer";
+import Spinner from "@components/spinner/spinner";
 // styles
 import "./post.scss";
 
@@ -44,7 +45,11 @@ const Post = ({ postId, user }: PostProps) => {
 
   return (
     <PageContainer>
-      {isLoading && <div>Loading...</div>}
+      {isLoading && (
+        <div className="post-page-spinner">
+          <Spinner />
+        </div>
+      )}
       {!isLoading && (
         <>
           <DisplayPost post={data!} />
