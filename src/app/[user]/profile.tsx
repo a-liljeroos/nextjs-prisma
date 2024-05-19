@@ -45,7 +45,16 @@ const Profile = ({ name }: ProfileProps) => {
       <div className="profile-bio-cont">
         <h1>{user?.profile?.bio}</h1>
       </div>
-      <PostList posts={user?.posts} name={name} />
+      <PostList posts={user?.posts} name={name}>
+        <div className="flex items-baseline ">
+          <h1>Posts</h1>{" "}
+          {isOwner && (
+            <Link href={`/post/write`}>
+              <button>Write New</button>
+            </Link>
+          )}
+        </div>
+      </PostList>
     </main>
   );
 };
