@@ -88,10 +88,22 @@ button {
   color: white;
   background-color: var(--button-color);
   transition: 150ms;
+  border-bottom: 3px solid rgb(70, 70, 70);
+}
+
+button:hover {
+  background-color: rgb(90, 90, 90);
+  border-bottom: 3px solid rgb(59, 59, 59);
+}
+
+button:active {
+  transition: 50ms;
+  transform: translateY(2px);
 }
 
 button[disabled] {
   background-color: rgb(165, 74, 67);
+  border-bottom: 3px solid rgb(129, 57, 54);
   color: rgb(212, 212, 212);
 }
 

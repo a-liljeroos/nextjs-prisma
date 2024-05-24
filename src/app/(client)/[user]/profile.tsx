@@ -23,7 +23,10 @@ const Profile = ({ name }: ProfileProps) => {
       <header>
         <div className="flex p-5">
           <div>
-            <button className="profile-img-button"></button>
+            <button
+              className="profile-img-button"
+              style={{ borderBottom: "initial" }}
+            ></button>
             <div>
               <form action="" id="profile-img-change">
                 <input type="file" accept="image/jpeg,image/png" />

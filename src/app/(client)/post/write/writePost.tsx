@@ -206,6 +206,7 @@ const AddInput = ({ inputField, orderNo }: AddInputElement) => {
       <button
         id="setControlsBtn"
         type="button"
+        style={{ borderBottom: "initial" }}
         onClick={() => setShowControls(!showControls)}
       >
         <BsThreeDotsVertical color="black" size={20} />
