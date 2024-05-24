@@ -51,7 +51,7 @@ const Post = ({ postId, user }: PostProps) => {
         </div>
       )}
       {!isLoading && (
-        <>
+        <div className="p-4">
           <DisplayPost post={data!} />
           <div className="flex items-center justify-between">
             <PostInfo
@@ -61,7 +61,7 @@ const Post = ({ postId, user }: PostProps) => {
             />
             {isOwner && <PostOperations postId={postId} user={user} />}
           </div>
-        </>
+        </div>
       )}
     </PageContainer>
   );
