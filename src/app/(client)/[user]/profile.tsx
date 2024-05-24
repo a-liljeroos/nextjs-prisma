@@ -37,7 +37,7 @@ const Profile = ({ name }: ProfileProps) => {
             <h2>{user?.name}</h2>
             {isOwner && (
               <div>
-                <Link href="/user/profile/edit">
+                <Link href={`/${name}/edit`}>
                   <button>Edit Profile</button>
                 </Link>
               </div>
