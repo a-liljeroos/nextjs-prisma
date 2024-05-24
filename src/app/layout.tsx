@@ -9,7 +9,6 @@ import { ReactQueryDevtools } from "@tanstack/react-query-devtools";
 import { Inter } from "next/font/google";
 // components
 import NavBar from "@components/navBar/navBar";
-import Footer from "@components/footer/footer";
 import { Toaster } from "react-hot-toast";
 // styles
 import "./globals.scss";
@@ -36,7 +35,6 @@ export default async function RootLayout({
             <NavBar />
             <Toaster />
             {children}
-            <Footer />
           </QueryProvider>
         </SessionProvider>
       </body>
