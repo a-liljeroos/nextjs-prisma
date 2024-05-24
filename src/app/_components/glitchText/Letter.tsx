@@ -109,7 +109,10 @@ const LetterSpinner = ({ input }: LetterSpinnerProps) => {
     }
   }, []);
   return (
-    <div ref={letterRef} className="letter-spinner">
+    <div
+      ref={letterRef}
+      className="letter-spinner font-semibold hover:text-backgroundSecondary"
+    >
       {letter}
     </div>
   );

@@ -197,7 +197,7 @@ const AddInput = ({ inputField, orderNo }: AddInputElement) => {
   return (
     <div id={inputId} className="extra-inputs">
       {showControls && (
-        <div className="extra-inputs-controls">
+        <div className="extra-inputs-controls bg-backgroundSecondary">
           <button type="button" onClick={deleteInputField}>
             Delete
           </button>

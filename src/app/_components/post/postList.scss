@@ -12,13 +12,10 @@
   }
   ul {
     li {
-      background-color: rgb(5, 5, 5);
-      border-bottom: 4px solid rgb(5, 5, 5);
+      //background-color: rgb(5, 5, 5);
+      //background-color: $background-color;
       transition: 150ms;
       &:hover {
-        background-color: rgb(57, 57, 57);
-        border-bottom: 4px solid rgb(48, 48, 48);
-        border-radius: 5px;
       }
       a {
         div {

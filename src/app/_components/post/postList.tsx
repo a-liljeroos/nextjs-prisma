@@ -38,7 +38,7 @@ const PostList = ({ posts, name, children }: PostListProps) => {
             return (
               <li
                 key={post.id}
-                className="flex items-center justify-between px-3"
+                className="flex items-center justify-between px-3 font-semibold hover:bg-backgroundSecondary hover:text-background"
               >
                 <Link href={`/${authorName}/${post.id}`}>
                   <div className="flex items-baseline">

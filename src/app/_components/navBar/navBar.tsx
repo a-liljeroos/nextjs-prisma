@@ -7,12 +7,12 @@ const NavBar = () => {
   const pathname = usePathname();
   const { data: session } = useSession();
   return (
-    <nav className="bg-neutral-800">
+    <nav className="bg-backgroundSecondary text-background font-semibold">
       <ul className="flex gap-3 list-none p-4">
         <li
           className={` p-2 ${
             pathname === "/"
-              ? "underline underline-offset-4 decoration-emerald-500"
+              ? "underline underline-offset-4 decoration-background decoration-2"
               : ""
           }`}
         >
@@ -26,7 +26,7 @@ const NavBar = () => {
             <li
               className={`p-2 cursor-pointer  ${
                 pathname === `/${session.user?.name}`
-                  ? "underline underline-offset-4 decoration-emerald-500"
+                  ? "underline underline-offset-4 decoration-background decoration-2"
                   : ""
               }`}
             >
@@ -46,7 +46,7 @@ const NavBar = () => {
             <li
               className={`p-2 ${
                 pathname === "/register"
-                  ? "underline underline-offset-4 decoration-emerald-500"
+                  ? "underline underline-offset-4 decoration-background decoration-2"
                   : ""
               }`}
             >
