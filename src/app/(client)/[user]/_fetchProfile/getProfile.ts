@@ -3,21 +3,11 @@ import toast from "react-hot-toast";
 interface useGetUserProfileReturn {
   name: string;
   id: number;
-  email: string | null;
+  email?: string | null;
   createdAt: Date;
-  role: string;
-  posts:
-    | {
-        id: number;
-        createdAt: Date;
-        title: string;
-        published: boolean;
-      }[]
-    | null;
+  role?: string;
   profile: {
-    id: number;
     bio: string | null;
-    userId: number;
   } | null;
 }
 
@@ -26,9 +16,8 @@ const getProfile = async ({
 }: {
   name: string;
 }): Promise<useGetUserProfileReturn | undefined | null> => {
-  const res = await fetch("/api/user/profile", {
-    method: "POST",
-    body: JSON.stringify({ name: name }),
+  const res = await fetch("/api/user/profile?name=" + name, {
+    method: "GET",
     headers: { "Content-Type": "application/json" },
   });
   if (res.status === 200) {
