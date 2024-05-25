@@ -6,17 +6,9 @@
   flex-direction: column;
   gap: 20px;
   border-radius: 10px;
-  h1 {
-    padding-inline: 20px;
-    font-size: 1.2em;
-  }
   ul {
     li {
-      //background-color: rgb(5, 5, 5);
-      //background-color: $background-color;
       transition: 150ms;
-      &:hover {
-      }
       a {
         div {
           padding-block: 25px;
