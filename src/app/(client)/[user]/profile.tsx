@@ -27,7 +27,7 @@ const Profile = ({ name }: ProfileProps) => {
 
   return (
     <main>
-      <header>
+      <header className="bg-neutral-600">
         <div className="flex p-5">
           <div>
             <button
@@ -41,19 +41,24 @@ const Profile = ({ name }: ProfileProps) => {
             </div>
           </div>
           <section className="profile-header-section">
-            <h2>{name}</h2>
+            <h1>{name}</h1>
             {isOwner && (
               <div>
                 <Link href={`/${name}/edit`}>
-                  <button>Edit Profile</button>
+                  <button className="mt-2">Edit Profile</button>
                 </Link>
               </div>
             )}
           </section>
         </div>
       </header>
-      <div className="profile-bio-cont">
-        <h1>{!profile.isLoading && profile.data?.profile?.bio}</h1>
+      <div
+        className="profile-bio-cont bg-neutral-600"
+        style={{ marginTop: -1 }}
+      >
+        <h2 className="text-backgroundSecondary text-lg text-pretty w-7/12 min-h-7">
+          {!profile.isLoading && profile.data?.profile?.bio}
+        </h2>
       </div>
       <FetchPosts name={name} isOwner={isOwner} />
     </main>
@@ -73,7 +78,7 @@ const FetchPosts = ({ name, isOwner }: FetchPostsProps) => {
 
   return (
     <>
-      <div className="flex items-baseline gap-2">
+      <div className="flex items-baseline gap-2 pt-6">
         <h1 className="text-xl px-5">Posts</h1>{" "}
         {isOwner && (
           <Link href={`/post/write`}>

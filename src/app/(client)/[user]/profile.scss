@@ -12,19 +12,16 @@
 .profile-header-section {
   display: flex;
   flex-direction: column;
-  gap: 15px;
+  gap: 5px;
   padding-left: 30px;
-  h2 {
+  h1 {
     font-size: 1.3em;
     height: 1.3em;
   }
 }
 
 .profile-bio-cont {
-  padding: 0px 20px 20px 20px;
-  h1 {
-    font-size: 1.2em;
-  }
+  padding: 0px 15px 20px 30px;
 }
 
 #profile-img-change {

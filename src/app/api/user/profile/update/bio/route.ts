@@ -6,7 +6,8 @@ import { z } from "zod";
 // api/user/profile/update/bio
 
 const schema = z.object({
-  bio: z.string().max(160),
+  id: z.number().int(),
+  bio: z.string().max(76),
 });
 
 export async function POST(req: NextRequest) {
@@ -23,25 +24,12 @@ export async function POST(req: NextRequest) {
       return NextResponse.json({ message: "Unauthorized." }, { status: 401 });
     }
 
-    const { bio } = result.data;
-    const { name } = session.user;
+    const { bio, id } = result.data;
 
-    const userBio = await prisma.user.update({
-      where: { name: name },
-      data: {
-        profile: {
-          update: {
-            bio: bio,
-          },
-        },
-      },
-      select: {
-        profile: {
-          select: {
-            bio: true,
-          },
-        },
-      },
+    const userBio = await prisma.profile.upsert({
+      where: { userId: id },
+      update: { bio: bio },
+      create: { userId: id, bio: bio },
     });
 
     if (!userBio) {
