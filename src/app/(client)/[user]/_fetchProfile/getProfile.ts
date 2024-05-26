@@ -1,6 +1,6 @@
 import toast from "react-hot-toast";
 
-interface useGetUserProfileReturn {
+export interface useGetUserProfileReturn {
   name: string;
   id: number;
   email?: string | null;
@@ -8,7 +8,7 @@ interface useGetUserProfileReturn {
   role?: string;
   profile: {
     bio: string | null;
-  } | null;
+  };
 }
 
 const getProfile = async ({
