@@ -7,7 +7,7 @@ import InputLabel from "@components/formComponents/inputLabel";
 import EditProfileListItem from "./editProfileListItem";
 
 const ChangeUsername = () => {
-  const { formList } = useEditProfileContext();
+  const { formList, userData } = useEditProfileContext();
   const inputRef = useRef<HTMLInputElement>(null);
   useEffect(() => {
     if (inputRef.current) {
@@ -18,6 +18,9 @@ const ChangeUsername = () => {
   const handleSubmit = (e: FormEvent) => {
     e.preventDefault();
   };
+
+  const name = userData ? userData.name : "";
+
   return (
     <EditProfileListItem indexNo={2} name="Change Username">
       <form
@@ -26,7 +29,13 @@ const ChangeUsername = () => {
         className="flex flex-col gap-3"
       >
         <InputLabel name="New username" />
-        <input ref={inputRef} type="text" placeholder="New username" />
+        <input
+          ref={inputRef}
+          type="text"
+          placeholder="New username"
+          defaultValue={name}
+          autoCorrect="off"
+        />
         <button type="submit" value="change-username" className="mt-4">
           Change username
         </button>
