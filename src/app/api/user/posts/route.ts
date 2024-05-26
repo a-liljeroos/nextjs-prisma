@@ -1,9 +1,8 @@
 import prisma from "@prisma/prismaClient";
-import { auth } from "@serverAuth";
 import { NextResponse, NextRequest } from "next/server";
 import { z } from "zod";
 
-// api/user/profile
+// api/user/posts
 
 const schema = z.object({
   name: z.string(),
@@ -21,31 +20,25 @@ export async function GET(req: NextRequest) {
 
     const { name } = result.data;
 
-    const session = await auth();
-
-    const isOwner = session?.user?.name === name;
-
-    const userProfile = await prisma.user.findUnique({
+    const userPosts = await prisma.user.findUnique({
       where: { name: name },
       select: {
-        id: true,
-        name: true,
-        email: isOwner,
-        role: isOwner,
-        createdAt: true,
-        profile: {
+        posts: {
           select: {
-            bio: true,
+            title: true,
+            createdAt: true,
+            id: true,
+            published: true,
           },
         },
       },
     });
 
-    if (!userProfile) {
+    if (!userPosts) {
       return NextResponse.json({ error: "User not found" }, { status: 404 });
     }
 
-    return NextResponse.json(userProfile, { status: 200 });
+    return NextResponse.json(userPosts, { status: 200 });
   } catch (error) {
     console.error(error);
     return NextResponse.json(

@@ -18,16 +18,14 @@ interface PostListProps {
       }[]
     | null
     | undefined;
-  children?: React.ReactNode;
 }
 
-const PostList = ({ posts, name, children }: PostListProps) => {
+const PostList = ({ posts, name }: PostListProps) => {
   const { data: session } = useSession();
   const isOwner = name ? session?.user?.name === name : false;
 
   return (
     <div className="posts-cont">
-      {children}
       {posts && posts.length === 0 && (
         <div className="text-center p-24 select-none text-xl">No posts 🙄</div>
       )}

@@ -3,9 +3,13 @@ import Link from "next/link";
 // auth
 import { useSession } from "next-auth/react";
 // react-query
-import useGetProfile from "./_fetchProfile/useGetProfile";
+import { useQuery } from "@tanstack/react-query";
+import getProfile from "./_fetchProfile/getProfile";
+import getUserPosts from "./_fetchProfile/getUserPosts";
 // components
 import PostList from "@components/post/postList";
+import Spinner from "@components/spinner/spinner";
+import ErrorMsg1 from "@components/spinner/errorMsg1";
 // styles
 import "./profile.scss";
 
@@ -14,7 +18,10 @@ interface ProfileProps {
 }
 
 const Profile = ({ name }: ProfileProps) => {
-  const { data: user, isLoading } = useGetProfile(name);
+  const profile = useQuery({
+    queryKey: ["profile", name],
+    queryFn: () => getProfile({ name: name }),
+  });
   const { data: session } = useSession();
   const isOwner = session?.user?.name === name;
 
@@ -34,10 +41,10 @@ const Profile = ({ name }: ProfileProps) => {
             </div>
           </div>
           <section className="profile-header-section">
-            <h2>{user?.name}</h2>
+            <h2>{name}</h2>
             {isOwner && (
               <div>
-                <Link href="/user/profile/edit">
+                <Link href={`/${name}/edit`}>
                   <button>Edit Profile</button>
                 </Link>
               </div>
@@ -46,19 +53,42 @@ const Profile = ({ name }: ProfileProps) => {
         </div>
       </header>
       <div className="profile-bio-cont">
-        <h1>{user?.profile?.bio}</h1>
+        <h1>{!profile.isLoading && profile.data?.profile?.bio}</h1>
       </div>
-      <PostList posts={user?.posts} name={name}>
-        <div className="flex items-baseline ">
-          <h1>Posts</h1>{" "}
-          {isOwner && (
-            <Link href={`/post/write`}>
-              <button>Write New</button>
-            </Link>
-          )}
-        </div>
-      </PostList>
+      <FetchPosts name={name} isOwner={isOwner} />
     </main>
+  );
+};
+
+interface FetchPostsProps {
+  name: string;
+  isOwner: boolean;
+}
+
+const FetchPosts = ({ name, isOwner }: FetchPostsProps) => {
+  const { data, isLoading, isError } = useQuery({
+    queryKey: ["posts", name],
+    queryFn: () => getUserPosts({ name: name }),
+  });
+
+  return (
+    <>
+      <div className="flex items-baseline gap-2">
+        <h1 className="text-xl px-5">Posts</h1>{" "}
+        {isOwner && (
+          <Link href={`/post/write`}>
+            <button>Write New</button>
+          </Link>
+        )}
+      </div>
+      {isError && <ErrorMsg1 message="Failed to load posts." />}
+      {isLoading && (
+        <div className="flex justify-center items-center h-52">
+          <Spinner />
+        </div>
+      )}
+      {!isLoading && <PostList posts={data?.posts} name={name}></PostList>}
+    </>
   );
 };
 

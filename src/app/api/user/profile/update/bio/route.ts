@@ -3,36 +3,39 @@ import { auth } from "@serverAuth";
 import { NextResponse, NextRequest } from "next/server";
 import { z } from "zod";
 
-// api/user/profile
+// api/user/profile/update/bio
 
 const schema = z.object({
-  name: z.string(),
+  bio: z.string().max(160),
 });
 
-export async function GET(req: NextRequest) {
+export async function POST(req: NextRequest) {
   try {
-    const params = req.nextUrl.searchParams;
-    const parsedParams = { name: params.get("name") };
-    const result = schema.safeParse(parsedParams);
+    const body = await req.json();
+    const result = schema.safeParse(body);
 
     if (!result.success) {
       return NextResponse.json({ error: result.error }, { status: 400 });
     }
 
-    const { name } = result.data;
-
     const session = await auth();
+    if (!session || !session.user?.name) {
+      return NextResponse.json({ message: "Unauthorized." }, { status: 401 });
+    }
 
-    const isOwner = session?.user?.name === name;
+    const { bio } = result.data;
+    const { name } = session.user;
 
-    const userProfile = await prisma.user.findUnique({
+    const userBio = await prisma.user.update({
       where: { name: name },
+      data: {
+        profile: {
+          update: {
+            bio: bio,
+          },
+        },
+      },
       select: {
-        id: true,
-        name: true,
-        email: isOwner,
-        role: isOwner,
-        createdAt: true,
         profile: {
           select: {
             bio: true,
@@ -41,11 +44,11 @@ export async function GET(req: NextRequest) {
       },
     });
 
-    if (!userProfile) {
+    if (!userBio) {
       return NextResponse.json({ error: "User not found" }, { status: 404 });
     }
 
-    return NextResponse.json(userProfile, { status: 200 });
+    return NextResponse.json(userBio, { status: 201 });
   } catch (error) {
     console.error(error);
     return NextResponse.json(

@@ -1,0 +1,32 @@
+.page-error-msg {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  height: 250px;
+  width: 500px;
+  animation: fadeOut 1s forwards;
+  animation-delay: 3s;
+  h1 {
+    font-size: 3em;
+    margin-bottom: -15px;
+  }
+  h2 {
+    font-size: 1em;
+    opacity: 0.7;
+  }
+  @media (max-width: 500px) {
+    width: 100vw;
+  }
+}
+
+@keyframes fadeOut {
+  from {
+    opacity: 1;
+    transform: translateY(0);
+  }
+  to {
+    opacity: 0;
+    transform: translateY(30px);
+  }
+}

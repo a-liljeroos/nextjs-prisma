@@ -2,6 +2,7 @@ import useGetPosts from "./useGetPosts";
 // components
 import PostList from "./postList";
 import Spinner from "@components/spinner/spinner";
+import ErrorMsg1 from "@components/spinner/errorMsg1";
 // styles
 import "./frontPagePosts.scss";
 
@@ -24,12 +25,7 @@ const FetchPosts = () => {
   }
 
   if (isError) {
-    return (
-      <div className="front-page-error text-center">
-        <h1>🤷</h1>
-        <h2>Failed to load posts.</h2>
-      </div>
-    );
+    return <ErrorMsg1 message="Failed to load posts." />;
   }
 
   return <>{!isLoading && <PostList posts={data} />}</>;
