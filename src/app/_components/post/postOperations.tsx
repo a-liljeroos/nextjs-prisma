@@ -2,6 +2,7 @@ import toast from "react-hot-toast";
 import { useState } from "react";
 // functions
 import { deletePost } from "@crudFunctions";
+import { delay } from "@functions";
 // icons
 import { TiDelete } from "react-icons/ti";
 import { AiOutlineEdit } from "react-icons/ai";
@@ -24,6 +25,12 @@ const PostOperations = ({ postId, user }: PostOperationsProps) => {
     return <></>;
   }
 
+  const openModal = async () => {
+    setShowModal(!showModal);
+    await delay(5000);
+    setShowModal(false);
+  };
+
   return (
     <div className="p-3 flex gap-2">
       {!showModal ? (
@@ -31,7 +38,7 @@ const PostOperations = ({ postId, user }: PostOperationsProps) => {
           <button>
             <AiOutlineEdit size={25} />
           </button>
-          <button onClick={() => setShowModal(!showModal)}>
+          <button onClick={openModal}>
             <TiDelete size={25} />
           </button>
         </>
