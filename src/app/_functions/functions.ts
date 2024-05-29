@@ -38,3 +38,31 @@ export function getRandomChar(str: string): string {
   const randomIndex = Math.floor(Math.random() * str.length);
   return str[randomIndex];
 }
+
+interface Range {
+  a: number;
+  n: number;
+}
+
+export function getPoints({ a, n }: Range) {
+  const points = [];
+
+  const xMin = -1;
+  const xMax = 1;
+
+  const stepSize = (xMax - xMin) / (n - 1);
+
+  for (let i = 0; i < n; i++) {
+    const x = xMin + i * stepSize;
+    let y = a * x * x + 0 * x + 0;
+    y = Math.round(y * 1000) / 1000;
+    points.push({ y: y });
+  }
+
+  if (points.length > 0) {
+    const firstPoint = points[0];
+    points[points.length - 1] = { y: firstPoint.y };
+  }
+
+  return points;
+}
