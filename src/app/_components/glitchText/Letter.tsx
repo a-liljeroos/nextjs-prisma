@@ -113,7 +113,7 @@ const LetterSpinner = ({ input }: LetterSpinnerProps) => {
     <div
       onClick={() => changeLetter(8, delayStart)}
       ref={letterRef}
-      className="letter-spinner font-semibold hover:text-backgroundSecondary"
+      className="letter-spinner font-semibold hover:text-backgroundSecondary cursor-pointer"
     >
       {letter}
     </div>
