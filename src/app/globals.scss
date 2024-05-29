@@ -74,6 +74,10 @@ input {
   color: black;
 }
 
+input[type="checkbox"]:checked {
+  accent-color: var(--background-secondary);
+}
+
 textarea {
   border-radius: 5px;
   width: 100%;
