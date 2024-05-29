@@ -40,6 +40,7 @@ const PostList = ({ posts, name, animate = true }: PostListProps) => {
             const del = delayValues[index].y;
             return (
               <ListItem
+                key={index}
                 post={post}
                 isOwner={isOwner}
                 name={name}
