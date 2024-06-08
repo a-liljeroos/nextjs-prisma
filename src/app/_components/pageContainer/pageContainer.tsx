@@ -8,7 +8,7 @@ interface PageContainerProps {
 
 const PageContainer = ({ children }: PageContainerProps) => {
   return (
-    <main style={{ margin: "0 auto" }}>
+    <main className="flex flex-col items-center w-full">
       <div
         className="content-container"
         style={{
