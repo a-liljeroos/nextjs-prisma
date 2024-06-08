@@ -25,6 +25,7 @@
       "@bcrypt/*": ["./src/app/_bcrypt/*"],
       "@serverAuth": ["./src/app/api/auth/[...nextauth]/auth.ts"],
       "@functions": ["./src/app/_functions/functions.ts"],
+      "@clientFunctions": ["./src/app/_functions/clientFunctions.ts"],
       "@crudFunctions": ["./src/app/_functions/crudFunctions.ts"],
       "@types": ["./src/app/_types/types.ts"]
     }
