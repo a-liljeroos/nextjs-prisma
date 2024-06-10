@@ -1,12 +1,12 @@
 import prisma, { Prisma } from "@prisma/prismaClient";
 import { auth } from "@serverAuth";
-import { Post } from "@types";
+import { NewPost, Post } from "@types";
 import { NextResponse, NextRequest } from "next/server";
 import { z } from "zod";
 
 // api/post/write/route.ts
 
-const createPost = async (post: Post) => {
+const createPost = async (post: NewPost) => {
   const { author, title, content } = post;
   const newPost = await prisma.post.create({
     data: {
@@ -67,7 +67,7 @@ export async function POST(req: NextRequest) {
       );
     }
 
-    const post: Post = result.data;
+    const post: NewPost = result.data;
 
     await createPost(post);
 
