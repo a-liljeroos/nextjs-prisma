@@ -71,3 +71,16 @@ export function useDebounce<Func extends SomeFunction>(
 }
 
 // =======================================
+
+/**
+ *
+ * @returns A boolean that is true if the component is mounted. Use this to prevent side effects from running before the component is mounted. For example when using window objects.
+ */
+
+export function useMounted(): boolean {
+  const [isMounted, setIsMounted] = useState<boolean>(false);
+  useEffect(() => {
+    setIsMounted(true);
+  }, []);
+  return isMounted;
+}
