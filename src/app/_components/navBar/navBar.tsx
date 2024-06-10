@@ -3,19 +3,25 @@ import React, { useRef, useEffect } from "react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 // auth
+import { Session } from "next-auth";
 import { signIn, signOut, useSession } from "next-auth/react";
 // functions
 import { delay } from "@functions";
+import { useMounted } from "@clientFunctions";
 // context
 import { useNavBarContext, NavBarContextProvider } from "./navBarContext";
 // components
-import { UserSearch, SearchResults } from "@components/navBar/userSearch";
-import { Session } from "next-auth";
+import Search from "@components/navBar/search";
+import SearchResults from "@components/navBar/searchResults";
 // styles
 import "./navBar.scss";
 
 const NavBar = () => {
   const { data: session } = useSession();
+  const isMounted = useMounted();
+
+  if (!isMounted) return null;
+
   return (
     <NavBarContextProvider>
       <NavBarContent session={session} />
@@ -78,7 +84,13 @@ const NavBarContent = ({ session }: NavBarContentProps) => {
                   : ""
               }`}
             >
-              <Link href={`/${session.user?.name}`}>Profile</Link>
+              <Link
+                href={{
+                  pathname: `/${session.user?.name}`,
+                }}
+              >
+                Profile
+              </Link>
             </li>
           </>
         )}
@@ -97,7 +109,7 @@ const NavBarContent = ({ session }: NavBarContentProps) => {
             </li>
           </>
         )}
-        <UserSearch />
+        <Search />
         {session && (
           <li
             ref={signOutRef}
@@ -117,7 +129,7 @@ const NavBarContent = ({ session }: NavBarContentProps) => {
           </li>
         )}
       </ul>
-      {/* {searchFocused && <SearchResults />} */}
+      <SearchResults />
     </nav>
   );
 };

@@ -1,5 +1,9 @@
 "use client";
 import React, { useRef, useEffect } from "react";
+// function
+import { useDebounce, useWindowDimensions } from "@clientFunctions";
+// fetch
+import makeSearch from "./_fetch/makeSearch";
 // context
 import { useNavBarContext } from "./navBarContext";
 // icons
@@ -7,17 +11,30 @@ import { BiSearchAlt } from "react-icons/bi";
 // styles
 import "./navBar.scss";
 
-const UserSearch = () => {
+const Search = () => {
   const inputContRef = useRef<HTMLLIElement>(null);
   const inputRef = useRef<HTMLInputElement>(null);
   const {
     searchFocused,
     setSearchFocused,
+    searchTerm,
+    setSearchTerm,
+    setResults,
     handleBlur,
     narrowScreen,
-    windowWidth,
   } = useNavBarContext();
-  useEffect(() => {}, [searchFocused]);
+
+  const { width: windowWidth } = useWindowDimensions();
+
+  const handleChange = (term: string) => {
+    if (term.length > 2) {
+      makeSearch(term).then((reponse) => {
+        setResults(reponse);
+      });
+    }
+  };
+
+  const debouncedChange = useDebounce(handleChange, 1000);
 
   const focusSearch = () => {
     if (inputRef.current) {
@@ -33,7 +50,7 @@ const UserSearch = () => {
   const inputClassName = narrowScreen ? "nav-input-narrow" : "nav-input";
   const focusBg = narrowScreen ? "rgb(199, 201, 80)" : "rgb(248, 248, 248)";
   const inputBg = searchFocused ? "rgb(248, 248, 248)" : focusBg;
-  const centerContainer = (windowWidth - inputWidth) / 2;
+  const centerContainer = (windowWidth! - inputWidth) / 2;
   const containerStyles: React.CSSProperties =
     searchFocused && narrowScreen
       ? {
@@ -47,11 +64,12 @@ const UserSearch = () => {
     <li ref={inputContRef} style={containerStyles}>
       <div className="relative">
         <input
-          name="search"
+          name="q"
           ref={inputRef}
           type="text"
           placeholder=""
           autoCorrect="off"
+          value={searchTerm}
           style={{
             paddingRight: 35,
             transition: "0.5s",
@@ -62,6 +80,11 @@ const UserSearch = () => {
           className={`nav-search-input ${inputClassName}`}
           onFocus={() => setSearchFocused(true)}
           onBlur={handleBlur}
+          onChange={(e) => {
+            const term = e.target.value;
+            setSearchTerm(term);
+            debouncedChange(term);
+          }}
         />
         <BiSearchAlt
           color="rgb(61, 61, 61)"
@@ -75,25 +98,4 @@ const UserSearch = () => {
   );
 };
 
-const SearchResults = () => {
-  const { searchFocused, setSearchFocused, windowHeight } = useNavBarContext();
-  const searchResultsHeight = windowHeight - 80;
-  return (
-    <div
-      style={{
-        position: "absolute",
-        width: "100%",
-        height: searchResultsHeight,
-        backgroundColor: "black",
-        opacity: 0.5,
-        top: 80,
-        zIndex: 10,
-        backdropFilter: "blur(10px)",
-      }}
-    >
-      Results
-    </div>
-  );
-};
-
-export { UserSearch, SearchResults };
+export default Search;

@@ -1,10 +1,11 @@
 "use client";
 import React, { useState, useEffect } from "react";
+import { useRouter } from "next/navigation";
 // react-query
 import { useMutation } from "@tanstack/react-query";
 // types
 import { InputType } from "./writePostContext";
-import { Post } from "@types";
+import { Post, NewPost } from "@types";
 // context
 import { useWritePostContext } from "./writePostContext";
 // functions
@@ -30,9 +31,10 @@ const WritePost = ({ user }: { user: string }) => {
     postContent,
     updatePostContent,
   } = useWritePostContext();
+  const router = useRouter();
 
   const mutation = useMutation({
-    mutationFn: (data: Post) => {
+    mutationFn: (data: NewPost) => {
       return fetch(`/api/post/write`, {
         method: "POST",
         body: JSON.stringify(data),
@@ -42,7 +44,7 @@ const WritePost = ({ user }: { user: string }) => {
     onSettled: (data) => {
       if (data?.status === 201) {
         toast.success("Post created.", { duration: 4000 });
-        window.location.href = `/${user}`;
+        router.push(`/${user}`);
       }
       if (data?.status === 500) {
         toast.error("Try again later.");
@@ -52,7 +54,7 @@ const WritePost = ({ user }: { user: string }) => {
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
-    const post: Post = {
+    const post: NewPost = {
       author: user,
       title: postTitle,
       content: postContent,

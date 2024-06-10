@@ -10,6 +10,7 @@ import getUserPosts from "./_fetchProfile/getUserPosts";
 import PostList from "@components/post/postList";
 import Spinner from "@components/spinner/spinner";
 import ErrorMsg1 from "@components/spinner/errorMsg1";
+import PageContainer from "@components/pageContainer/pageContainer";
 // styles
 import "./profile.scss";
 
@@ -26,7 +27,7 @@ const Profile = ({ name }: ProfileProps) => {
   const isOwner = session?.user?.name === name;
 
   return (
-    <main>
+    <PageContainer>
       <header className="bg-neutral-600">
         <div className="flex p-5">
           <div>
@@ -61,7 +62,7 @@ const Profile = ({ name }: ProfileProps) => {
         </h2>
       </div>
       <FetchPosts name={name} isOwner={isOwner} />
-    </main>
+    </PageContainer>
   );
 };
 
