@@ -1,5 +1,6 @@
 "use server";
 import prisma from "@prisma/prismaClient";
+import { Post } from "@types";
 import { auth } from "@serverAuth";
 
 export const deletePost = async (postId: number) => {
@@ -66,4 +67,11 @@ export const getPosts = async (): Promise<TGetPostReturn> => {
     },
   });
   return posts;
+};
+
+export const getPost = async (postId: number) => {
+  const post = await prisma.post.findUnique({
+    where: { id: postId },
+  });
+  return post as Post;
 };

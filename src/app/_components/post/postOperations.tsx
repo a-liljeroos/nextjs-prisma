@@ -1,5 +1,6 @@
 import toast from "react-hot-toast";
 import { useState } from "react";
+import Link from "next/link";
 // functions
 import { deletePost } from "@crudFunctions";
 import { delay } from "@functions";
@@ -35,9 +36,11 @@ const PostOperations = ({ postId, user }: PostOperationsProps) => {
     <div className="p-3 flex gap-2">
       {!showModal ? (
         <>
-          <button>
-            <AiOutlineEdit size={25} />
-          </button>
+          <Link href={`/post/edit/${postId}`}>
+            <button>
+              <AiOutlineEdit size={25} />
+            </button>
+          </Link>
           <button onClick={openModal}>
             <TiDelete size={25} />
           </button>
