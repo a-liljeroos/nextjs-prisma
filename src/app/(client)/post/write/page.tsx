@@ -2,7 +2,7 @@ import { redirect } from "next/navigation";
 // auth
 import { auth } from "@serverAuth";
 // context
-import { WritePostContextProvider } from "./writePostContext";
+import { WritePostContextProvider } from "../writePostContext";
 // components
 import WritePost from "./writePost";
 
