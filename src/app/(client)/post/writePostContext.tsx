@@ -4,6 +4,7 @@ import { createContext, ReactNode, useContext, useState } from "react";
 import { PostContent, Post } from "@types";
 
 interface WritePostContextProps {
+  addContentField: (type: "Paragraph" | "Subheader") => void;
   deletePostContent: (index: number) => void;
   hydrateForm: (post: Post) => void;
   moveUp: (currentIndex: number) => void;
@@ -21,7 +22,13 @@ const WritePostContext = createContext<WritePostContextProps>(
 );
 
 export const useWritePostContext = () => {
-  return useContext(WritePostContext);
+  const context = useContext(WritePostContext);
+  if (!context) {
+    throw new Error(
+      "useWritePostContext must be used within a WritePostContextProvider"
+    );
+  }
+  return context;
 };
 
 type WritePostContextProviderProps = {
@@ -37,6 +44,7 @@ export const WritePostContextProvider = ({
   const [postTitle, setPostTitle] = useState<string>("");
 
   const {
+    addContentField,
     deletePostContent,
     hydratePostContent,
     moveUp,
@@ -53,6 +61,7 @@ export const WritePostContextProvider = ({
   return (
     <WritePostContext.Provider
       value={{
+        addContentField,
         deletePostContent,
         hydrateForm,
         moveUp,
@@ -73,39 +82,52 @@ export const WritePostContextProvider = ({
 const usePostContent = () => {
   // first paragraph is always required and cannot be deleted
 
-  const [postContent, setPostContent] = useState<PostContent[]>([
-    {
-      index: 0,
-      type: "Paragraph",
-      content: "",
-    },
-  ]);
+  const initContent = (): PostContent[] => {
+    return [
+      {
+        index: 0,
+        type: "Paragraph",
+        content: "",
+      },
+    ];
+  };
+
+  const [postContent, setPostContent] = useState<PostContent[]>(initContent);
 
   const hydratePostContent = (content: PostContent[]) => {
-    const contentSorted = sortContent(content);
-    setPostContent(contentSorted);
+    const contentSorted = sortContent([...content]);
+    return setPostContent(contentSorted);
+  };
+
+  const addContentField = (type: "Paragraph" | "Subheader") => {
+    const newContent: PostContent = {
+      index: postContent.length,
+      type: type,
+      content: "",
+    };
+    return setPostContent([...postContent, newContent]);
   };
 
   const updatePostContent = (content: PostContent): void => {
-    let staleRemoved = postContent.filter((item) => {
+    const staleRemoved = [...postContent].filter((item) => {
       if (item.index !== content.index) {
         return item;
       }
     });
-    const newContents = staleRemoved.concat(cleanPostContent(content));
-    const contentSorted = sortContent(newContents);
-    setPostContent(contentSorted);
+    const contentCombined = [...staleRemoved, content];
+    const contentSorted = sortContent(contentCombined);
+    return setPostContent(contentSorted);
   };
 
   const deletePostContent = (index: number) => {
-    const staleRemoved = postContent.filter((item) => {
+    const staleRemoved = [...postContent].filter((item) => {
       if (item.index !== index) {
         return item;
       }
     });
     const contentSorted = sortContent(staleRemoved);
     const contentReIndexed = reIndexContent(contentSorted);
-    setPostContent(contentReIndexed);
+    return setPostContent(contentReIndexed);
   };
 
   const moveUp = (currentIndex: number) => {
@@ -116,7 +138,7 @@ const usePostContent = () => {
     arrangedContent = moveItemUp(prevContent.slice(1), targetIndex);
     arrangedContent = [firstParagraph, ...arrangedContent];
     arrangedContent = reIndexContent(arrangedContent);
-    setPostContent(arrangedContent);
+    return setPostContent(arrangedContent);
   };
 
   const moveDown = (currentIndex: number) => {
@@ -127,12 +149,13 @@ const usePostContent = () => {
     arrangedContent = moveItemDown(prevContent.slice(1), targetIndex);
     arrangedContent = [firstParagraph, ...arrangedContent];
     arrangedContent = reIndexContent(arrangedContent);
-    setPostContent(arrangedContent);
+    return setPostContent(arrangedContent);
   };
 
   return {
     postContent,
     hydratePostContent,
+    addContentField,
     updatePostContent,
     deletePostContent,
     moveUp,
