@@ -1,5 +1,5 @@
 "use server";
-import prisma from "@prisma/prismaClient";
+import prisma, { Prisma } from "@prisma/prismaClient";
 import { Post } from "@types";
 import { auth } from "@serverAuth";
 
@@ -39,6 +39,20 @@ export const deletePost = async (postId: number) => {
   return deletedPost;
 };
 
+export const editPost = async (post: Post) => {
+  const editedPost = await prisma.post.update({
+    where: {
+      id: post.id,
+    },
+    data: {
+      title: post.title,
+      content: post.content,
+      published: post.published,
+    } as Prisma.PostUpdateInput,
+  });
+  return editedPost;
+};
+
 type TGetPostReturn =
   | {
       id: number;
@@ -74,4 +88,28 @@ export const getPost = async (postId: number) => {
     where: { id: postId },
   });
   return post as Post;
+};
+
+export const getUserId = async (name: string) => {
+  const userId = await prisma.user.findUnique({
+    where: {
+      name: name,
+    },
+    select: {
+      id: true,
+    },
+  });
+  return userId;
+};
+
+export const getAuthor = async (authorId: number) => {
+  const author = await prisma.user.findUnique({
+    where: {
+      id: authorId,
+    },
+    select: {
+      name: true,
+    },
+  });
+  return author?.name;
 };
