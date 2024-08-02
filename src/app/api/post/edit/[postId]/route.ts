@@ -1,24 +1,10 @@
-import prisma, { Prisma } from "@prisma/prismaClient";
 import { auth } from "@serverAuth";
-import { NewPost, Post } from "@types";
+import { Post } from "@types";
+import { getPost, getUserId, editPost } from "@crudFunctions";
 import { NextResponse, NextRequest } from "next/server";
 import { z } from "zod";
 
 // api/post/edit/[postId]/route.ts
-
-const editPost = async (post: Post) => {
-  const editedPost = await prisma.post.update({
-    where: {
-      id: post.id,
-    },
-    data: {
-      title: post.title,
-      content: post.content,
-      published: post.published,
-    } as Prisma.PostUpdateInput,
-  });
-  return editedPost;
-};
 
 const postSchema = z
   .object({
@@ -66,6 +52,20 @@ export async function PUT(req: NextRequest) {
     }
 
     const post: Post = result.data;
+
+    const existingPost = await getPost(post.id);
+    const sessionUserId = await getUserId(sessionAuthor);
+
+    if (!existingPost) {
+      return NextResponse.json({ message: "Post not found." }, { status: 404 });
+    }
+
+    if (existingPost.authorId !== sessionUserId!.id) {
+      return NextResponse.json(
+        { message: "You are not the author of this post." },
+        { status: 401 }
+      );
+    }
 
     await editPost(post);
 

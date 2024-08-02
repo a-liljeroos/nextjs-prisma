@@ -1,9 +1,5 @@
 "use client";
 import Link from "next/link";
-// auth
-import { useSession } from "next-auth/react";
-// react-query
-import { useQuery } from "@tanstack/react-query";
 // functions
 import formatDate from "@functions";
 // types
@@ -11,58 +7,30 @@ import { Post as TPost } from "@types";
 // components
 import PostOperations from "@components/post/postOperations";
 import PageContainer from "@components/pageContainer/pageContainer";
-import Spinner from "@components/spinner/spinner";
 // styles
 import "./post.scss";
 
 interface PostProps {
+  post: TPost;
   postId: string;
   user: string;
+  isOwner: boolean;
 }
 
-const Post = ({ postId, user }: PostProps) => {
-  const { data: session } = useSession();
-  const isOwner = session?.user?.name === user;
-  const { data, isLoading, isError } = useQuery({
-    queryKey: ["post", postId],
-    queryFn: async (): Promise<TPost> => {
-      const res = await fetch(`/api/post/${postId}`);
-      if (!res.ok) {
-        throw new Error("Network response was not ok");
-      }
-      const post = await res.json();
-      return post;
-    },
-  });
-
-  if (isError) {
-    return (
-      <PageContainer>
-        <div className="text-center p-10">Post not found.</div>
-      </PageContainer>
-    );
-  }
-
+const Post = ({ postId, user, isOwner, post }: PostProps) => {
   return (
     <PageContainer>
-      {isLoading && (
-        <div className="post-page-spinner">
-          <Spinner />
+      <div className="p-4">
+        <DisplayPost post={post} />
+        <div className="flex items-center justify-between">
+          <PostInfo
+            author={post.author}
+            created={post.createdAt}
+            updated={post.updatedAt}
+          />
+          {isOwner && <PostOperations postId={postId} user={user} />}
         </div>
-      )}
-      {!isLoading && (
-        <div className="p-4">
-          <DisplayPost post={data!} />
-          <div className="flex items-center justify-between">
-            <PostInfo
-              author={data?.author!}
-              created={data?.createdAt}
-              updated={data?.updatedAt}
-            />
-            {isOwner && <PostOperations postId={postId} user={user} />}
-          </div>
-        </div>
-      )}
+      </div>
     </PageContainer>
   );
 };

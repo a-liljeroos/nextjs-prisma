@@ -1,36 +1,50 @@
 "use server";
-// types
-import { Post as TPost } from "@types";
-// react-query
-import {
-  dehydrate,
-  HydrationBoundary,
-  QueryClient,
-} from "@tanstack/react-query";
-
+import { redirect } from "next/navigation";
+// functions
+import { getPost, getAuthor } from "@crudFunctions";
+// auth
+import { auth } from "@serverAuth";
+// components
 import Post from "./post";
+import ErrorPage from "@components/errorPage/errorPage";
 
 const Page = async ({
   params,
 }: {
   params: { user: string; postId: string };
 }) => {
-  const { postId, user } = params;
-  const queryClient = new QueryClient();
-  await queryClient.prefetchQuery({
-    queryKey: ["post", postId],
-    queryFn: async (): Promise<TPost> => {
-      const res = await fetch(`/api/post/${postId}`);
-      const post = await res.json();
-      return post;
-    },
-  });
+  try {
+    const session = await auth();
+    const { postId, user } = params;
 
-  return (
-    <HydrationBoundary state={dehydrate(queryClient)}>
-      <Post postId={postId} user={user} />
-    </HydrationBoundary>
-  );
+    const postIdNumber = parseInt(postId);
+
+    if (isNaN(postIdNumber) || postIdNumber < 1) {
+      redirect("/");
+    }
+
+    let post = await getPost(postIdNumber);
+
+    if (!post) {
+      return <ErrorPage message={"Post not found."} />;
+    }
+
+    const author = await getAuthor(post.authorId);
+
+    if (author) {
+      post = {
+        ...post,
+        author: author,
+      };
+    }
+
+    const isOwner = session?.user?.name === author;
+
+    return <Post postId={postId} user={user} isOwner={isOwner} post={post} />;
+  } catch (error) {
+    console.error(error);
+    return <ErrorPage message={"Something went wrong. Try again later."} />;
+  }
 };
 
 export default Page;

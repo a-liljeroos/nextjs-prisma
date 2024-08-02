@@ -17,6 +17,7 @@ interface PostFormProps {
 
 const PostForm = ({ handleSubmit }: PostFormProps) => {
   const {
+    addContentField,
     submitLock,
     setSubmitLock,
     postTitle,
@@ -36,13 +37,13 @@ const PostForm = ({ handleSubmit }: PostFormProps) => {
   }, [textareaRef]);
 
   const DynamicFields = ({ postContent }: { postContent: PostContent[] }) => {
-    return postContent.map((contents, index) => {
+    return [...postContent].map((contents, index) => {
       const { type: inputType, content, index: postIndex } = contents;
       if (postIndex !== 0) {
         return (
           <DynamicInput
-            key={index}
-            index={index}
+            key={content + index}
+            index={postIndex}
             inputType={inputType}
             content={content}
           />
@@ -89,11 +90,7 @@ const PostForm = ({ handleSubmit }: PostFormProps) => {
             type="button"
             className="px-1"
             onClick={() => {
-              updatePostContent({
-                index: postContent.length,
-                type: "Subheader",
-                content: "",
-              });
+              addContentField("Subheader");
             }}
           >
             + Subheader
@@ -102,11 +99,7 @@ const PostForm = ({ handleSubmit }: PostFormProps) => {
             type="button"
             className="px-1"
             onClick={() => {
-              updatePostContent({
-                index: postContent.length,
-                type: "Paragraph",
-                content: "",
-              });
+              addContentField("Paragraph");
             }}
           >
             + Paragraph
@@ -138,7 +131,7 @@ export default PostForm;
 type DynamicInputElement = {
   index: number;
   inputType: "Subheader" | "Paragraph";
-  content?: string;
+  content: string;
 };
 
 interface MoveButtonsProps {
@@ -156,7 +149,8 @@ const DynamicInput = ({ index, inputType, content }: DynamicInputElement) => {
     }
   }, []);
 
-  const { deletePostContent, updatePostContent } = useWritePostContext();
+  const { deletePostContent, updatePostContent, postContent } =
+    useWritePostContext();
   const [showControls, setShowControls] = useState(false);
   const [inputValue, setInputValue] = useState<string>(content || "");
 
@@ -233,7 +227,9 @@ const DynamicInput = ({ index, inputType, content }: DynamicInputElement) => {
             placeholder="Paragraph"
             spellCheck="false"
             defaultValue={inputValue}
-            onChange={(e) => setInputValue(e.target.value)}
+            onChange={(e) => {
+              setInputValue(e.target.value);
+            }}
             onFocus={() => {
               setShowControls(false);
             }}
@@ -241,7 +237,7 @@ const DynamicInput = ({ index, inputType, content }: DynamicInputElement) => {
               updatePostContent({
                 index: Number(index),
                 type: inputType,
-                content: e.target.value,
+                content: inputValue,
               })
             }
           />
