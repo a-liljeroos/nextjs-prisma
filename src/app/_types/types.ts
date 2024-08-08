@@ -1,3 +1,15 @@
+export type ProfileFetch = {
+  name: string;
+  id: number;
+  email: string | null;
+  createdAt: Date;
+  role: string;
+  profile: {
+    bio: string | null;
+    image: string | null;
+  } | null;
+} | null;
+
 export type PostContent = {
   index: number;
   type: "Subheader" | "Paragraph";

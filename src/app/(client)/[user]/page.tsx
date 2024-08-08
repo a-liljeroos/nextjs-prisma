@@ -1,5 +1,3 @@
-// auth
-import { auth } from "@serverAuth";
 // react-query
 import {
   dehydrate,

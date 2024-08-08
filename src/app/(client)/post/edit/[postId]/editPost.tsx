@@ -1,7 +1,7 @@
 "use client";
 import React, { useEffect } from "react";
 import { useRouter } from "next/navigation";
-import { revalidatePost, redirectToPost } from "./actions";
+import { revalidatePost, redirectToPost } from "@actions";
 // react-query
 import { useMutation } from "@tanstack/react-query";
 // types

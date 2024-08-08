@@ -27,6 +27,7 @@
       "@functions": ["./src/app/_functions/functions.ts"],
       "@clientFunctions": ["./src/app/_functions/clientFunctions.ts"],
       "@crudFunctions": ["./src/app/_functions/crudFunctions.ts"],
+      "@actions": ["./src/app/_actions/actions.ts"],
       "@types": ["./src/app/_types/types.ts"]
     }
   },
