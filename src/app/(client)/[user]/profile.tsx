@@ -1,4 +1,5 @@
 "use client";
+import { useState } from "react";
 import Link from "next/link";
 // auth
 import { useSession } from "next-auth/react";
@@ -11,6 +12,7 @@ import PostList from "@components/post/postList";
 import Spinner from "@components/spinner/spinner";
 import ErrorMsg1 from "@components/spinner/errorMsg1";
 import PageContainer from "@components/pageContainer/pageContainer";
+import ProfileHeader from "./_components/profileHeader";
 // styles
 import "./profile.scss";
 
@@ -28,31 +30,7 @@ const Profile = ({ name }: ProfileProps) => {
 
   return (
     <PageContainer>
-      <header className="bg-neutral-600">
-        <div className="flex p-5">
-          <div>
-            <button
-              className="profile-img-button"
-              style={{ borderBottom: "initial" }}
-            ></button>
-            <div>
-              <form action="" id="profile-img-change">
-                <input type="file" accept="image/jpeg,image/png" />
-              </form>
-            </div>
-          </div>
-          <section className="profile-header-section">
-            <h1>{name}</h1>
-            {isOwner && (
-              <div>
-                <Link href={`/${name}/edit`}>
-                  <button className="mt-2">Edit Profile</button>
-                </Link>
-              </div>
-            )}
-          </section>
-        </div>
-      </header>
+      <ProfileHeader profile={profile.data} name={name} isOwner={isOwner} />
       <div
         className="profile-bio-cont bg-neutral-600"
         style={{ marginTop: -1 }}

@@ -1,21 +1,11 @@
 import toast from "react-hot-toast";
-
-export interface useGetUserProfileReturn {
-  name: string;
-  id: number;
-  email?: string | null;
-  createdAt: Date;
-  role?: string;
-  profile: {
-    bio: string | null;
-  };
-}
+import { ProfileFetch } from "@types";
 
 const getProfile = async ({
   name,
 }: {
   name: string;
-}): Promise<useGetUserProfileReturn | undefined | null> => {
+}): Promise<ProfileFetch | undefined | null> => {
   const res = await fetch("/api/user/profile?name=" + name, {
     method: "GET",
     headers: { "Content-Type": "application/json" },

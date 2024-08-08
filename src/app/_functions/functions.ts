@@ -66,3 +66,19 @@ export function getPoints({ a, n }: Range) {
 
   return points;
 }
+
+export function isImage(buffer: Uint8Array) {
+  const signatures = [
+    { header: [0x89, 0x50, 0x4e, 0x47], format: "PNG" },
+    { header: [0xff, 0xd8, 0xff], format: "JPEG" },
+    { header: [0x52, 0x49, 0x46, 0x46], format: "WebP" },
+    {
+      header: [0x00, 0x00, 0x00, 0x18, 0x66, 0x74, 0x79, 0x70],
+      format: "AVIF",
+    },
+  ];
+
+  return signatures.some((signature) =>
+    signature.header.every((byte, index) => buffer[index] === byte)
+  );
+}
