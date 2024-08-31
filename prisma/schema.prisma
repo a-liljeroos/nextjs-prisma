@@ -16,6 +16,7 @@ datasource db {
 
 model Post {
   id        Int      @id @default(autoincrement())
+  imageFolder String? @db.VarChar(255)
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
   title     String   @db.VarChar(255)
