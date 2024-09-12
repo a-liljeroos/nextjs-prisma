@@ -6,10 +6,10 @@ import { Post, PostContent } from "@types";
 import { postSchema } from "@zValidation";
 import { z } from "zod";
 // functions
+import { CustomError } from "@errors/customError";
 import { getPost, getUserId, editPost } from "@crudFunctions";
 import {
   preparePostBody,
-  CustomError,
   uploadImages,
   addBlobUrlsToPostContent,
   ImageUploadResult,

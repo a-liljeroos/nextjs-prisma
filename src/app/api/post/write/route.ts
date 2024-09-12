@@ -7,10 +7,10 @@ import { auth } from "@serverAuth";
 import { NewPost, PostContent } from "@types";
 import { postSchema } from "@zValidation";
 // functions
+import { CustomError } from "@errors/customError";
 import { getUserId } from "@crudFunctions";
 import {
   preparePostBody,
-  CustomError,
   uploadImages,
   addBlobUrlsToPostContent,
   ImageUploadResult,

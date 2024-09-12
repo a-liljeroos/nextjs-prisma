@@ -19,16 +19,17 @@
     ],
     "paths": {
       "@/*": ["./src/*"],
-      "@components/*": ["./src/app/_components/*"],
-      "@prisma/*": ["./prisma/*"],
-      "@react-query/*": ["./src/app/_react-query/*"],
+      "@actions": ["./src/app/_actions/actions.ts"],
       "@bcrypt/*": ["./src/app/_bcrypt/*"],
-      "@serverAuth": ["./src/app/api/auth/[...nextauth]/auth.ts"],
+      "@components/*": ["./src/app/_components/*"],
+      "@errors/*": ["./src/app/_errors/*"],
       "@functions": ["./src/app/_functions/functions.ts"],
       "@clientFunctions": ["./src/app/_functions/clientFunctions.ts"],
       "@crudFunctions": ["./src/app/_functions/crudFunctions.ts"],
       "@postFunctions": ["./src/app/_functions/postFunctions.ts"],
-      "@actions": ["./src/app/_actions/actions.ts"],
+      "@prisma/*": ["./prisma/*"],
+      "@react-query/*": ["./src/app/_react-query/*"],
+      "@serverAuth": ["./src/app/api/auth/[...nextauth]/auth.ts"],
       "@types": ["./src/app/_types/types.ts"],
       "@zValidation": ["./src/app/_zod/zValidation.ts"]
     }
