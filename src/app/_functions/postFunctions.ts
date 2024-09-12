@@ -2,28 +2,21 @@
 import { NextResponse, NextRequest } from "next/server";
 import { PostContent, Post, PostRequest, PostRequestImage } from "@types";
 import { postSchema, newImagesSchema } from "@zValidation";
-import { z } from "zod";
 import { put, del, list } from "@vercel/blob";
 import type { PutBlobResult } from "@vercel/blob";
+import { CustomError } from "@errors/customError";
 import { randomUUID } from "crypto";
 // image processing
 const sharp = require("sharp");
-
-export class CustomError extends Error {
-  errorCode: number;
-
-  constructor(message: string, errorCode: number) {
-    super(message);
-    this.errorCode = errorCode;
-    this.name = "CustomError";
-  }
-}
 
 /**
  * Returns the path for the image folder.
  */
 
-export function getImageFolderPath(userId: number, imageFolder: string) {
+export async function getImageFolderPath(
+  userId: number,
+  imageFolder: string
+): Promise<string> {
   return `/posts/${userId}/${imageFolder}`;
 }
 
@@ -35,7 +28,7 @@ export function getImageFolderPath(userId: number, imageFolder: string) {
  * @returns - A boolean indicating if the buffer is an image.
  */
 
-export function isImage(buffer: Uint8Array) {
+export async function isImage(buffer: Uint8Array): Promise<boolean> {
   const signatures = [
     { header: [0x89, 0x50, 0x4e, 0x47], format: "PNG" },
     { header: [0xff, 0xd8, 0xff], format: "JPEG" },
@@ -57,7 +50,9 @@ export function isImage(buffer: Uint8Array) {
  * @returns - The cleaned array of PostContent objects.
  */
 
-export function trimPostContent(content: PostContent[]): PostContent[] {
+export async function trimPostContent(
+  content: PostContent[]
+): Promise<PostContent[]> {
   return content.map((content) => {
     const cleanedContent = {
       ...content,
@@ -175,13 +170,13 @@ export async function uploadImages(
   }
 }
 
-export function addBlobUrlsToPostContent(
+export async function addBlobUrlsToPostContent(
   content: PostContent[],
   uploadedImages: {
     index: number;
     imageUrl: string;
   }[]
-): PostContent[] {
+): Promise<PostContent[]> {
   try {
     const updatedContent: PostContent[] = content.map((content) => {
       if (content.type === "Image") {
@@ -217,7 +212,7 @@ export function addBlobUrlsToPostContent(
 export async function deleteOldPostImages(
   imageFolder: string,
   currentUrls: string[]
-) {
+): Promise<void> {
   try {
     const { blobs } = await list({
       mode: "folded",

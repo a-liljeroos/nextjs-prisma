@@ -7,10 +7,10 @@ import { auth } from "@serverAuth";
 import { NewPost, PostContent } from "@types";
 import { postSchema } from "@zValidation";
 // functions
+import { CustomError } from "@errors/customError";
 import { getUserId } from "@crudFunctions";
 import {
   preparePostBody,
-  CustomError,
   uploadImages,
   addBlobUrlsToPostContent,
   ImageUploadResult,
@@ -76,7 +76,7 @@ export async function POST(req: NextRequest) {
     let processedContent: PostContent[] = [];
 
     if (imageUploadResults.length > 0) {
-      processedContent = addBlobUrlsToPostContent(
+      processedContent = await addBlobUrlsToPostContent(
         postRequest.post.content,
         imageUploadResults
       );

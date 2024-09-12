@@ -6,10 +6,10 @@ import { Post, PostContent } from "@types";
 import { postSchema } from "@zValidation";
 import { z } from "zod";
 // functions
+import { CustomError } from "@errors/customError";
 import { getPost, getUserId, editPost } from "@crudFunctions";
 import {
   preparePostBody,
-  CustomError,
   uploadImages,
   addBlobUrlsToPostContent,
   ImageUploadResult,
@@ -81,7 +81,7 @@ export async function PUT(req: NextRequest) {
     let processedContent: PostContent[] = [];
 
     if (imageUploadResults.length > 0) {
-      processedContent = addBlobUrlsToPostContent(
+      processedContent = await addBlobUrlsToPostContent(
         postRequest.post.content,
         imageUploadResults
       );
@@ -92,7 +92,7 @@ export async function PUT(req: NextRequest) {
         }
       });
       if (currentUrls) {
-        const folderPath = getImageFolderPath(userId.id, postImageFolder);
+        const folderPath = await getImageFolderPath(userId.id, postImageFolder);
         await deleteOldPostImages(folderPath, currentUrls);
       }
     } else {
