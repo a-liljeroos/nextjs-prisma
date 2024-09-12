@@ -76,7 +76,7 @@ export async function POST(req: NextRequest) {
     let processedContent: PostContent[] = [];
 
     if (imageUploadResults.length > 0) {
-      processedContent = addBlobUrlsToPostContent(
+      processedContent = await addBlobUrlsToPostContent(
         postRequest.post.content,
         imageUploadResults
       );
