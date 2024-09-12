@@ -8,7 +8,7 @@ import prisma, { Prisma } from "@prisma/prismaClient";
 import { auth } from "@serverAuth";
 // functions
 import { getUserId } from "@crudFunctions";
-import { isImage } from "@functions";
+import { isImage } from "@postFunctions";
 import { randomUUID } from "crypto";
 const sharp = require("sharp");
 
