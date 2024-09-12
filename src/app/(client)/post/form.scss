@@ -53,3 +53,21 @@
   cursor: pointer;
   z-index: 10;
 }
+
+#write-post-image-preview-btn {
+  border-top-right-radius: 0px;
+  border-bottom-right-radius: 0px;
+  border-bottom: 0px;
+}
+
+#write-post-image-description {
+  border-top-left-radius: 0px;
+  border-bottom-left-radius: 0px;
+  padding-left: 10px;
+}
+
+#write-post-image-description:active,
+#write-post-image-description:focus {
+  border: none;
+  outline: none;
+}

@@ -27,8 +27,10 @@
       "@functions": ["./src/app/_functions/functions.ts"],
       "@clientFunctions": ["./src/app/_functions/clientFunctions.ts"],
       "@crudFunctions": ["./src/app/_functions/crudFunctions.ts"],
+      "@postFunctions": ["./src/app/_functions/postFunctions.ts"],
       "@actions": ["./src/app/_actions/actions.ts"],
-      "@types": ["./src/app/_types/types.ts"]
+      "@types": ["./src/app/_types/types.ts"],
+      "@zValidation": ["./src/app/_zod/zValidation.ts"]
     }
   },
   "include": [

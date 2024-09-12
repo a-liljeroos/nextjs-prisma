@@ -1,5 +1,5 @@
 "use client";
-import React, { useState, useEffect } from "react";
+import { useRef } from "react";
 import { useRouter } from "next/navigation";
 // react-query
 import { useMutation } from "@tanstack/react-query";
@@ -7,28 +7,26 @@ import { useMutation } from "@tanstack/react-query";
 import { Post, NewPost } from "@types";
 // context
 import { useWritePostContext } from "../writePostContext";
+import { ImageViewContextProvider } from "@components/imagePreview/imagePreviewContext";
+// functions
+import { preparePostSubmit } from "../writePostContext";
 // components
+import { ImageView } from "@components/imagePreview/imagePreviewContext";
 import PageContainer from "@components/pageContainer/pageContainer";
 import toast from "react-hot-toast";
 import PostForm from "../form";
 
 const WritePost = ({ user }: { user: string }) => {
-  const {
-    submitLock,
-    setSubmitLock,
-    postTitle,
-    setPostTitle,
-    postContent,
-    updatePostContent,
-  } = useWritePostContext();
+  const { postTitle, postContent } = useWritePostContext();
   const router = useRouter();
 
+  const mainRef = useRef(null);
+
   const mutation = useMutation({
-    mutationFn: (data: NewPost) => {
+    mutationFn: (data: FormData) => {
       return fetch(`/api/post/write`, {
         method: "POST",
-        body: JSON.stringify(data),
-        headers: { "Content-Type": "application/json" },
+        body: data,
       });
     },
     onSettled: (data) => {
@@ -42,24 +40,58 @@ const WritePost = ({ user }: { user: string }) => {
     },
   });
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
+    const formData = new FormData();
+    const preparedContent = preparePostSubmit(postContent);
     const post: NewPost = {
       author: user,
       title: postTitle,
-      content: postContent,
+      content: preparedContent,
     };
-    mutation.mutate(post);
+    formData.append("post", JSON.stringify(post));
+    const newImages: number[] = [];
+    preparedContent.map((content) => {
+      if (
+        content.type === "Image" &&
+        content.imageUpdated === undefined &&
+        content.content
+      ) {
+        newImages.push(content.index);
+      }
+    });
+    formData.append("newImages", JSON.stringify(newImages));
+    await Promise.all(
+      postContent.map(async (content) => {
+        if (content.type === "Image" && newImages.includes(content.index)) {
+          const image = await fetch(content.content).then((r) => r.blob());
+          formData.append(content.index.toString(), image);
+        }
+      })
+    );
+
+    mutation.mutate(formData);
   };
 
   return (
-    <PageContainer>
-      <div className="p-3">
-        <div className="flex items-center justify-between mb-4">
-          <h1 className="text-xl">Write New Post</h1>
+    <PageContainer mainRef={mainRef}>
+      <ImageViewContextProvider>
+        <ImageView
+          containerRef={mainRef}
+          width={280}
+          className="rounded-lg shadow-lg"
+          style={{
+            objectFit: "cover",
+            zIndex: 100,
+          }}
+        />
+        <div className="p-3">
+          <div className="flex items-center justify-between mb-4">
+            <h1 className="text-xl">Write New Post</h1>
+          </div>
+          <PostForm handleSubmit={handleSubmit} />
         </div>
-        <PostForm handleSubmit={handleSubmit} />
-      </div>
+      </ImageViewContextProvider>
     </PageContainer>
   );
 };

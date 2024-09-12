@@ -1,7 +1,8 @@
 "use server";
 import prisma, { Prisma } from "@prisma/prismaClient";
-import { Post } from "@types";
+import { Post, PostContent } from "@types";
 import { auth } from "@serverAuth";
+import { del } from "@vercel/blob";
 
 export const deletePost = async (postId: number) => {
   const session = await auth();
@@ -24,13 +25,29 @@ export const deletePost = async (postId: number) => {
     where: {
       id: postId,
     },
-    select: {
-      authorId: true,
-    },
   });
+
   if (post?.authorId !== userId.id) {
     throw new Error("You are not the author of this post.");
   }
+
+  const content = post.content as PostContent[];
+
+  // Delete images from the blob storage
+  try {
+    let imageUrls: string[] = [];
+    if (content)
+      content.map(async (item) => {
+        if (item.type === "Image") {
+          imageUrls.push(item.content);
+        }
+      });
+    await del(imageUrls);
+  } catch (error: any) {
+    console.log("Error on deleting images: ", error);
+  }
+
+  // Delete the post from the database
   const deletedPost = await prisma.post.delete({
     where: {
       id: postId,
@@ -40,14 +57,16 @@ export const deletePost = async (postId: number) => {
 };
 
 export const editPost = async (post: Post) => {
+  const { id, imageFolder, title, author, content, published } = post;
   const editedPost = await prisma.post.update({
     where: {
       id: post.id,
     },
     data: {
-      title: post.title,
-      content: post.content,
-      published: post.published,
+      imageFolder,
+      title,
+      content,
+      published,
     } as Prisma.PostUpdateInput,
   });
   return editedPost;
