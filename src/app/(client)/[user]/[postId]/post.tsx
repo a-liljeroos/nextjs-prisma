@@ -1,12 +1,14 @@
 "use client";
+import React, { useState } from "react";
 import Link from "next/link";
 // functions
 import formatDate from "@functions";
 // types
-import { Post as TPost } from "@types";
+import { PostContent, Post as TPost } from "@types";
 // components
 import PostOperations from "@components/post/postOperations";
 import PageContainer from "@components/pageContainer/pageContainer";
+import Image from "next/image";
 // styles
 import "./post.scss";
 
@@ -52,8 +54,16 @@ const DisplayPost = ({ post }: DisplayPostProps) => {
             return <FirstParagraph key={item.index} content={item.content} />;
           } else if (item.type === "Subheader") {
             return <SubHeader key={item.index} content={item.content} />;
-          } else {
+          } else if (item.type === "Paragraph") {
             return <Paragraph key={item.index} content={item.content} />;
+          } else if (item.type === "Image") {
+            return (
+              <ImageContent
+                key={item.index}
+                content={item.content}
+                description={item.description}
+              />
+            );
           }
         })}
         {content.length > 1 && (
@@ -86,15 +96,34 @@ const FirstParagraph = ({ content }: { content: string }) => {
 };
 
 const SubHeader = ({ content }: { content: string }) => {
-  return (
-    <div>
-      <h2 className="text-lg p-3 mt-4 text-green-200">{content}</h2>
-    </div>
-  );
+  return <h2 className="text-lg p-3 pb-2 mt-6 text-green-200">{content}</h2>;
 };
 
 const Paragraph = ({ content }: { content: string }) => {
   return <p className="p-3 w-11/12 text-pretty">{content}</p>;
+};
+
+const ImageContent = ({
+  content,
+  description,
+}: {
+  content: string;
+  description?: string;
+}) => {
+  return (
+    <div className="p-3 my-2">
+      <div className=" ">
+        <Image
+          src={content}
+          alt={description || "image"}
+          width={500}
+          height={500}
+          layout="responsive"
+        />
+        {description && <p className="mt-2">{description}</p>}
+      </div>
+    </div>
+  );
 };
 
 const PostInfo = ({

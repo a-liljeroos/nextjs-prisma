@@ -1,10 +1,10 @@
 "use client";
 import { createContext, ReactNode, useContext, useState } from "react";
 // types
-import { PostContent, Post } from "@types";
+import { PostContent, PostContentType, Post } from "@types";
 
 interface WritePostContextProps {
-  addContentField: (type: "Paragraph" | "Subheader") => void;
+  addContentField: (type: PostContentType) => void;
   deletePostContent: (index: number) => void;
   hydrateForm: (post: Post) => void;
   moveUp: (currentIndex: number) => void;
@@ -95,12 +95,18 @@ const usePostContent = () => {
   const [postContent, setPostContent] = useState<PostContent[]>(initContent);
 
   const hydratePostContent = (content: PostContent[]) => {
-    const contentSorted = sortContent([...content]);
+    const markImages = content.map((item) => {
+      if (item.type === "Image") {
+        return { ...item, imageUpdated: false };
+      }
+      return item;
+    });
+    const contentSorted = sortContent(markImages);
     return setPostContent(contentSorted);
   };
 
-  const addContentField = (type: "Paragraph" | "Subheader") => {
-    const newContent: PostContent = {
+  const addContentField = (type: PostContentType) => {
+    let newContent: PostContent = {
       index: postContent.length,
       type: type,
       content: "",
@@ -163,10 +169,28 @@ const usePostContent = () => {
   };
 };
 
-const cleanPostContent = (postContent: PostContent): PostContent => {
-  let cleanedContent = postContent.content;
-  cleanedContent = cleanedContent.trim();
-  return { ...postContent, content: cleanedContent };
+export const preparePostSubmit = (
+  postContent: PostContent[]
+): PostContent[] => {
+  // remove empty fields
+  let content = postContent.filter((item) => {
+    return item.content !== "";
+  });
+  content = cleanPostContent(content);
+  content = sortContent(content);
+  content = reIndexContent(content);
+  return content;
+};
+
+const cleanPostContent = (postContent: PostContent[]): PostContent[] => {
+  let cleanedContent: PostContent[] = [];
+  postContent.forEach((item) => {
+    cleanedContent.push({
+      ...item,
+      content: item.content.trim(),
+    });
+  });
+  return cleanedContent;
 };
 
 const sortContent = (content: PostContent[]): PostContent[] => {

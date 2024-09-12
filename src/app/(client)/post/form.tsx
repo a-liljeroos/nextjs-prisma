@@ -1,13 +1,17 @@
 "use client";
-import React, { useState, useEffect, useRef } from "react";
+import React, { useState, useLayoutEffect, useRef } from "react";
 // context
 import { useWritePostContext } from "./writePostContext";
+import { useImageViewContext } from "@components/imagePreview/imagePreviewContext";
 // types
-import { PostContent } from "@types";
+import { PostContent, PostContentType } from "@types";
 // icons
+import { AiOutlineEye } from "react-icons/ai";
 import { FiLock } from "react-icons/fi";
 import { FiUnlock } from "react-icons/fi";
 import { BsThreeDotsVertical } from "react-icons/bs";
+// components
+import Image from "next/image";
 // styles
 import "./form.scss";
 
@@ -27,8 +31,7 @@ const PostForm = ({ handleSubmit }: PostFormProps) => {
   } = useWritePostContext();
 
   const textareaRef = useRef<HTMLTextAreaElement>(null);
-
-  useEffect(() => {
+  useLayoutEffect(() => {
     if (textareaRef.current) {
       textareaRef.current.style.height = "auto";
       textareaRef.current.style.height =
@@ -38,7 +41,12 @@ const PostForm = ({ handleSubmit }: PostFormProps) => {
 
   const DynamicFields = ({ postContent }: { postContent: PostContent[] }) => {
     return [...postContent].map((contents, index) => {
-      const { type: inputType, content, index: postIndex } = contents;
+      const {
+        type: inputType,
+        content,
+        index: postIndex,
+        description,
+      } = contents;
       if (postIndex !== 0) {
         return (
           <DynamicInput
@@ -46,16 +54,31 @@ const PostForm = ({ handleSubmit }: PostFormProps) => {
             index={postIndex}
             inputType={inputType}
             content={content}
+            description={description}
           />
         );
       }
     });
   };
 
+  const AddFieldButton = ({ type }: { type: PostContentType }) => {
+    return (
+      <button
+        type="button"
+        className="px-1"
+        onClick={() => {
+          addContentField(type);
+        }}
+      >
+        + {type}
+      </button>
+    );
+  };
+
   return (
     <form
       onSubmit={handleSubmit}
-      className="flex flex-col gap-3 "
+      className="flex flex-col gap-3 relative"
       action="POST"
     >
       <input
@@ -86,27 +109,9 @@ const PostForm = ({ handleSubmit }: PostFormProps) => {
       <DynamicFields postContent={postContent} />
       <div className="controls flex flex-col gap-3">
         <div className="flex gap-2 ">
-          <button
-            type="button"
-            className="px-1"
-            onClick={() => {
-              addContentField("Subheader");
-            }}
-          >
-            + Subheader
-          </button>
-          <button
-            type="button"
-            className="px-1"
-            onClick={() => {
-              addContentField("Paragraph");
-            }}
-          >
-            + Paragraph
-          </button>
-          {/*   <button type="button" className="px-1">
-        + Image
-      </button> */}
+          <AddFieldButton type="Subheader" />
+          <AddFieldButton type="Paragraph" />
+          <AddFieldButton type="Image" />
         </div>
       </div>
       <div className="flex gap-2 mt-4">
@@ -130,18 +135,24 @@ export default PostForm;
 
 type DynamicInputElement = {
   index: number;
-  inputType: "Subheader" | "Paragraph";
+  inputType: PostContentType;
   content: string;
+  description?: string;
 };
 
 interface MoveButtonsProps {
   index: number;
 }
 
-const DynamicInput = ({ index, inputType, content }: DynamicInputElement) => {
+const DynamicInput = ({
+  index,
+  inputType,
+  content,
+  description,
+}: DynamicInputElement) => {
   const textareaRef = useRef<HTMLTextAreaElement>(null);
 
-  useEffect(() => {
+  useLayoutEffect(() => {
     if (textareaRef.current) {
       textareaRef.current.style.height = "auto";
       textareaRef.current.style.height =
@@ -181,7 +192,10 @@ const DynamicInput = ({ index, inputType, content }: DynamicInputElement) => {
   return (
     <div className="dynamic-inputs">
       {showControls && (
-        <div className="dynamic-inputs-controls bg-backgroundSecondary">
+        <div
+          className="dynamic-inputs-controls bg-backgroundSecondary"
+          style={{ zIndex: 20 }}
+        >
           <button type="button" onClick={deleteInputField}>
             Delete
           </button>
@@ -243,7 +257,115 @@ const DynamicInput = ({ index, inputType, content }: DynamicInputElement) => {
           />
         </>
       )}
+      {inputType === "Image" && (
+        <ImageInput index={index} content={content} description={description} />
+      )}
       {/* <MoveButtons index={index} /> */}
+    </div>
+  );
+};
+
+interface ImageInputProps {
+  index: number;
+  content: string;
+  description?: string;
+}
+
+const ImageInput = ({ index, content, description }: ImageInputProps) => {
+  const { updatePostContent, postContent } = useWritePostContext();
+  const { setImage } = useImageViewContext();
+
+  const showPreview = (
+    e:
+      | React.TouchEvent<HTMLButtonElement>
+      | React.MouseEvent<HTMLButtonElement, MouseEvent>
+  ) => {
+    e.preventDefault();
+    setImage(content);
+  };
+
+  return (
+    <div
+      className="flex flex-col gap-2 items-center py-2 pl-2 relative"
+      style={{ background: "#d4d4d4", borderRadius: 5 }}
+    >
+      <div className="flex items-center w-full">
+        <input
+          hidden
+          accept=".png,.jpg,.jpeg,.webp,image/png"
+          type="file"
+          name={"image_" + index}
+          id={"image_" + index}
+          onChange={(e) => {
+            updatePostContent({
+              index: Number(index),
+              type: "Image",
+              content: URL.createObjectURL(e.target.files![0]),
+              description: description,
+            });
+          }}
+        />
+        <label
+          className="file-upload-btn"
+          style={{ lineHeight: 2.2, marginTop: 2, zIndex: 10 }}
+          role="button"
+          htmlFor={"image_" + index}
+        >
+          Select
+        </label>
+      </div>
+      {content && (
+        <div className="flex items-center w-full">
+          <button
+            onMouseDown={showPreview}
+            onMouseUp={(e) => {
+              e.preventDefault();
+              setImage("");
+            }}
+            onMouseLeave={(e) => {
+              e.preventDefault();
+              setImage("");
+            }}
+            onTouchStart={showPreview}
+            onTouchEnd={(e) => {
+              e.preventDefault();
+              setImage("");
+            }}
+            type="button"
+            className={`z-20 `}
+            id="write-post-image-preview-btn"
+          >
+            <AiOutlineEye size={30} color="white" />
+          </button>
+          <input
+            name={"imageDescription_" + index}
+            className="w-10/12 shadow-lg"
+            id="write-post-image-description"
+            type="text"
+            placeholder="Image Description"
+            defaultValue={description}
+            style={{ zIndex: 10 }}
+            onBlur={(e) => {
+              updatePostContent({
+                index: Number(index),
+                type: "Image",
+                content: content,
+                description: e.target.value,
+              });
+            }}
+          />
+        </div>
+      )}
+      {content && (
+        <Image
+          quality={10}
+          src={content}
+          fill={true}
+          alt=""
+          className="rounded mr-auto"
+          style={{ objectFit: "cover", opacity: 0.7 }}
+        />
+      )}
     </div>
   );
 };
