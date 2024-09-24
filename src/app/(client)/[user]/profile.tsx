@@ -1,45 +1,42 @@
 "use client";
-import { useState } from "react";
 import Link from "next/link";
-// auth
-import { useSession } from "next-auth/react";
 // react-query
 import { useQuery } from "@tanstack/react-query";
-import getProfile from "./_fetchProfile/getProfile";
 import getUserPosts from "./_fetchProfile/getUserPosts";
+// types
+import { ProfileFetch } from "@types";
 // components
 import PostList from "@components/post/postList";
 import Spinner from "@components/spinner/spinner";
 import ErrorMsg1 from "@components/spinner/errorMsg1";
 import PageContainer from "@components/pageContainer/pageContainer";
 import ProfileHeader from "./_components/profileHeader";
+import ErrorPage from "@components/errorPage/errorPage";
 // styles
 import "./profile.scss";
 
 interface ProfileProps {
-  name: string;
+  profile: ProfileFetch;
+  isOwner: boolean;
 }
 
-const Profile = ({ name }: ProfileProps) => {
-  const profile = useQuery({
-    queryKey: ["profile", name],
-    queryFn: () => getProfile({ name: name }),
-  });
-  const { data: session } = useSession();
-  const isOwner = session?.user?.name === name;
+const Profile = ({ profile, isOwner }: ProfileProps) => {
+  if (!profile) {
+    return <ErrorPage message={"Page not found."} />;
+  }
 
   return (
     <PageContainer>
-      <ProfileHeader profile={profile.data} name={name} isOwner={isOwner} />
+      <ProfileHeader profile={profile} name={profile.name} isOwner={isOwner} />
       <div
         className="profile-bio-cont bg-neutral-600"
         style={{ marginTop: -1 }}
       >
         <h2 className="text-backgroundSecondary text-lg text-pretty w-7/12 min-h-7">
-          {!profile.isLoading && profile.data?.profile?.bio}
+          {profile?.profile?.bio && profile?.profile?.bio}
         </h2>
       </div>
-      <FetchPosts name={name} isOwner={isOwner} />
+      <FetchPosts name={profile.name} isOwner={isOwner} />
     </PageContainer>
   );
 };
