@@ -10,6 +10,9 @@ import { AiOutlineEye } from "react-icons/ai";
 import { FiLock } from "react-icons/fi";
 import { FiUnlock } from "react-icons/fi";
 import { BsThreeDotsVertical } from "react-icons/bs";
+import { TiArrowSortedUp } from "react-icons/ti";
+import { TiArrowSortedDown } from "react-icons/ti";
+import { LuMove } from "react-icons/lu";
 // components
 import Image from "next/image";
 // styles
@@ -28,9 +31,12 @@ const PostForm = ({ handleSubmit }: PostFormProps) => {
     setPostTitle,
     postContent,
     updatePostContent,
+    showMoveButtons,
+    setShowMoveButtons,
   } = useWritePostContext();
 
   const textareaRef = useRef<HTMLTextAreaElement>(null);
+
   useLayoutEffect(() => {
     if (textareaRef.current) {
       textareaRef.current.style.height = "auto";
@@ -112,6 +118,13 @@ const PostForm = ({ handleSubmit }: PostFormProps) => {
           <AddFieldButton type="Subheader" />
           <AddFieldButton type="Paragraph" />
           <AddFieldButton type="Image" />
+          <button
+            type="button"
+            className={`${showMoveButtons ? "bg-backgroundSecondary" : ""}`}
+            onClick={() => setShowMoveButtons(!showMoveButtons)}
+          >
+            <LuMove color="white" size={20} />
+          </button>
         </div>
       </div>
       <div className="flex gap-2 mt-4">
@@ -140,10 +153,6 @@ type DynamicInputElement = {
   description?: string;
 };
 
-interface MoveButtonsProps {
-  index: number;
-}
-
 const DynamicInput = ({
   index,
   inputType,
@@ -160,107 +169,130 @@ const DynamicInput = ({
     }
   }, []);
 
-  const { deletePostContent, updatePostContent, postContent } =
+  const { deletePostContent, updatePostContent, postContent, showMoveButtons } =
     useWritePostContext();
   const [showControls, setShowControls] = useState(false);
-  const [inputValue, setInputValue] = useState<string>(content || "");
 
   const deleteInputField = () => {
     setShowControls(!showControls);
     deletePostContent(index);
   };
 
-  const MoveButtons = ({ index }: MoveButtonsProps) => {
-    const { moveUp, moveDown } = useWritePostContext();
+  interface MoveButtonsProps {
+    index: number;
+    totalInputs: number;
+    children?: React.ReactNode;
+  }
+
+  const MoveButtons = ({ index, totalInputs, children }: MoveButtonsProps) => {
+    const { moveUp, moveDown, showMoveButtons } = useWritePostContext();
+    const notFirst = index !== 1;
+    const notLast = index !== totalInputs - 1;
+
     return (
-      <>
-        <button
-          type="button"
-          onClick={() => {
-            moveUp(index);
-          }}
-        >
-          up
-        </button>
-        <button type="button" onClick={() => moveDown(index)}>
-          down
-        </button>
-      </>
+      <div className="flex flex-col w-full">
+        {showMoveButtons && (
+          <div
+            role="button"
+            className={`bg-white w-1/4 rounded-t-xl flex justify-center -mb-1  ${
+              notFirst ? "" : "opacity-0 user-select-none cursor-default"
+            }`}
+            onClick={() => {
+              moveUp(index);
+            }}
+          >
+            <TiArrowSortedUp size={22} color="#3D3D3D" />
+          </div>
+        )}
+        {children}
+        {showMoveButtons && (
+          <div
+            role="button"
+            className={`bg-white w-1/4 ml-auto rounded-b-xl flex justify-center -mt-1 ${
+              notLast ? "" : "opacity-0 user-select-none cursor-default"
+            }`}
+            onClick={() => moveDown(index)}
+          >
+            <TiArrowSortedDown size={22} color="#3D3D3D" />
+          </div>
+        )}
+      </div>
     );
   };
 
   return (
-    <div className="dynamic-inputs">
-      {showControls && (
-        <div
-          className="dynamic-inputs-controls bg-backgroundSecondary"
-          style={{ zIndex: 20 }}
-        >
-          <button type="button" onClick={deleteInputField}>
-            Delete
+    <div
+      className={`dynamic-inputs flex rounded" ${showMoveButtons && "-mt-5"} `}
+    >
+      <MoveButtons index={index} totalInputs={postContent.length}>
+        <div className="flex w-full relative">
+          {showControls && (
+            <div
+              className="dynamic-inputs-controls bg-backgroundSecondary"
+              style={{ zIndex: 20 }}
+            >
+              <button type="button" onClick={deleteInputField}>
+                Delete
+              </button>
+            </div>
+          )}
+          <button
+            id="setControlsBtn"
+            type="button"
+            style={{ borderBottom: "initial" }}
+            onClick={() => setShowControls(!showControls)}
+          >
+            <BsThreeDotsVertical color="black" size={20} />
           </button>
-        </div>
-      )}
-      <button
-        id="setControlsBtn"
-        type="button"
-        style={{ borderBottom: "initial" }}
-        onClick={() => setShowControls(!showControls)}
-      >
-        <BsThreeDotsVertical color="black" size={20} />
-      </button>
 
-      {inputType === "Subheader" && (
-        <>
-          <input
-            name={"subheader_" + index}
-            className="dynamic-input"
-            type="text"
-            placeholder="Subheader"
-            defaultValue={inputValue}
-            onChange={(e) => setInputValue(e.target.value)}
-            onFocus={() => {
-              setShowControls(false);
-            }}
-            onBlur={(e) =>
-              updatePostContent({
-                index: Number(index),
-                type: inputType,
-                content: e.target.value,
-              })
-            }
-          />
-        </>
-      )}
-      {inputType === "Paragraph" && (
-        <>
-          <textarea
-            ref={textareaRef}
-            name={"paragraph_" + index}
-            className="paragraph-input dynamic-input"
-            placeholder="Paragraph"
-            spellCheck="false"
-            defaultValue={inputValue}
-            onChange={(e) => {
-              setInputValue(e.target.value);
-            }}
-            onFocus={() => {
-              setShowControls(false);
-            }}
-            onBlur={(e) =>
-              updatePostContent({
-                index: Number(index),
-                type: inputType,
-                content: inputValue,
-              })
-            }
-          />
-        </>
-      )}
-      {inputType === "Image" && (
-        <ImageInput index={index} content={content} description={description} />
-      )}
-      {/* <MoveButtons index={index} /> */}
+          {inputType === "Subheader" && (
+            <input
+              name={"subheader_" + index}
+              className="dynamic-input w-full"
+              type="text"
+              placeholder="Subheader"
+              defaultValue={content || ""}
+              onFocus={() => {
+                if (showControls) setShowControls(false);
+              }}
+              onBlur={(e) =>
+                updatePostContent({
+                  index: Number(index),
+                  type: inputType,
+                  content: e.target.value,
+                })
+              }
+            />
+          )}
+          {inputType === "Paragraph" && (
+            <textarea
+              ref={textareaRef}
+              name={"paragraph_" + index}
+              className="paragraph-input dynamic-input w-full"
+              placeholder="Paragraph"
+              spellCheck="false"
+              defaultValue={content || ""}
+              onFocus={() => {
+                if (showControls) setShowControls(false);
+              }}
+              onBlur={(e) =>
+                updatePostContent({
+                  index: Number(index),
+                  type: inputType,
+                  content: e.target.value,
+                })
+              }
+            />
+          )}
+          {inputType === "Image" && (
+            <ImageInput
+              index={index}
+              content={content}
+              description={description}
+            />
+          )}
+        </div>
+      </MoveButtons>
     </div>
   );
 };
@@ -286,7 +318,7 @@ const ImageInput = ({ index, content, description }: ImageInputProps) => {
 
   return (
     <div
-      className="flex flex-col gap-2 items-center py-2 pl-2 relative"
+      className="flex flex-col gap-2 items-center py-2 pl-2 relative w-full"
       style={{ background: "#d4d4d4", borderRadius: 5 }}
     >
       <div className="flex items-center w-full">

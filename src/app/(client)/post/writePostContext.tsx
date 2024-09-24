@@ -7,6 +7,8 @@ interface WritePostContextProps {
   addContentField: (type: PostContentType) => void;
   deletePostContent: (index: number) => void;
   hydrateForm: (post: Post) => void;
+  showMoveButtons: boolean;
+  setShowMoveButtons: (showMoveButtons: boolean) => void;
   moveUp: (currentIndex: number) => void;
   moveDown: (currentIndex: number) => void;
   postContent: PostContent[];
@@ -41,6 +43,8 @@ export const WritePostContextProvider = ({
   //
   const [submitLock, setSubmitLock] = useState(true);
 
+  const [showMoveButtons, setShowMoveButtons] = useState(false);
+
   const [postTitle, setPostTitle] = useState<string>("");
 
   const {
@@ -66,6 +70,8 @@ export const WritePostContextProvider = ({
         hydrateForm,
         moveUp,
         moveDown,
+        showMoveButtons,
+        setShowMoveButtons,
         postContent,
         postTitle,
         setPostTitle,
