@@ -76,7 +76,7 @@ const PostForm = ({ handleSubmit }: PostFormProps) => {
           addContentField(type);
         }}
       >
-        + {type}
+        {type}
       </button>
     );
   };
@@ -114,7 +114,7 @@ const PostForm = ({ handleSubmit }: PostFormProps) => {
       />
       <DynamicFields postContent={postContent} />
       <div className="controls flex flex-col gap-3">
-        <div className="flex gap-2 ">
+        <div className="flex flex-wrap gap-2 ">
           <AddFieldButton type="Subheader" />
           <AddFieldButton type="Paragraph" />
           <AddFieldButton type="Image" />
