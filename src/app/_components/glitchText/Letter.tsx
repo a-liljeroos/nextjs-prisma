@@ -63,55 +63,57 @@ const LetterSpinner = ({ input }: LetterSpinnerProps) => {
 
   const delayStart = getRandomNumber(120, 250);
 
-  useEffect(() => {
-    const changeLetter = async (rounds: number, effectDelay: number) => {
-      const random = Math.random();
+  const changeLetter = async (rounds: number, effectDelay: number) => {
+    const random = Math.random();
 
-      const animation = letterRef.current?.animate(
-        [
-          { transform: `translateY(-67px)`, opacity: 0 },
-          { transform: `translateY(0px)`, opacity: 1 },
-        ],
-        {
-          duration: effectDelay,
-          easing: "ease-in-out",
-          iterations: 1,
-          fill: "forwards",
-        }
-      );
-      animation?.pause();
+    const animation = letterRef.current?.animate(
+      [
+        { transform: `translateY(-67px)`, opacity: 0 },
+        { transform: `translateY(0px)`, opacity: 1 },
+      ],
+      {
+        duration: effectDelay,
+        easing: "ease-in-out",
+        iterations: 1,
+        fill: "forwards",
+      }
+    );
+    animation?.pause();
 
-      if (rounds === 0) {
-        setLetter(input);
+    if (rounds === 0) {
+      setLetter(input);
+    } else {
+      if (random < 0.05) {
+        setLetter(getRandomArrayItem(emotes));
       } else {
-        if (random < 0.05) {
-          setLetter(getRandomArrayItem(emotes));
-        } else {
-          setLetter(getRandomChar(letters));
-        }
+        setLetter(getRandomChar(letters));
       }
-      animation?.play();
+    }
+    animation?.play();
 
-      await delay(effectDelay);
-      animation?.finish();
-      if (rounds > 0) {
-        changeLetter(rounds - 1, effectDelay + 70);
-      }
-      if (rounds === 0) {
-        setLetter(input);
-        await delay(getRandomNumber(15000, 25000));
+    await delay(effectDelay);
+    animation?.finish();
+    if (rounds > 0) {
+      changeLetter(rounds - 1, effectDelay + 70);
+    }
+    if (rounds === 0) {
+      setLetter(input);
+      await delay(getRandomNumber(15000, 25000));
 
-        changeLetter(getRandomNumber(2, 7), delayStart);
-      }
-    };
+      changeLetter(getRandomNumber(2, 7), delayStart);
+    }
+  };
+
+  useEffect(() => {
     if (!window.matchMedia("(prefers-reduced-motion: reduce)").matches) {
       changeLetter(8, delayStart);
     }
   }, []);
   return (
     <div
+      onClick={() => changeLetter(8, delayStart)}
       ref={letterRef}
-      className="letter-spinner font-semibold hover:text-backgroundSecondary"
+      className="letter-spinner font-semibold hover:text-backgroundSecondary cursor-pointer"
     >
       {letter}
     </div>

@@ -1,11 +1,11 @@
 "use client";
 import { createContext, ReactNode, useContext, useState } from "react";
 // types
-import { useGetUserProfileReturn } from "../_fetchProfile/getProfile";
+import { ProfileFetch } from "@types";
 
 interface EditProfileContextProps {
   user: string;
-  userData: useGetUserProfileReturn | null | undefined;
+  userData: ProfileFetch | null | undefined;
   toggleForms: (indexNo: number) => void;
   formList: EditProfileForm[];
 }
@@ -20,7 +20,7 @@ export const useEditProfileContext = () => {
 
 type EditProfileContextProviderProps = {
   user: string;
-  userData: useGetUserProfileReturn;
+  userData: ProfileFetch;
   children: ReactNode;
 };
 

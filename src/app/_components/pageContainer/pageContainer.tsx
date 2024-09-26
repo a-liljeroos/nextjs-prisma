@@ -1,16 +1,17 @@
-import React from "react";
+import React, { ElementRef, forwardRef } from "react";
 // styles
 import "./pageContainer.scss";
 
 interface PageContainerProps {
   children: React.ReactNode;
+  mainRef?: React.RefObject<ElementRef<"main">>;
 }
 
-const PageContainer = ({ children }: PageContainerProps) => {
+const PageContainer = ({ children, mainRef }: PageContainerProps) => {
   return (
-    <main style={{ margin: "0 auto" }}>
+    <main ref={mainRef} id="main" className="flex flex-col items-center w-full">
       <div
-        className="content-container"
+        className="content-container relative"
         style={{
           minHeight: "100%",
         }}

@@ -1,68 +1,38 @@
 "use client";
+import React, { useState } from "react";
 import Link from "next/link";
-// auth
-import { useSession } from "next-auth/react";
-// react-query
-import { useQuery } from "@tanstack/react-query";
 // functions
 import formatDate from "@functions";
 // types
-import { Post as TPost } from "@types";
+import { PostContent, Post as TPost } from "@types";
 // components
 import PostOperations from "@components/post/postOperations";
 import PageContainer from "@components/pageContainer/pageContainer";
-import Spinner from "@components/spinner/spinner";
+import Image from "next/image";
 // styles
 import "./post.scss";
 
 interface PostProps {
+  post: TPost;
   postId: string;
   user: string;
+  isOwner: boolean;
 }
 
-const Post = ({ postId, user }: PostProps) => {
-  const { data: session } = useSession();
-  const isOwner = session?.user?.name === user;
-  const { data, isLoading, isError } = useQuery({
-    queryKey: ["post", postId],
-    queryFn: async (): Promise<TPost> => {
-      const res = await fetch(`/api/post/${postId}`);
-      if (!res.ok) {
-        throw new Error("Network response was not ok");
-      }
-      const post = await res.json();
-      return post;
-    },
-  });
-
-  if (isError) {
-    return (
-      <PageContainer>
-        <div className="text-center p-10">Post not found.</div>
-      </PageContainer>
-    );
-  }
-
+const Post = ({ postId, user, isOwner, post }: PostProps) => {
   return (
     <PageContainer>
-      {isLoading && (
-        <div className="post-page-spinner">
-          <Spinner />
+      <div className="p-4">
+        <DisplayPost post={post} />
+        <div className="flex items-center justify-between">
+          <PostInfo
+            author={post.author}
+            created={post.createdAt}
+            updated={post.updatedAt}
+          />
+          {isOwner && <PostOperations postId={postId} user={user} />}
         </div>
-      )}
-      {!isLoading && (
-        <div className="p-4">
-          <DisplayPost post={data!} />
-          <div className="flex items-center justify-between">
-            <PostInfo
-              author={data?.author!}
-              created={data?.createdAt}
-              updated={data?.updatedAt}
-            />
-            {isOwner && <PostOperations postId={postId} user={user} />}
-          </div>
-        </div>
-      )}
+      </div>
     </PageContainer>
   );
 };
@@ -84,8 +54,16 @@ const DisplayPost = ({ post }: DisplayPostProps) => {
             return <FirstParagraph key={item.index} content={item.content} />;
           } else if (item.type === "Subheader") {
             return <SubHeader key={item.index} content={item.content} />;
-          } else {
+          } else if (item.type === "Paragraph") {
             return <Paragraph key={item.index} content={item.content} />;
+          } else if (item.type === "Image") {
+            return (
+              <ImageContent
+                key={item.index}
+                content={item.content}
+                description={item.description}
+              />
+            );
           }
         })}
         {content.length > 1 && (
@@ -118,15 +96,34 @@ const FirstParagraph = ({ content }: { content: string }) => {
 };
 
 const SubHeader = ({ content }: { content: string }) => {
-  return (
-    <div>
-      <h2 className="text-lg p-3 mt-4 text-green-200">{content}</h2>
-    </div>
-  );
+  return <h2 className="text-lg p-3 pb-2 mt-6 text-green-200">{content}</h2>;
 };
 
 const Paragraph = ({ content }: { content: string }) => {
   return <p className="p-3 w-11/12 text-pretty">{content}</p>;
+};
+
+const ImageContent = ({
+  content,
+  description,
+}: {
+  content: string;
+  description?: string;
+}) => {
+  return (
+    <div className="p-3 my-2">
+      <div className=" ">
+        <Image
+          src={content}
+          alt={description || "image"}
+          width={500}
+          height={500}
+          layout="responsive"
+        />
+        {description && <p className="mt-2">{description}</p>}
+      </div>
+    </div>
+  );
 };
 
 const PostInfo = ({

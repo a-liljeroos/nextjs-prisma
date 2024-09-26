@@ -4,14 +4,14 @@
   padding-right: 28px;
 }
 
-.extra-inputs {
+.dynamic-inputs {
   position: relative;
 
-  .extra-input {
+  .dynamic-input {
     width: 100%;
   }
 
-  .extra-inputs-controls {
+  .dynamic-inputs-controls {
     position: absolute;
     display: flex;
     flex-direction: column;
@@ -52,4 +52,22 @@
   right: -5px;
   cursor: pointer;
   z-index: 10;
+}
+
+#write-post-image-preview-btn {
+  border-top-right-radius: 0px;
+  border-bottom-right-radius: 0px;
+  border-bottom: 0px;
+}
+
+#write-post-image-description {
+  border-top-left-radius: 0px;
+  border-bottom-left-radius: 0px;
+  padding-left: 10px;
+}
+
+#write-post-image-description:active,
+#write-post-image-description:focus {
+  border: none;
+  outline: none;
 }

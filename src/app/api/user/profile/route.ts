@@ -2,6 +2,7 @@ import prisma from "@prisma/prismaClient";
 import { auth } from "@serverAuth";
 import { NextResponse, NextRequest } from "next/server";
 import { z } from "zod";
+import { ProfileFetch } from "@types";
 
 // api/user/profile
 
@@ -25,7 +26,7 @@ export async function GET(req: NextRequest) {
 
     const isOwner = session?.user?.name === name;
 
-    const userProfile = await prisma.user.findUnique({
+    const userProfile: ProfileFetch = await prisma.user.findUnique({
       where: { name: name },
       select: {
         id: true,
@@ -36,6 +37,7 @@ export async function GET(req: NextRequest) {
         profile: {
           select: {
             bio: true,
+            image: true,
           },
         },
       },
