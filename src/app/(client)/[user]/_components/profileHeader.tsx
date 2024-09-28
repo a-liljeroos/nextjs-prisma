@@ -3,6 +3,11 @@ import React, { useState } from "react";
 import Link from "next/link";
 // types
 import { ProfileFetch } from "@types";
+// context
+import {
+  useImageViewContext,
+  ImageViewContextProvider,
+} from "@components/imagePreview/imagePreviewContext";
 // components
 import { Avatar, AvatarOperations } from "./avatar";
 
@@ -41,6 +46,7 @@ const ProfileHeader = ({ profile, name, isOwner }: ProfileHeaderProps) => {
             </div>
           ) : (
             <AvatarOperations
+              imageUrl={profile?.profile?.image}
               profileId={profile?.id}
               blob={blob}
               setBlob={setBlob}

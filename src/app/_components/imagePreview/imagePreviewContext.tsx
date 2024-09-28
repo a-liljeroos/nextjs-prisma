@@ -5,6 +5,7 @@ import React, {
   useContext,
   useState,
   useEffect,
+  useRef,
 } from "react";
 // components
 import Image from "next/image";
@@ -52,43 +53,53 @@ export const ImageViewContextProvider = ({
 interface ImageViewProps {
   containerRef: React.RefObject<HTMLElement>;
   className?: string;
-  height?: number;
   quality?: number;
   style?: React.CSSProperties;
   width?: number;
+  relativeWidth?: number;
+  height?: number;
+  topPosition?: number;
 }
 
 export const ImageView = ({
   containerRef,
   className,
-  height = 100,
   quality = 75,
   style,
-  width = 100,
+  width = 0,
+  relativeWidth = 100,
+  height = 100,
+  topPosition = 20,
 }: ImageViewProps) => {
   const { image, setImage } = useImageViewContext();
-  const [top, setTop] = useState<number>(20);
+  const [top, setTop] = useState<number>(topPosition);
+  const [imageWidth, setImageWidth] = useState<number>(width);
 
   useEffect(() => {
     const mainRef = containerRef?.current;
     const scrollPosition = mainRef?.scrollTop;
 
-    if (scrollPosition) {
-      if (scrollPosition === 0) {
-        setTop(20);
-      } else setTop(scrollPosition + 20);
+    if (scrollPosition && topPosition !== 20) {
+      if (scrollPosition !== 0) {
+        setTop(scrollPosition + 20);
+      }
     }
-  }, [image]);
+
+    if (imageWidth === 0 && mainRef) {
+      const widthPercentage = (relativeWidth / 100) * mainRef.clientWidth;
+      setImageWidth(widthPercentage);
+    }
+  }, [image, imageWidth, topPosition, containerRef]);
 
   if (!image) return null;
   return (
     <div
-      className="absolute  w-full flex justify-center items-center"
+      className="absolute w-full flex justify-center items-center"
       style={{ top: top }}
     >
       <Image
         onClick={() => setImage("")}
-        width={width}
+        width={imageWidth}
         height={height}
         src={image}
         alt="image"

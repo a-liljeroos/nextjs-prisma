@@ -1,11 +1,18 @@
 "use client";
 import Link from "next/link";
+import { useRef, ElementRef } from "react";
 // react-query
 import { useQuery } from "@tanstack/react-query";
 import getUserPosts from "./_fetchProfile/getUserPosts";
+// context
+import {
+  useImageViewContext,
+  ImageViewContextProvider,
+} from "@components/imagePreview/imagePreviewContext";
 // types
 import { ProfileFetch } from "@types";
 // components
+import { ImageView } from "@components/imagePreview/imagePreviewContext";
 import PostList from "@components/post/postList";
 import Spinner from "@components/spinner/spinner";
 import ErrorMsg1 from "@components/spinner/errorMsg1";
@@ -21,22 +28,39 @@ interface ProfileProps {
 }
 
 const Profile = ({ profile, isOwner }: ProfileProps) => {
+  const mainRef = useRef<ElementRef<"main">>(null);
   if (!profile) {
     return <ErrorPage message={"Page not found."} />;
   }
 
   return (
-    <PageContainer>
-      <ProfileHeader profile={profile} name={profile.name} isOwner={isOwner} />
-      <div
-        className="profile-bio-cont bg-neutral-600"
-        style={{ marginTop: -1 }}
-      >
-        <h2 className="text-backgroundSecondary text-lg text-pretty w-7/12 min-h-7">
-          {profile?.profile?.bio && profile?.profile?.bio}
-        </h2>
-      </div>
-      <FetchPosts name={profile.name} isOwner={isOwner} />
+    <PageContainer mainRef={mainRef}>
+      <ImageViewContextProvider>
+        <ImageView
+          containerRef={mainRef}
+          className="rounded-lg shadow-lg"
+          relativeWidth={80}
+          topPosition={200}
+          style={{
+            objectFit: "cover",
+            zIndex: 100,
+          }}
+        />
+        <ProfileHeader
+          profile={profile}
+          name={profile.name}
+          isOwner={isOwner}
+        />
+        <div
+          className="profile-bio-cont bg-neutral-600"
+          style={{ marginTop: -1 }}
+        >
+          <h2 className="text-backgroundSecondary text-lg text-pretty w-7/12 min-h-7">
+            {profile?.profile?.bio && profile?.profile?.bio}
+          </h2>
+        </div>
+        <FetchPosts name={profile.name} isOwner={isOwner} />
+      </ImageViewContextProvider>
     </PageContainer>
   );
 };
