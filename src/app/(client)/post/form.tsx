@@ -312,8 +312,18 @@ const ImageInput = ({ index, content, description }: ImageInputProps) => {
       | React.TouchEvent<HTMLButtonElement>
       | React.MouseEvent<HTMLButtonElement, MouseEvent>
   ) => {
-    e.preventDefault();
+    if (e.cancelable && e.preventDefault) {
+      e.preventDefault();
+      e.stopPropagation();
+    }
     setImage(content);
+  };
+
+  window.oncontextmenu = function (event) {
+    event.preventDefault();
+    event.stopPropagation();
+    event.stopImmediatePropagation();
+    return false;
   };
 
   return (
@@ -350,17 +360,14 @@ const ImageInput = ({ index, content, description }: ImageInputProps) => {
         <div className="flex items-center w-full">
           <button
             onMouseDown={showPreview}
-            onMouseUp={(e) => {
-              e.preventDefault();
+            onMouseUp={() => {
               setImage("");
             }}
-            onMouseLeave={(e) => {
-              e.preventDefault();
+            onMouseLeave={() => {
               setImage("");
             }}
             onTouchStart={showPreview}
-            onTouchEnd={(e) => {
-              e.preventDefault();
+            onTouchEnd={() => {
               setImage("");
             }}
             type="button"

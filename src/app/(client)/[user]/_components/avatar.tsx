@@ -3,6 +3,8 @@ import type { PutBlobResult } from "@vercel/blob";
 import { useState, useEffect, useRef } from "react";
 // actions
 import { deleteAvatar } from "@actions";
+// context
+import { useImageViewContext } from "@components/imagePreview/imagePreviewContext";
 // components
 import Image from "next/image";
 import toast from "react-hot-toast";
@@ -28,15 +30,47 @@ export const Avatar = ({
   avatarModal,
   setAvatarModal,
 }: AvatarProps) => {
+  const { setImage } = useImageViewContext();
+
   useEffect(() => {
     setBlob(imageUrl);
   }, [imageUrl]);
 
+  const showPreview = (
+    e:
+      | React.TouchEvent<HTMLButtonElement>
+      | React.MouseEvent<HTMLButtonElement, MouseEvent>
+  ) => {
+    if (e.cancelable && e.preventDefault) {
+      e.preventDefault();
+      e.stopPropagation();
+    }
+
+    if (!isOwner) setImage(imageUrl || "");
+  };
+
+  const hidePreview = () => {
+    setImage("");
+  };
+
+  window.oncontextmenu = function (event) {
+    event.preventDefault();
+    event.stopPropagation();
+    event.stopImmediatePropagation();
+    return false;
+  };
+
   return (
     <div className="relative">
       <button
+        type="button"
         className="profile-img-button"
-        onClick={() => {
+        onMouseDown={showPreview}
+        onMouseUp={hidePreview}
+        onTouchStart={showPreview}
+        onTouchEnd={hidePreview}
+        onClick={(e) => {
+          e.preventDefault();
           if (isOwner) setAvatarModal(!avatarModal);
         }}
         style={{ borderBottom: "initial" }}
@@ -57,6 +91,7 @@ export const Avatar = ({
 };
 
 interface AvatarOperationsProps {
+  imageUrl: string | null | undefined;
   avatarModal: boolean;
   setAvatarModal: React.Dispatch<React.SetStateAction<boolean>>;
   profileId: number | undefined;
@@ -65,6 +100,7 @@ interface AvatarOperationsProps {
 }
 
 export const AvatarOperations = ({
+  imageUrl,
   avatarModal,
   setAvatarModal,
   profileId,
@@ -73,6 +109,8 @@ export const AvatarOperations = ({
 }: AvatarOperationsProps) => {
   const inputFileRef = useRef<HTMLInputElement>(null);
   const [uploadButton, setUploadButton] = useState(false);
+  const [deleteModal, setDeleteModal] = useState(false);
+  const { setImage } = useImageViewContext();
 
   useEffect(() => {
     if (inputFileRef.current?.files?.length) {
@@ -81,6 +119,30 @@ export const AvatarOperations = ({
       setUploadButton(false);
     }
   }, [inputFileRef.current?.files, uploadButton]);
+
+  const showPreview = (
+    e:
+      | React.TouchEvent<HTMLButtonElement>
+      | React.MouseEvent<HTMLButtonElement, MouseEvent>
+  ) => {
+    if (e.cancelable && e.preventDefault) {
+      e.preventDefault();
+      e.stopPropagation();
+    }
+
+    window.oncontextmenu = function (event) {
+      event.preventDefault();
+      event.stopPropagation();
+      event.stopImmediatePropagation();
+      return false;
+    };
+
+    setImage(imageUrl || "");
+  };
+
+  const hidePreview = () => {
+    setImage("");
+  };
 
   return (
     <>
@@ -142,20 +204,40 @@ export const AvatarOperations = ({
           <label
             style={{
               lineHeight: 2.2,
-              paddingInline: 20,
+              paddingInline: 15,
               cursor: "pointer",
             }}
             role="button"
-            className="file-upload-btn w-24"
+            className="file-upload-btn avatar-edit-btn "
             htmlFor="file"
           >
             Select
           </label>
-          <button className="w-24" type="submit">
+          <button className="avatar-edit-btn" type="submit">
             Upload
           </button>
         </div>
-        <DeleteButton profileId={profileId} blob={blob} setBlob={setBlob} />
+        <div className="flex gap-2">
+          <DeleteButton
+            profileId={profileId}
+            blob={blob}
+            setBlob={setBlob}
+            deleteModal={deleteModal}
+            setDeleteModal={setDeleteModal}
+          />
+          {!deleteModal && (
+            <button
+              type="button"
+              className="avatar-edit-btn select-none"
+              onMouseDown={showPreview}
+              onMouseUp={hidePreview}
+              onTouchStart={showPreview}
+              onTouchEnd={hidePreview}
+            >
+              Preview
+            </button>
+          )}
+        </div>
       </form>
     </>
   );
@@ -165,13 +247,15 @@ const DeleteButton = ({
   profileId,
   blob,
   setBlob,
+  deleteModal,
+  setDeleteModal,
 }: {
   profileId: number | undefined;
   blob: string | null | undefined;
   setBlob: React.Dispatch<React.SetStateAction<string | null | undefined>>;
+  deleteModal: boolean;
+  setDeleteModal: React.Dispatch<React.SetStateAction<boolean>>;
 }) => {
-  const [deleteModal, setDeleteModal] = useState(false);
-
   useEffect(() => {
     const timer = setTimeout(() => {
       setDeleteModal(false);
@@ -183,9 +267,9 @@ const DeleteButton = ({
 
   if (deleteModal) {
     return (
-      <div className="flex gap-2">
+      <>
         <button
-          className="w-24"
+          className="avatar-edit-btn"
           type="button"
           onClick={() => {
             setDeleteModal(false);
@@ -203,17 +287,17 @@ const DeleteButton = ({
             }
             setDeleteModal(false);
           }}
-          className="w-24"
+          className="avatar-edit-btn"
           type="button"
         >
           Confirm
         </button>
-      </div>
+      </>
     );
   }
   return (
     <button
-      className="w-24"
+      className="avatar-edit-btn"
       onClick={() => setDeleteModal(!deleteModal)}
       type="button"
     >
