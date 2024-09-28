@@ -87,6 +87,9 @@ type TGetPostReturn =
 
 export const getPosts = async (): Promise<TGetPostReturn> => {
   const posts = await prisma.post.findMany({
+    where: {
+      published: true,
+    },
     select: {
       id: true,
       title: true,
