@@ -1,12 +1,33 @@
 import prisma from "@prisma/prismaClient";
 import { NextResponse, NextRequest } from "next/server";
 import { z } from "zod";
+// auth
+import { auth } from "@serverAuth";
 
 // api/user/posts
 
 const schema = z.object({
   name: z.string(),
 });
+
+const published = {
+  where: { published: true },
+  select: {
+    title: true,
+    createdAt: true,
+    id: true,
+    published: true,
+  },
+};
+
+const allPosts = {
+  select: {
+    title: true,
+    createdAt: true,
+    id: true,
+    published: true,
+  },
+};
 
 export async function GET(req: NextRequest) {
   try {
@@ -19,18 +40,14 @@ export async function GET(req: NextRequest) {
     }
 
     const { name } = result.data;
+    const session = await auth();
+    const sessionName = session?.user?.name;
+    const isOwner = sessionName === name;
 
     const userPosts = await prisma.user.findUnique({
       where: { name: name },
       select: {
-        posts: {
-          select: {
-            title: true,
-            createdAt: true,
-            id: true,
-            published: true,
-          },
-        },
+        posts: isOwner ? allPosts : published,
       },
     });
 

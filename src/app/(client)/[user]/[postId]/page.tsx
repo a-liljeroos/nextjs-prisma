@@ -40,6 +40,10 @@ const Page = async ({
 
     const isOwner = session?.user?.name === author;
 
+    if (!post.published && !isOwner) {
+      return <ErrorPage message={"Post not found."} />;
+    }
+
     return <Post postId={postId} user={user} isOwner={isOwner} post={post} />;
   } catch (error) {
     console.error(error);

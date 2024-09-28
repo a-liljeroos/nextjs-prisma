@@ -109,7 +109,7 @@ export const getPost = async (postId: number) => {
   const post = await prisma.post.findUnique({
     where: { id: postId },
   });
-  return post as Post;
+  return post as Post | null;
 };
 
 export const getUserId = async (name: string) => {
