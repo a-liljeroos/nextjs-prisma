@@ -30,7 +30,12 @@
   }
 }
 
-.post-list-item:hover {
+.post-list-unpublished {
+  color: var(--background-secondary);
+}
+
+.post-list-item:hover,
+.post-list-unpublished:hover {
   background-color: var(--background-secondary);
   color: var(--background);
 }

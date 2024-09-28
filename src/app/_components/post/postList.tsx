@@ -59,6 +59,7 @@ interface ListItemProps {
   post: {
     id: number;
     title: string;
+    published: boolean;
     author?: { name: string };
   };
   isOwner: boolean;
@@ -75,15 +76,13 @@ const ListItem = ({
   animate = true,
 }: ListItemProps) => {
   const authorName = name ? name : post.author?.name;
-  const animationClass = animate ? "" : "animate-post-list-item";
+  const animationClass = animate ? "" : " animate-post-list-item ";
 
   return (
     <li
       key={post.id}
-      className={
-        "post-list-item flex items-center justify-between px-3 font-semibold " +
-        animationClass
-      }
+      className={`post-list-item flex items-center justify-between px-3 font-semibold 
+        ${animationClass} ${post.published ? "" : "post-list-unpublished"}`}
       style={{ animationDelay: `${delay}s` }}
     >
       <Link href={`/${authorName}/${post.id}`}>
