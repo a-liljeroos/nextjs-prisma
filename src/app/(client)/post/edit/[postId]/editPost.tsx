@@ -88,11 +88,13 @@ const EditPostForm = ({ post, user }: EditPostFormProps) => {
     e.preventDefault();
     const formData = new FormData();
     const preparedContent = preparePostSubmit(postContent);
+    const published = document.getElementById("published") as HTMLInputElement;
     const editedPost: Post = {
       ...post,
       author: user,
       title: postTitle,
       content: preparedContent,
+      published: published.checked || false,
     };
     formData.append("post", JSON.stringify(editedPost));
     const newImages: number[] = [];
@@ -117,7 +119,7 @@ const EditPostForm = ({ post, user }: EditPostFormProps) => {
     mutation.mutate(formData);
   };
 
-  return <PostForm handleSubmit={handleSubmit} />;
+  return <PostForm handleSubmit={handleSubmit} published={post.published} />;
 };
 
 export default EditPost;

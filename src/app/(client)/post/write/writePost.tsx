@@ -44,10 +44,12 @@ const WritePost = ({ user }: { user: string }) => {
     e.preventDefault();
     const formData = new FormData();
     const preparedContent = preparePostSubmit(postContent);
+    const published = document.getElementById("published") as HTMLInputElement;
     const post: NewPost = {
       author: user,
       title: postTitle,
       content: preparedContent,
+      published: published.checked || false,
     };
     formData.append("post", JSON.stringify(post));
     const newImages: number[] = [];
