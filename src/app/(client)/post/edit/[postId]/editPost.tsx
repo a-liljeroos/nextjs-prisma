@@ -39,7 +39,7 @@ const EditPost = ({ user, post }: EditPostProps) => {
         />
         <div className="p-3">
           <div className="flex items-center justify-between mb-4">
-            <h1 className="text-xl">Edit Post</h1>
+            <h1 className="text-xl mt-4 mb-3">Edit Post</h1>
           </div>
           <EditPostForm post={post} user={user} />
         </div>

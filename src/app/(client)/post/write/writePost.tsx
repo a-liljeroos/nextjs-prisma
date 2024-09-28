@@ -87,7 +87,7 @@ const WritePost = ({ user }: { user: string }) => {
         />
         <div className="p-3">
           <div className="flex items-center justify-between mb-4">
-            <h1 className="text-xl">Write New Post</h1>
+            <h1 className="text-xl mt-4 mb-3">Write New Post</h1>
           </div>
           <PostForm handleSubmit={handleSubmit} />
         </div>
