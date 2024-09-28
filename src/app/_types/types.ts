@@ -36,6 +36,7 @@ export type Post = {
 export type NewPost = {
   author: string;
   title: string;
+  published: boolean;
   content: PostContent[];
 };
 

@@ -39,7 +39,7 @@ const EditPost = ({ user, post }: EditPostProps) => {
         />
         <div className="p-3">
           <div className="flex items-center justify-between mb-4">
-            <h1 className="text-xl">Edit Post</h1>
+            <h1 className="text-xl mt-4 mb-3">Edit Post</h1>
           </div>
           <EditPostForm post={post} user={user} />
         </div>
@@ -88,11 +88,13 @@ const EditPostForm = ({ post, user }: EditPostFormProps) => {
     e.preventDefault();
     const formData = new FormData();
     const preparedContent = preparePostSubmit(postContent);
+    const published = document.getElementById("published") as HTMLInputElement;
     const editedPost: Post = {
       ...post,
       author: user,
       title: postTitle,
       content: preparedContent,
+      published: published.checked || false,
     };
     formData.append("post", JSON.stringify(editedPost));
     const newImages: number[] = [];
@@ -117,7 +119,7 @@ const EditPostForm = ({ post, user }: EditPostFormProps) => {
     mutation.mutate(formData);
   };
 
-  return <PostForm handleSubmit={handleSubmit} />;
+  return <PostForm handleSubmit={handleSubmit} published={post.published} />;
 };
 
 export default EditPost;

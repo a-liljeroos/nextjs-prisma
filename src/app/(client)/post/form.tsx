@@ -20,9 +20,10 @@ import "./form.scss";
 
 interface PostFormProps {
   handleSubmit: (e: React.FormEvent) => void;
+  published?: boolean;
 }
 
-const PostForm = ({ handleSubmit }: PostFormProps) => {
+const PostForm = ({ handleSubmit, published }: PostFormProps) => {
   const {
     addContentField,
     submitLock,
@@ -126,6 +127,16 @@ const PostForm = ({ handleSubmit }: PostFormProps) => {
             <LuMove color="white" size={20} />
           </button>
         </div>
+      </div>
+      <div className="flex gap-2 items-center">
+        <input
+          className="w-4 h-4"
+          name="published"
+          type="checkbox"
+          id="published"
+          defaultChecked={published || false}
+        />
+        <label htmlFor="published">Published</label>
       </div>
       <div className="flex gap-2 mt-4">
         <button type="submit" disabled={submitLock}>
