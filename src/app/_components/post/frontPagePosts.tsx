@@ -7,7 +7,7 @@ import "./frontPagePosts.scss";
 
 const FrontPagePosts = () => {
   return (
-    <div className="flex flex-col items-center w-full">
+    <div className="flex flex-col items-center w-full py-8">
       <FetchPosts />
     </div>
   );
