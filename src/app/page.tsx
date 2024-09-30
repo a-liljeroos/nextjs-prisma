@@ -1,14 +1,13 @@
 "use client";
-// auth
-import { useSession } from "next-auth/react";
+// components
 import GlitchText from "@components/glitchText/GlitchText";
+import PageContainer from "@components/pageContainer/pageContainer";
 import FrontPagePosts from "@/app/_components/post/frontPagePosts";
 
 export default function Home() {
-  const { data: session, status } = useSession();
   return (
-    <main className="flex flex-col items-center pt-10">
-      <div className="pt-6">
+    <PageContainer>
+      <div className="pt-16">
         <div className="pl-6">
           <GlitchText text="  " />
           <GlitchText text="Hi       " />
@@ -19,6 +18,6 @@ export default function Home() {
           <FrontPagePosts />
         </div>
       </div>
-    </main>
+    </PageContainer>
   );
 }
