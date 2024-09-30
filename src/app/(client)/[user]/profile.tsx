@@ -78,7 +78,7 @@ const FetchPosts = ({ name, isOwner }: FetchPostsProps) => {
 
   return (
     <>
-      <div className="flex items-baseline gap-2 pt-6">
+      <div className="flex items-baseline gap-2 py-6 bg-neutral-700">
         <h1 className="text-xl px-5">Posts</h1>{" "}
         {isOwner && (
           <Link href={`/post/write`}>
