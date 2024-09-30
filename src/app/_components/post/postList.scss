@@ -1,7 +1,7 @@
 .posts-cont {
   //background-color: rgb(36, 36, 36);
   height: 100%;
-  padding-block: 20px;
+
   display: flex;
   flex-direction: column;
   gap: 20px;
@@ -9,6 +9,8 @@
   ul {
     li {
       transition: 150ms;
+      backdrop-filter: blur(2px);
+      font-weight: bold;
       a {
         div {
           padding-block: 25px;
