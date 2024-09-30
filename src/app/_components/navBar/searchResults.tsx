@@ -29,14 +29,14 @@ const SearchResults = () => {
         position: "absolute",
         color: "white",
         width: "100%",
-        height: searchResultsHeight,
+        height: "100vh",
         backgroundColor: "rgba(0, 0, 0, 0.2)",
         top: 80,
         left: 0,
-        zIndex: 10,
+        zIndex: 5,
         backdropFilter: "blur(10px)",
       }}
-      className="flex justify-center p-4"
+      className="flex justify-center p-4 border"
     >
       <div className="py-1 flex flex-col w-96">
         {results.users.length > 0 && (

@@ -37,7 +37,8 @@ interface NavBarContentProps {
 
 const NavBarContent = ({ session }: NavBarContentProps) => {
   const pathname = usePathname();
-  const { searchFocused, narrowScreen, handleBlur } = useNavBarContext();
+  const { searchFocused, narrowScreen, handleBlur, results } =
+    useNavBarContext();
 
   const homeRef = useRef<HTMLLIElement>(null);
   const profileRef = useRef<HTMLLIElement>(null);
@@ -57,80 +58,87 @@ const NavBarContent = ({ session }: NavBarContentProps) => {
   }, [narrowScreen, searchFocused]);
 
   return (
-    <nav
-      className={`bg-backgroundSecondary text-background text-nowrap font-semibold h-20 ${navPadding} flex ${justifyNav} items-center overflow-hidden`}
-    >
-      <ul className={`flex gap-3 justify-center list-none relative nav-list `}>
-        <li
-          ref={homeRef}
-          className={`${visible} p-2 ${
-            pathname === "/"
-              ? "underline underline-offset-4 decoration-background decoration-2"
-              : ""
-          }`}
+    <>
+      <nav
+        className={`bg-backgroundSecTransparent hover:bg-backgroundSecondary backdrop-blur-sm sticky top-0 text-background text-nowrap font-bold h-20 ${navPadding} flex ${justifyNav} items-center overflow-hidden z-10 ${
+          results ? "bg-backgroundSecondary" : ""
+        }`}
+      >
+        <ul
+          className={`flex gap-3 justify-center list-none relative nav-list `}
         >
-          <Link className="h-full" href="/">
-            Home
-          </Link>
-        </li>
+          <li
+            ref={homeRef}
+            className={`${visible} p-2 ${
+              pathname === "/"
+                ? "underline underline-offset-4 decoration-background decoration-2"
+                : ""
+            }`}
+          >
+            <Link className="h-full" href="/">
+              Home
+            </Link>
+          </li>
 
-        {session && (
-          <>
-            <li
-              ref={profileRef}
-              className={`${visible} p-2 cursor-pointer text-nowrap ${
-                pathname === `/${session.user?.name}`
-                  ? "underline underline-offset-4 decoration-background decoration-2"
-                  : ""
-              }`}
-            >
-              <Link
-                href={{
-                  pathname: `/${session.user?.name}`,
-                }}
+          {session && (
+            <>
+              <li
+                ref={profileRef}
+                className={`${visible} p-2 cursor-pointer text-nowrap ${
+                  pathname === `/${session.user?.name}`
+                    ? "underline underline-offset-4 decoration-background decoration-2"
+                    : ""
+                }`}
               >
-                Profile
-              </Link>
-            </li>
-          </>
-        )}
-        {!session && (
-          <>
-            {" "}
+                <Link
+                  href={{
+                    pathname: `/${session.user?.name}`,
+                  }}
+                >
+                  Profile
+                </Link>
+              </li>
+            </>
+          )}
+          {!session && (
+            <>
+              {" "}
+              <li
+                ref={registerRef}
+                className={`${visible} p-2 text-nowrap ${
+                  pathname === "/register"
+                    ? "underline underline-offset-4 decoration-background decoration-2"
+                    : ""
+                }`}
+              >
+                <Link href="/register">Register</Link>
+              </li>
+            </>
+          )}
+          <Search />
+          {session && (
             <li
-              ref={registerRef}
-              className={`${visible} p-2 text-nowrap ${
-                pathname === "/register"
-                  ? "underline underline-offset-4 decoration-background decoration-2"
-                  : ""
-              }`}
+              ref={signOutRef}
+              className={`${visible} p-2 cursor-pointer ml-auto text-nowrap`}
+              onClick={() => signOut({ callbackUrl: "/" })}
             >
-              <Link href="/register">Register</Link>
+              Sign Out
             </li>
-          </>
-        )}
-        <Search />
-        {session && (
-          <li
-            ref={signOutRef}
-            className={`${visible} p-2 cursor-pointer ml-auto text-nowrap`}
-            onClick={() => signOut({ callbackUrl: "/" })}
-          >
-            Sign Out
-          </li>
-        )}
-        {!session && (
-          <li
-            ref={signInRef}
-            className={`${visible} p-2 ml-auto cursor-pointer text-nowrap`}
-            onClick={() => signIn("credentials", { callbackUrl: "/" })}
-          >
-            Sign In
-          </li>
-        )}
-      </ul>
+          )}
+          {!session && (
+            <li
+              ref={signInRef}
+              className={`${visible} p-2 ml-auto cursor-pointer text-nowrap`}
+              onClick={() => signIn("credentials", { callbackUrl: "/" })}
+            >
+              Sign In
+            </li>
+          )}
+        </ul>
+      </nav>
+
       <SearchResults />
-    </nav>
+    </>
   );
 };
 

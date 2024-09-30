@@ -48,7 +48,9 @@ const Search = () => {
 
   const inputWidth = narrowScreen ? (searchFocused ? 300 : 40) : 300;
   const inputClassName = narrowScreen ? "nav-input-narrow" : "nav-input";
-  const focusBg = narrowScreen ? "rgb(199, 201, 80)" : "rgb(248, 248, 248)";
+  const focusBg = narrowScreen
+    ? "rgba(199, 201, 80, 0)"
+    : "rgba(248, 248, 248, 0.5)";
   const inputBg = searchFocused ? "rgb(248, 248, 248)" : focusBg;
   const centerContainer = (windowWidth! - inputWidth) / 2;
   const containerStyles: React.CSSProperties =

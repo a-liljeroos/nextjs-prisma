@@ -3,3 +3,29 @@
   z-index: 100;
   background-color: white;
 }
+
+nav {
+  transition: all 0.3s;
+  background: rgb(216, 218, 85);
+  background: -moz-linear-gradient(
+    341deg,
+    rgba(216, 218, 85, 0.7035189075630253) 20%,
+    rgba(218, 221, 114, 0.7035189075630253) 45%,
+    rgba(216, 218, 85, 0.6979166666666667) 76%
+  );
+  background: -webkit-linear-gradient(
+    341deg,
+    rgba(216, 218, 85, 0.7035189075630253) 20%,
+    rgba(218, 221, 114, 0.7035189075630253) 45%,
+    rgba(216, 218, 85, 0.6979166666666667) 76%
+  );
+  background: linear-gradient(
+    341deg,
+    rgba(216, 218, 85, 0.7035189075630253) 20%,
+    rgba(218, 221, 114, 0.7035189075630253) 45%,
+    rgba(216, 218, 85, 0.6979166666666667) 76%
+  );
+  filter: progid:DXImageTransform.Microsoft.gradient(startColorstr="#d8da55",endColorstr="#d8da55",GradientType=1);
+  border-top: 2px solid rgba(147, 148, 115, 0.356);
+  border-bottom: 2px solid rgba(232, 233, 178, 0.356);
+}
