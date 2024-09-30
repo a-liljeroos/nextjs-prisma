@@ -6,14 +6,14 @@ import SessionProvider from "@components/SessionProvider/SessionProvider";
 import QueryProvider from "@react-query/QueryClient";
 import { ReactQueryDevtools } from "@tanstack/react-query-devtools";
 // font
-import { Inter } from "next/font/google";
+import { Mulish } from "next/font/google";
 // components
 import NavBar from "@components/navBar/navBar";
 import { Toaster } from "react-hot-toast";
 // styles
 import "./globals.scss";
 
-const inter = Inter({ subsets: ["latin"] });
+const mulish = Mulish({ subsets: ["latin"] });
 
 export const metadata: Metadata = {
   title: "Create Next App",
@@ -28,7 +28,7 @@ export default async function RootLayout({
   const session = await auth();
   return (
     <html lang="en">
-      <body className={inter.className}>
+      <body className={mulish.className}>
         <SessionProvider session={session}>
           <QueryProvider>
             {/* <ReactQueryDevtools initialIsOpen={false} /> */}
