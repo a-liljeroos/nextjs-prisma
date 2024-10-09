@@ -11,6 +11,7 @@ const config: Config = {
       colors: {
         background: "var(--background)",
         backgroundSecondary: "var(--background-secondary)",
+        backgroundSecTransparent: "var(--background-secondary-transparent)",
         buttonColor: "var(--button-color)",
       },
       backgroundImage: {
