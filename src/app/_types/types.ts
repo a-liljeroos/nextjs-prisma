@@ -63,3 +63,12 @@ export type SearchResult = {
     name: string;
   }[];
 } | null;
+
+export type Comment = {
+  id: number;
+  postId: number;
+  authorId: number;
+  content: string;
+  createdAt: Date;
+  updatedAt: Date;
+};
