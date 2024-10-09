@@ -24,7 +24,7 @@ const Post = ({ postId, user, isOwner, post }: PostProps) => {
     <PageContainer>
       <div className="p-4">
         <DisplayPost post={post} />
-        <div className="flex items-center justify-between">
+        <div className="flex items-center justify-between py-10">
           <PostInfo
             author={post.author}
             created={post.createdAt}
@@ -47,30 +47,32 @@ const DisplayPost = ({ post }: DisplayPostProps) => {
   try {
     const content = post.content.sort((a, b) => a.index - b.index);
     return (
-      <div className="display-post">
+      <div className="display-post pt-10">
         <Title content={post.title} />
-        {content.map((item, index) => {
-          if (index === 0) {
-            return <FirstParagraph key={item.index} content={item.content} />;
-          } else if (item.type === "Subheader") {
-            return <SubHeader key={item.index} content={item.content} />;
-          } else if (item.type === "Paragraph") {
-            return <Paragraph key={item.index} content={item.content} />;
-          } else if (item.type === "Image") {
-            return (
-              <ImageContent
-                key={item.index}
-                content={item.content}
-                description={item.description}
-              />
-            );
-          }
-        })}
-        {content.length > 1 && (
-          <div style={{ marginBlock: 20, paddingInline: 10 }}>
-            <hr />
+        <div className="flex">
+          <div className="bg-neutral-800 shadow-lg" style={{ width: 30 }} />
+          <div>
+            {content.map((item, index) => {
+              if (index === 0) {
+                return (
+                  <FirstParagraph key={item.index} content={item.content} />
+                );
+              } else if (item.type === "Subheader") {
+                return <SubHeader key={item.index} content={item.content} />;
+              } else if (item.type === "Paragraph") {
+                return <Paragraph key={item.index} content={item.content} />;
+              } else if (item.type === "Image") {
+                return (
+                  <ImageContent
+                    key={item.index}
+                    content={item.content}
+                    description={item.description}
+                  />
+                );
+              }
+            })}
           </div>
-        )}
+        </div>
       </div>
     );
   } catch (error) {
@@ -80,10 +82,10 @@ const DisplayPost = ({ post }: DisplayPostProps) => {
 
 const Title = ({ content }: { content: string }) => {
   return (
-    <div className="py-3.5">
+    <div className="mt-3.5 bg-neutral-800 shadow-xl">
       <h1
-        className="text-2xl p-3 text-green-200 text-pretty"
-        style={{ marginTop: 10 }}
+        className="flex items-center font-bold pl-4 pr-8 text-green-200 text-pretty scale-110 scale-x-100"
+        style={{ marginTop: 10, fontSize: 32, lineHeight: 0.95 }}
       >
         {content}
       </h1>
@@ -92,15 +94,37 @@ const Title = ({ content }: { content: string }) => {
 };
 
 const FirstParagraph = ({ content }: { content: string }) => {
-  return <p className="p-3 py-3.5 text-balance bg-neutral-800">{content}</p>;
+  return (
+    <p
+      className="pl-3 pt-2 my-2 mt-12 my-3.5 text-balance border-l-4 border-neutral-800 shadow-l"
+      style={{ lineHeight: 1.3, fontSize: 18 }}
+    >
+      {content}
+    </p>
+  );
 };
 
 const SubHeader = ({ content }: { content: string }) => {
-  return <h2 className="text-lg p-3 pb-2 mt-6 text-green-200">{content}</h2>;
+  return (
+    <h2
+      className="inline-block font-semibold p-3 pb-2 mt-6 text-green-200 relative"
+      style={{ fontSize: 24 }}
+    >
+      {content}
+      <div className="absolute top-2/4 left-2 w-full h-4 bg-neutral-700 -z-10"></div>
+    </h2>
+  );
 };
 
 const Paragraph = ({ content }: { content: string }) => {
-  return <p className="p-3 w-11/12 text-pretty">{content}</p>;
+  return (
+    <p
+      className="p-3 w-11/12 text-pretty"
+      style={{ lineHeight: 1.3, fontSize: 18 }}
+    >
+      {content}
+    </p>
+  );
 };
 
 const ImageContent = ({
@@ -112,7 +136,7 @@ const ImageContent = ({
 }) => {
   return (
     <div className="p-3 my-2">
-      <div className=" ">
+      <div className="shadow-xl">
         <Image
           src={content}
           alt={description || "image"}
