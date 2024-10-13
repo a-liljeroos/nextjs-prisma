@@ -2,8 +2,11 @@
 import Link from "next/link";
 import { useRef, ElementRef } from "react";
 // react-query
-import { useQuery } from "@tanstack/react-query";
+import { useQuery, useQueryClient } from "@tanstack/react-query";
 import getUserPosts from "./_fetchProfile/getUserPosts";
+// functions
+import { getCommentsByUser } from "@crudFunctions";
+import { useIntersectionObserver } from "@clientFunctions";
 // context
 import {
   useImageViewContext,
@@ -13,12 +16,13 @@ import {
 import { ProfileFetch } from "@types";
 // components
 import { ImageView } from "@components/imagePreview/imagePreviewContext";
-import PostList from "@components/post/postList";
-import Spinner from "@components/spinner/spinner";
+import Comment from "@components/comments/commentList/comment";
 import ErrorMsg1 from "@components/spinner/errorMsg1";
-import PageContainer from "@components/pageContainer/pageContainer";
-import ProfileHeader from "./_components/profileHeader";
 import ErrorPage from "@components/errorPage/errorPage";
+import PageContainer from "@components/pageContainer/pageContainer";
+import PostList from "@components/post/postList";
+import ProfileHeader from "./_components/profileHeader";
+import Spinner from "@components/spinner/spinner";
 // styles
 import "./profile.scss";
 
@@ -29,7 +33,9 @@ interface ProfileProps {
 
 const Profile = ({ profile, isOwner }: ProfileProps) => {
   const mainRef = useRef<ElementRef<"main">>(null);
-  if (!profile) {
+  const [isVisible, elementRef] = useIntersectionObserver();
+
+  if (profile === null || profile === undefined) {
     return <ErrorPage message={"Page not found."} />;
   }
 
@@ -59,13 +65,40 @@ const Profile = ({ profile, isOwner }: ProfileProps) => {
             {profile?.profile?.bio && profile?.profile?.bio}
           </h2>
         </div>
+        <ProfileSubHeader title="Posts">
+          {isOwner && (
+            <Link href={`/post/write`}>
+              <button className="plain-button">Write New</button>
+            </Link>
+          )}
+        </ProfileSubHeader>
         <FetchPosts name={profile.name} isOwner={isOwner} />
+        <ProfileSubHeader title="Comments" />
+        <div ref={elementRef}>
+          {isVisible && <FetchComments profileInput={profile} />}
+        </div>
       </ImageViewContextProvider>
     </PageContainer>
   );
 };
 
 export default Profile;
+
+interface ProfileSubHeaderProps {
+  title: string;
+  children?: React.ReactNode;
+}
+
+const ProfileSubHeader = ({ title, children }: ProfileSubHeaderProps) => {
+  return (
+    <div className="flex items-center justify-between gap-2 py-4 px-8 bg-neutral-700">
+      <h1 className="text-xl font-bold">{title}</h1>
+      {children}
+    </div>
+  );
+};
+
+// ------------------------------------------------------------
 
 interface FetchPostsProps {
   name: string;
@@ -80,13 +113,6 @@ const FetchPosts = ({ name, isOwner }: FetchPostsProps) => {
 
   return (
     <>
-      <ProfileSubHeader title="Posts">
-        {isOwner && (
-          <Link href={`/post/write`}>
-            <button className="plain-button">Write New</button>
-          </Link>
-        )}
-      </ProfileSubHeader>
       {isError && <ErrorMsg1 message="Failed to load posts." />}
       {isLoading && (
         <div className="flex justify-center items-center h-52">
@@ -98,16 +124,93 @@ const FetchPosts = ({ name, isOwner }: FetchPostsProps) => {
   );
 };
 
-interface ProfileSubHeaderProps {
-  title: string;
-  children: React.ReactNode;
+// ------------------------------------------------------------
+
+interface FetchCommentsProps {
+  profileInput: ProfileFetch;
 }
 
-const ProfileSubHeader = ({ title, children }: ProfileSubHeaderProps) => {
+const FetchComments = ({ profileInput }: FetchCommentsProps) => {
+  const { name, profile } = profileInput!;
+  const queryClient = useQueryClient();
+  const queryKeys = ["comments", name];
+  const invalidateQueries = () =>
+    queryClient.invalidateQueries({ queryKey: queryKeys });
+  const {
+    data: comments,
+    isLoading,
+    isError,
+  } = useQuery({
+    queryKey: queryKeys,
+    queryFn: () => getCommentsByUser(name),
+  });
+
+  if (isLoading) {
+    return (
+      <div className="flex justify-center items-center h-52">
+        <Spinner />
+      </div>
+    );
+  }
+
+  if (
+    isError ||
+    comments === null ||
+    comments === undefined ||
+    comments?.length === 0
+  ) {
+    return <ErrorMsg1 message="Failed to load comments." />;
+  }
+
   return (
-    <div className="flex items-center justify-between gap-2 py-4 px-8 bg-neutral-700">
-      <h1 className="text-xl font-bold">{title}</h1>
-      {children}
+    <div className="p-2">
+      {!isLoading && (
+        <ul className="flex flex-col gap-2">
+          {comments.map((comment) => {
+            const extractedComment = {
+              id: comment.id,
+              content: comment.content,
+              createdAt: comment.createdAt,
+              contentHistory: comment.contentHistory,
+              author: { name: name, profile: { image: profile?.image } },
+            };
+            return (
+              <Comment
+                key={comment.id}
+                postId={comment.postId.toString()}
+                comment={extractedComment}
+                sessionName={name}
+                invalidateQuery={invalidateQueries}
+                postTitle={
+                  <>
+                    <div
+                      className="py-2 leading-tight"
+                      style={{ fontSize: 18 }}
+                    >
+                      <Link href={`/${comment.post.author.name}`}>
+                        <span className="py-2 font-bold text-backgroundSecondary">
+                          @{comment.post.author.name}{" "}
+                        </span>
+                      </Link>
+                      <span className="py-2 font-bold text-neutral-400">
+                        /{" "}
+                      </span>
+                      <Link
+                        href={`/${comment.post.author.name}/${comment.postId}`}
+                      >
+                        <span className="py-2 font-bold text-neutral-500 text-pretty">
+                          {comment.post.title}
+                        </span>
+                      </Link>
+                    </div>
+                    <hr className="border-neutral-700" />
+                  </>
+                }
+              />
+            );
+          })}
+        </ul>
+      )}
     </div>
   );
 };
