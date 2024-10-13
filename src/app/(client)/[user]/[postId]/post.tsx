@@ -6,7 +6,7 @@ import formatDate from "@functions";
 // types
 import { PostContent, Post as TPost } from "@types";
 // components
-import CommentSection from "./comments/commentSection";
+import CommentSection from "@components/comments/commentSection";
 import PostOperations from "@components/post/postOperations";
 import PageContainer from "@components/pageContainer/pageContainer";
 import Image from "next/image";
