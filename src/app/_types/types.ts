@@ -6,7 +6,7 @@ export type ProfileFetch = {
   role: string;
   profile: {
     bio: string | null;
-    image: string | null;
+    image: string | null | undefined;
   } | null;
 } | null;
 
@@ -87,7 +87,21 @@ export type PostCommentFetch = {
   author: {
     name: string;
     profile: {
-      image: string | null;
+      image: string | null | undefined;
     } | null;
+  };
+};
+
+export type ProfileCommentFetch = {
+  id: number;
+  createdAt: Date;
+  content: string;
+  contentHistory: CommentContentHistory[] | null;
+  postId: number;
+  post: {
+    title: string;
+    author: {
+      name: string;
+    };
   };
 };

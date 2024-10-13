@@ -1,6 +1,12 @@
 "use server";
 import prisma, { Prisma } from "@prisma/prismaClient";
-import { Post, PostContent, Comment, PostCommentFetch } from "@types";
+import {
+  Post,
+  PostContent,
+  Comment,
+  PostCommentFetch,
+  ProfileCommentFetch,
+} from "@types";
 import { auth } from "@serverAuth";
 import { del } from "@vercel/blob";
 
@@ -193,6 +199,38 @@ export const getComments = async (postId: number) => {
   });
 
   return comments as unknown as PostCommentFetch[] | null;
+};
+
+export const getCommentsByUser = async (name: string) => {
+  const comments = await prisma.user.findUnique({
+    where: {
+      name: name,
+    },
+    select: {
+      comments: {
+        select: {
+          id: true,
+          content: true,
+          contentHistory: true,
+          createdAt: true,
+          postId: true,
+          post: {
+            select: {
+              title: true,
+              author: {
+                select: {
+                  name: true,
+                },
+              },
+            },
+          },
+        },
+        orderBy: { createdAt: "desc" },
+      },
+    },
+  });
+  const commentsArray = comments?.comments;
+  return commentsArray as ProfileCommentFetch[] | null;
 };
 
 export const deleteComment = async (commentId: number) => {

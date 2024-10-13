@@ -18,9 +18,17 @@ interface CommentProps {
   postId: string;
   comment: PostCommentFetch;
   sessionName?: string | null | undefined;
+  postTitle?: React.ReactNode;
+  invalidateQuery?: () => void;
 }
 
-const Comment = ({ postId, comment, sessionName }: CommentProps) => {
+const Comment = ({
+  postId,
+  postTitle,
+  comment,
+  sessionName,
+  invalidateQuery,
+}: CommentProps) => {
   const { author, content, createdAt, id: commentId, contentHistory } = comment;
   const [deleteModalOpen, setDeleteModalOpen] = useState(false);
   const [showEditHistory, setShowEditHistory] = useState(false);
@@ -33,6 +41,7 @@ const Comment = ({ postId, comment, sessionName }: CommentProps) => {
     onSettled: (data) => {
       if (data) {
         queryClient.invalidateQueries({ queryKey: ["comments", postId] });
+        invalidateQuery && invalidateQuery();
       } else {
         toast.error("Error deleting comment.");
       }
@@ -44,6 +53,7 @@ const Comment = ({ postId, comment, sessionName }: CommentProps) => {
       className="px-4 py-3 rounded-lg bg-neutral-800 list-none"
       style={{ fontSize: 16 }}
     >
+      {postTitle && postTitle}
       <div
         className={`flex justify-between items-center h-10 comment-header ${
           showEditHistory && "mb-1"
@@ -118,6 +128,7 @@ const Comment = ({ postId, comment, sessionName }: CommentProps) => {
             content={content}
             formOpen={formOpen}
             setFormOpen={setFormOpen}
+            invalidateQuery={invalidateQuery}
           />
         </div>
       ) : (
