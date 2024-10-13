@@ -65,6 +65,8 @@ const Profile = ({ profile, isOwner }: ProfileProps) => {
   );
 };
 
+export default Profile;
+
 interface FetchPostsProps {
   name: string;
   isOwner: boolean;
@@ -78,14 +80,13 @@ const FetchPosts = ({ name, isOwner }: FetchPostsProps) => {
 
   return (
     <>
-      <div className="flex items-baseline gap-2 py-6 bg-neutral-700">
-        <h1 className="text-xl px-5">Posts</h1>{" "}
+      <ProfileSubHeader title="Posts">
         {isOwner && (
           <Link href={`/post/write`}>
-            <button>Write New</button>
+            <button className="plain-button">Write New</button>
           </Link>
         )}
-      </div>
+      </ProfileSubHeader>
       {isError && <ErrorMsg1 message="Failed to load posts." />}
       {isLoading && (
         <div className="flex justify-center items-center h-52">
@@ -97,4 +98,16 @@ const FetchPosts = ({ name, isOwner }: FetchPostsProps) => {
   );
 };
 
-export default Profile;
+interface ProfileSubHeaderProps {
+  title: string;
+  children: React.ReactNode;
+}
+
+const ProfileSubHeader = ({ title, children }: ProfileSubHeaderProps) => {
+  return (
+    <div className="flex items-center justify-between gap-2 py-4 px-8 bg-neutral-700">
+      <h1 className="text-xl font-bold">{title}</h1>
+      {children}
+    </div>
+  );
+};
