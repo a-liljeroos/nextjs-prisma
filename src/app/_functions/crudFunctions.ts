@@ -1,6 +1,6 @@
 "use server";
 import prisma, { Prisma } from "@prisma/prismaClient";
-import { Post, PostContent } from "@types";
+import { Post, PostContent, Comment, PostCommentFetch } from "@types";
 import { auth } from "@serverAuth";
 import { del } from "@vercel/blob";
 
@@ -134,4 +134,104 @@ export const getAuthor = async (authorId: number) => {
     },
   });
   return author?.name;
+};
+
+export const addComment = async (postId: number, content: string) => {
+  const session = await auth();
+  const user = session?.user;
+  if (!user || !user.name) {
+    throw new Error("You are not authenticated.");
+  }
+  const userId = await prisma.user.findUnique({
+    where: {
+      name: user.name,
+    },
+    select: {
+      id: true,
+    },
+  });
+  if (!userId) {
+    throw new Error("User not found.");
+  }
+  const comment = await prisma.comment.create({
+    data: {
+      postId,
+      authorId: userId.id,
+      content: content.trim(),
+    },
+  });
+  return comment;
+};
+
+export const getComment = async (commentId: number) => {
+  const comment = await prisma.comment.findUnique({
+    where: {
+      id: commentId,
+    },
+  });
+  return comment as Comment | null;
+};
+
+export const getComments = async (postId: number) => {
+  const comments = await prisma.comment.findMany({
+    where: {
+      postId,
+    },
+    select: {
+      id: true,
+      content: true,
+      createdAt: true,
+      contentHistory: true,
+      author: {
+        select: {
+          name: true,
+          profile: { select: { image: true } },
+        },
+      },
+    },
+    orderBy: { createdAt: "asc" },
+  });
+
+  return comments as unknown as PostCommentFetch[] | null;
+};
+
+export const deleteComment = async (commentId: number) => {
+  try {
+    const session = await auth();
+    const user = session?.user;
+    if (!user || !user.name) {
+      throw new Error("You are not authenticated.");
+    }
+    const userId = await prisma.user.findUnique({
+      where: {
+        name: user.name,
+      },
+      select: {
+        id: true,
+      },
+    });
+    if (!userId) {
+      throw new Error("User not found.");
+    }
+    const comment = await prisma.comment.findUnique({
+      where: {
+        id: commentId,
+      },
+    });
+    if (comment?.authorId !== userId.id) {
+      throw new Error("You are not the author of this comment.");
+    }
+    const deletedComment = await prisma.comment.delete({
+      where: {
+        id: commentId,
+      },
+    });
+    if (!deletedComment) {
+      throw new Error("Comment not found.");
+    }
+    return true;
+  } catch (error) {
+    console.error(error);
+    return false;
+  }
 };

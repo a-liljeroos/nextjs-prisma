@@ -1,5 +1,5 @@
 "use client";
-import { useState, useEffect, useRef } from "react";
+import { useState, useEffect, useRef, RefObject } from "react";
 
 // =======================================
 
@@ -84,3 +84,59 @@ export function useMounted(): boolean {
   }, []);
   return isMounted;
 }
+
+// =======================================
+
+/**
+ *
+ * Observes an element and returns a boolean that is true if the element is in view.
+ */
+
+export const useIntersectionObserver = (): [
+  boolean,
+  RefObject<HTMLDivElement>
+] => {
+  const [isVisible, setIsVisible] = useState(false);
+  const elementRef = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    const observer = new IntersectionObserver(
+      ([entry]) => {
+        if (entry.isIntersecting) {
+          setIsVisible(true);
+          observer.disconnect();
+        }
+      },
+      { threshold: 0.1 }
+    );
+
+    if (elementRef.current) {
+      observer.observe(elementRef.current);
+    }
+
+    return () => observer.disconnect();
+  }, []);
+
+  return [isVisible, elementRef];
+};
+
+export const isToday = (date: Date): boolean => {
+  const today = new Date();
+  return (
+    date.getDate() === today.getDate() &&
+    date.getMonth() === today.getMonth() &&
+    date.getFullYear() === today.getFullYear()
+  );
+};
+
+export const isYesterday = (date: Date): boolean => {
+  const today = new Date();
+  const yesterday = new Date();
+  yesterday.setDate(today.getDate() - 1);
+
+  return (
+    date.getDate() === yesterday.getDate() &&
+    date.getMonth() === yesterday.getMonth() &&
+    date.getFullYear() === yesterday.getFullYear()
+  );
+};

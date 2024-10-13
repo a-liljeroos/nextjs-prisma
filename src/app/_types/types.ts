@@ -69,6 +69,25 @@ export type Comment = {
   postId: number;
   authorId: number;
   content: string;
+  contentHistory: CommentContentHistory[];
   createdAt: Date;
   updatedAt: Date;
+};
+
+export type CommentContentHistory = {
+  content: string;
+  createdAt: Date;
+};
+
+export type PostCommentFetch = {
+  id: number;
+  createdAt: Date;
+  content: string;
+  contentHistory: CommentContentHistory[] | null;
+  author: {
+    name: string;
+    profile: {
+      image: string | null;
+    } | null;
+  };
 };
