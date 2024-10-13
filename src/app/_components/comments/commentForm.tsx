@@ -74,6 +74,7 @@ interface EditCommentProps {
   content: string;
   setFormOpen: (open: boolean) => void;
   formOpen: boolean;
+  invalidateQuery?: () => void;
 }
 
 export const EditComment = ({
@@ -82,6 +83,7 @@ export const EditComment = ({
   content,
   formOpen,
   setFormOpen,
+  invalidateQuery,
 }: EditCommentProps) => {
   const textareaRef = useRef<ElementRef<"textarea">>(null);
   const queryClient = useQueryClient();
@@ -105,6 +107,7 @@ export const EditComment = ({
         textareaRef.current!.value = "";
         setFormOpen(false);
         queryClient.invalidateQueries({ queryKey: ["comments", postId] });
+        invalidateQuery && invalidateQuery();
       } else {
         toast.error("Error editing comment.");
       }
