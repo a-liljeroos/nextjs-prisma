@@ -6,6 +6,7 @@ import formatDate from "@functions";
 // types
 import { PostContent, Post as TPost } from "@types";
 // components
+import CommentSection from "./comments/commentSection";
 import PostOperations from "@components/post/postOperations";
 import PageContainer from "@components/pageContainer/pageContainer";
 import Image from "next/image";
@@ -32,6 +33,7 @@ const Post = ({ postId, user, isOwner, post }: PostProps) => {
           />
           {isOwner && <PostOperations postId={postId} user={user} />}
         </div>
+        <CommentSection postId={postId} />
       </div>
     </PageContainer>
   );

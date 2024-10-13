@@ -1,0 +1,7 @@
+.comment-header {
+  @media (max-width: 435px) {
+    flex-direction: column;
+    align-items: flex-start;
+    height: 3rem;
+  }
+}

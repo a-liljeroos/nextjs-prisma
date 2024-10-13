@@ -23,3 +23,13 @@ export const postSchema = z
   .required();
 
 export const newImagesSchema = z.array(z.number());
+
+export const commentSchema = z.object({
+  postId: z.number(),
+  content: z.string().min(2).max(500),
+});
+
+export const editCommentSchema = z.object({
+  commentId: z.number(),
+  content: z.string().min(2).max(500),
+});
