@@ -16,11 +16,20 @@ import SearchResults from "@components/navBar/searchResults";
 // styles
 import "./navBar.scss";
 
-const NavBar = () => {
-  const { data: session } = useSession();
-  const isMounted = useMounted();
+interface NavBarProps {
+  navBarRendered: boolean;
+  setNavBarRendered: React.Dispatch<React.SetStateAction<boolean>>;
+}
 
-  if (!isMounted) return null;
+const NavBar = ({ navBarRendered, setNavBarRendered }: NavBarProps) => {
+  const { data: session } = useSession();
+
+  useEffect(() => {
+    setNavBarRendered(true);
+    return () => setNavBarRendered(false);
+  }, [setNavBarRendered]);
+
+  if (!navBarRendered) return null;
 
   return (
     <NavBarContextProvider>

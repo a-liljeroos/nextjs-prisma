@@ -8,8 +8,7 @@ import { ReactQueryDevtools } from "@tanstack/react-query-devtools";
 // font
 import { Mulish } from "next/font/google";
 // components
-import NavBar from "@components/navBar/navBar";
-import { Toaster } from "react-hot-toast";
+import ClientLayout from "./clientLayout";
 // styles
 import "./globals.scss";
 
@@ -30,12 +29,7 @@ export default async function RootLayout({
     <html lang="en">
       <body className={mulish.className}>
         <SessionProvider session={session}>
-          <QueryProvider>
-            {/* <ReactQueryDevtools initialIsOpen={false} /> */}
-            <NavBar />
-            <Toaster />
-            {children}
-          </QueryProvider>
+          <ClientLayout>{children}</ClientLayout>
         </SessionProvider>
       </body>
     </html>
