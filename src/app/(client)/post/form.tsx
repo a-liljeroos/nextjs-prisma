@@ -72,7 +72,7 @@ const PostForm = ({ handleSubmit, published }: PostFormProps) => {
     return (
       <button
         type="button"
-        className="px-1"
+        className="px-1 plain-button"
         onClick={() => {
           addContentField(type);
         }}
@@ -121,7 +121,9 @@ const PostForm = ({ handleSubmit, published }: PostFormProps) => {
           <AddFieldButton type="Image" />
           <button
             type="button"
-            className={`${showMoveButtons ? "bg-backgroundSecondary" : ""}`}
+            className={`plain-button ${
+              showMoveButtons ? "bg-backgroundSecondary" : ""
+            }`}
             onClick={() => setShowMoveButtons(!showMoveButtons)}
           >
             <LuMove color="white" size={20} />
@@ -139,11 +141,17 @@ const PostForm = ({ handleSubmit, published }: PostFormProps) => {
         <label htmlFor="published">Published</label>
       </div>
       <div className="flex gap-2 mt-4">
-        <button type="submit" disabled={submitLock}>
+        <button className="plain-button" type="submit" disabled={submitLock}>
           Save
         </button>
-        <button type="button">Preview</button>
-        <button type="button" onClick={() => setSubmitLock(!submitLock)}>
+        <button className="plain-button" type="button">
+          Preview
+        </button>
+        <button
+          className="plain-button"
+          type="button"
+          onClick={() => setSubmitLock(!submitLock)}
+        >
           {submitLock ? (
             <FiLock color="white" size={25} />
           ) : (
@@ -242,7 +250,11 @@ const DynamicInput = ({
               className="dynamic-inputs-controls bg-backgroundSecondary"
               style={{ zIndex: 20 }}
             >
-              <button type="button" onClick={deleteInputField}>
+              <button
+                className="plain-button"
+                type="button"
+                onClick={deleteInputField}
+              >
                 Delete
               </button>
             </div>
@@ -382,7 +394,7 @@ const ImageInput = ({ index, content, description }: ImageInputProps) => {
               setImage("");
             }}
             type="button"
-            className={`z-20 `}
+            className={`z-20 plain-button`}
             id="write-post-image-preview-btn"
           >
             <AiOutlineEye size={30} color="white" />

@@ -99,7 +99,11 @@ const ChangePassword = () => {
           minLength={6}
           maxLength={32}
         />
-        <button type="submit" value="change-password" className="mt-4">
+        <button
+          type="submit"
+          value="change-password"
+          className="mt-4 plain-button"
+        >
           Change password
         </button>
       </form>

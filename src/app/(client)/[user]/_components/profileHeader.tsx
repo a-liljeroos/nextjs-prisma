@@ -39,7 +39,7 @@ const ProfileHeader = ({ profile, name, isOwner }: ProfileHeaderProps) => {
               {isOwner && (
                 <div>
                   <Link href={`/${name}/edit`}>
-                    <button className="mt-2">Edit Profile</button>
+                    <button className="mt-2 plain-button">Edit Profile</button>
                   </Link>
                 </div>
               )}

@@ -65,7 +65,7 @@ const ChangeBio = () => {
           placeholder="Write something about yourself..."
           autoCorrect="off"
         />
-        <button type="submit" value="Change bio" className="mt-2">
+        <button type="submit" value="Change bio" className="mt-2 plain-button">
           Update
         </button>
       </form>

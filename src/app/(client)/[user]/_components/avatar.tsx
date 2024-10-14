@@ -208,12 +208,12 @@ export const AvatarOperations = ({
               cursor: "pointer",
             }}
             role="button"
-            className="file-upload-btn avatar-edit-btn "
+            className="file-upload-btn avatar-edit-btn plain-button"
             htmlFor="file"
           >
             Select
           </label>
-          <button className="avatar-edit-btn" type="submit">
+          <button className="avatar-edit-btn plain-button" type="submit">
             Upload
           </button>
         </div>
@@ -228,7 +228,7 @@ export const AvatarOperations = ({
           {!deleteModal && (
             <button
               type="button"
-              className="avatar-edit-btn select-none"
+              className="avatar-edit-btn select-none plain-button"
               onMouseDown={showPreview}
               onMouseUp={hidePreview}
               onTouchStart={showPreview}
@@ -269,7 +269,7 @@ const DeleteButton = ({
     return (
       <>
         <button
-          className="avatar-edit-btn"
+          className="avatar-edit-btn plain-button"
           type="button"
           onClick={() => {
             setDeleteModal(false);
@@ -287,7 +287,7 @@ const DeleteButton = ({
             }
             setDeleteModal(false);
           }}
-          className="avatar-edit-btn"
+          className="avatar-edit-btn plain-button"
           type="button"
         >
           Confirm
@@ -297,7 +297,7 @@ const DeleteButton = ({
   }
   return (
     <button
-      className="avatar-edit-btn"
+      className="avatar-edit-btn plain-button"
       onClick={() => setDeleteModal(!deleteModal)}
       type="button"
     >

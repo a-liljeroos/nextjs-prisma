@@ -37,18 +37,25 @@ const PostOperations = ({ postId, user }: PostOperationsProps) => {
       {!showModal ? (
         <>
           <Link href={`/post/edit/${postId}`}>
-            <button>
+            <button className="plain-button">
               <AiOutlineEdit size={25} />
             </button>
           </Link>
-          <button onClick={openModal}>
+          <button className="plain-button" onClick={openModal}>
             <TiDelete size={25} />
           </button>
         </>
       ) : (
         <>
-          <button onClick={handleDelete}>Delete</button>
-          <button onClick={() => setShowModal(!showModal)}>Cancel</button>
+          <button className="plain-button" onClick={handleDelete}>
+            Delete
+          </button>
+          <button
+            className="plain-button"
+            onClick={() => setShowModal(!showModal)}
+          >
+            Cancel
+          </button>
         </>
       )}
     </div>

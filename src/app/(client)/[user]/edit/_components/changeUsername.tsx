@@ -86,7 +86,7 @@ const ChangeUsername = () => {
           disabled={disableSubmit}
           type="submit"
           value="change-username"
-          className="mt-4"
+          className="mt-4 plain-button"
         >
           Change username
         </button>

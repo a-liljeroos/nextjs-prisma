@@ -32,7 +32,7 @@ const EditProfileListItem = ({
       >
         <button
           type="button"
-          className="bg-transparent hover:bg-transparent border-none hover:border-none grid place-items-center rounded-full w-2 h-8 mr-2"
+          className="bg-transparent hover:bg-transparent border-none hover:border-none grid place-items-center rounded-full w-2 h-8 mr-2 "
           onClick={() => {
             toggleForms(indexNo);
           }}
