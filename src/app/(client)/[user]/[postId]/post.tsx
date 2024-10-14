@@ -52,7 +52,7 @@ const DisplayPost = ({ post }: DisplayPostProps) => {
       <div className="display-post pt-10">
         <Title content={post.title} />
         <div className="flex">
-          <div className="bg-neutral-800 shadow-lg" style={{ width: 30 }} />
+          <div className="bg-neutral-700/70 shadow-lg" style={{ width: 30 }} />
           <div>
             {content.map((item, index) => {
               if (index === 0) {
@@ -84,9 +84,9 @@ const DisplayPost = ({ post }: DisplayPostProps) => {
 
 const Title = ({ content }: { content: string }) => {
   return (
-    <div className="mt-3.5 bg-neutral-800 shadow-xl">
+    <div className=" bg-neutral-800/50 shadow-xl">
       <h1
-        className="flex items-center font-bold pl-4 pr-8 text-green-200 text-pretty scale-110 scale-x-100"
+        className="flex items-center font-bold pl-4 pr-8 text-white text-pretty scale-110 scale-x-100"
         style={{ marginTop: 10, fontSize: 32, lineHeight: 0.95 }}
       >
         {content}
@@ -98,8 +98,8 @@ const Title = ({ content }: { content: string }) => {
 const FirstParagraph = ({ content }: { content: string }) => {
   return (
     <p
-      className="pl-3 pt-2 my-2 mt-12 my-3.5 text-balance border-l-4 border-neutral-800 shadow-l"
-      style={{ lineHeight: 1.3, fontSize: 18 }}
+      className="pl-3 py-2 mt-6 mb-6 text-balance text-white border-l-4 border-neutral-700/70 shadow-l"
+      style={{ lineHeight: 1.15, fontSize: 18, maxWidth: "95%" }}
     >
       {content}
     </p>
@@ -109,11 +109,11 @@ const FirstParagraph = ({ content }: { content: string }) => {
 const SubHeader = ({ content }: { content: string }) => {
   return (
     <h2
-      className="inline-block font-semibold p-3 pb-2 mt-6 text-green-200 relative"
-      style={{ fontSize: 24 }}
+      className="inline-block font-semibold p-3 pb-2 mt-2 text-white relative translate-y-1"
+      style={{ lineHeight: 1.1, fontSize: 24 }}
     >
       {content}
-      <div className="absolute top-2/4 left-2 w-full h-4 bg-neutral-700 -z-10"></div>
+      <div className="absolute top-2/4 left-2 w-full h-4 bg-neutral-700/50 opacity-50 -z-10"></div>
     </h2>
   );
 };
@@ -121,8 +121,8 @@ const SubHeader = ({ content }: { content: string }) => {
 const Paragraph = ({ content }: { content: string }) => {
   return (
     <p
-      className="p-3 w-11/12 text-pretty"
-      style={{ lineHeight: 1.3, fontSize: 18 }}
+      className="p-3 text-pretty"
+      style={{ lineHeight: 1.15, fontSize: 18, maxWidth: "95%" }}
     >
       {content}
     </p>
@@ -145,6 +145,7 @@ const ImageContent = ({
           width={500}
           height={500}
           layout="responsive"
+          className="rounded-lg"
         />
         {description && <p className="mt-2">{description}</p>}
       </div>
