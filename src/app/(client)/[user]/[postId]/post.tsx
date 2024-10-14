@@ -1,8 +1,6 @@
 "use client";
 import React, { useState } from "react";
 import Link from "next/link";
-// functions
-import formatDate from "@functions";
 // types
 import { PostContent, Post as TPost } from "@types";
 // components
@@ -169,8 +167,37 @@ const PostInfo = ({
           <p className="text-lg underline"> {author}</p>
         </Link>
       )}
-      {created && <p>{formatDate(created)}</p>}
-      {updated && created !== updated && <p>updated: {formatDate(updated)}</p>}
+      {created && (
+        <p>
+          {created.toLocaleTimeString([], {
+            hour: "2-digit",
+            minute: "2-digit",
+            hourCycle: "h23",
+          })}{" "}
+          -{" "}
+          {created.toLocaleDateString("en-GB", {
+            day: "2-digit",
+            month: "2-digit",
+            year: "numeric",
+          })}
+        </p>
+      )}
+      {updated && created !== updated && (
+        <p>
+          updated:{" "}
+          {updated.toLocaleTimeString([], {
+            hour: "2-digit",
+            minute: "2-digit",
+            hourCycle: "h23",
+          })}{" "}
+          -{" "}
+          {updated.toLocaleDateString("en-GB", {
+            day: "2-digit",
+            month: "2-digit",
+            year: "numeric",
+          })}
+        </p>
+      )}
     </div>
   );
 };
