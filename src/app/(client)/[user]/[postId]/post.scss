@@ -9,3 +9,25 @@
     width: 100vw;
   }
 }
+
+@keyframes postContentIn {
+  0% {
+    opacity: 0;
+    transform: skewX(10deg);
+  }
+  100% {
+    opacity: 1;
+    transform: skewX(0deg);
+  }
+}
+
+@keyframes sideBarIn {
+  0% {
+    opacity: 0;
+    transform: translateX(-5);
+  }
+  100% {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}

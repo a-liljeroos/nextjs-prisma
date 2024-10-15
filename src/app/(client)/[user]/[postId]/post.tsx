@@ -43,28 +43,68 @@ interface DisplayPostProps {
   post: TPost;
 }
 
+function generateDelays(n: number): number[] {
+  const items: number[] = [];
+  for (let i = 0; i < n; i++) {
+    items.push(50 + i * 50);
+  }
+  return items;
+}
+
+const postContentAnimation = {
+  opacity: 0,
+  animation: "postContentIn 0.2s ease-out forwards",
+};
+
+const sideBarAnimation = {
+  opacity: 0,
+  animation: "sideBarIn 0.7s ease-in forwards",
+};
+
 const DisplayPost = ({ post }: DisplayPostProps) => {
   try {
     const content = post.content.sort((a, b) => a.index - b.index);
+    const delays = generateDelays(content.length);
     return (
       <div className="display-post pt-10">
         <Title content={post.title} />
         <div className="flex">
-          <div className="bg-neutral-700/70 shadow-lg" style={{ width: 30 }} />
+          <div
+            className="bg-neutral-700/70 shadow-lg"
+            style={{ width: 30, ...sideBarAnimation }}
+          />
           <div>
             {content.map((item, index) => {
+              const delay = delays[index];
               if (index === 0) {
                 return (
-                  <FirstParagraph key={item.index} content={item.content} />
+                  <FirstParagraph
+                    key={item.index}
+                    delay={delay}
+                    content={item.content}
+                  />
                 );
               } else if (item.type === "Subheader") {
-                return <SubHeader key={item.index} content={item.content} />;
+                return (
+                  <SubHeader
+                    key={item.index}
+                    delay={delay}
+                    content={item.content}
+                  />
+                );
               } else if (item.type === "Paragraph") {
-                return <Paragraph key={item.index} content={item.content} />;
+                return (
+                  <Paragraph
+                    key={item.index}
+                    delay={delay}
+                    content={item.content}
+                  />
+                );
               } else if (item.type === "Image") {
                 return (
                   <ImageContent
                     key={item.index}
+                    delay={delay}
                     content={item.content}
                     description={item.description}
                   />
@@ -85,7 +125,12 @@ const Title = ({ content }: { content: string }) => {
     <div className=" bg-neutral-800/50 shadow-xl">
       <h1
         className="flex items-center font-bold pl-4 pr-8 text-white text-pretty scale-110 scale-x-100"
-        style={{ marginTop: 10, fontSize: 32, lineHeight: 0.95 }}
+        style={{
+          marginTop: 10,
+          fontSize: 32,
+          lineHeight: 0.95,
+          ...postContentAnimation,
+        }}
       >
         {content}
       </h1>
@@ -93,22 +138,39 @@ const Title = ({ content }: { content: string }) => {
   );
 };
 
-const FirstParagraph = ({ content }: { content: string }) => {
+const FirstParagraph = ({
+  content,
+  delay,
+}: {
+  content: string;
+  delay: number;
+}) => {
   return (
     <p
       className="pl-3 py-2 mt-6 mb-6 text-balance text-white border-l-4 border-neutral-700/70 shadow-l"
-      style={{ lineHeight: 1.15, fontSize: 18, maxWidth: "95%" }}
+      style={{
+        lineHeight: 1.15,
+        fontSize: 18,
+        maxWidth: "95%",
+        ...postContentAnimation,
+        animationDelay: `${delay}ms`,
+      }}
     >
       {content}
     </p>
   );
 };
 
-const SubHeader = ({ content }: { content: string }) => {
+const SubHeader = ({ content, delay }: { content: string; delay: number }) => {
   return (
     <h2
       className="inline-block font-semibold p-3 pb-2 mt-2 text-white relative translate-y-1"
-      style={{ lineHeight: 1.1, fontSize: 24 }}
+      style={{
+        lineHeight: 1.1,
+        fontSize: 24,
+        ...postContentAnimation,
+        animationDelay: `${delay}ms`,
+      }}
     >
       {content}
       <div className="absolute top-2/4 left-2 w-full h-4 bg-neutral-700/50 opacity-50 -z-10"></div>
@@ -116,11 +178,17 @@ const SubHeader = ({ content }: { content: string }) => {
   );
 };
 
-const Paragraph = ({ content }: { content: string }) => {
+const Paragraph = ({ content, delay }: { content: string; delay: number }) => {
   return (
     <p
       className="p-3 text-pretty"
-      style={{ lineHeight: 1.15, fontSize: 18, maxWidth: "95%" }}
+      style={{
+        lineHeight: 1.15,
+        fontSize: 18,
+        maxWidth: "95%",
+        ...postContentAnimation,
+        animationDelay: `${delay}ms`,
+      }}
     >
       {content}
     </p>
@@ -130,12 +198,20 @@ const Paragraph = ({ content }: { content: string }) => {
 const ImageContent = ({
   content,
   description,
+  delay,
 }: {
   content: string;
   description?: string;
+  delay: number;
 }) => {
   return (
-    <div className="p-3 my-2">
+    <div
+      className="p-3 my-2"
+      style={{
+        ...postContentAnimation,
+        animationDelay: `${delay}ms`,
+      }}
+    >
       <div className="shadow-xl">
         <Image
           src={content}
