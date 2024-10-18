@@ -1,6 +1,7 @@
 import toast from "react-hot-toast";
 import { useState } from "react";
 import Link from "next/link";
+import { useRouter } from "next/navigation";
 // functions
 import { deletePost } from "@crudFunctions";
 import { delay } from "@functions";
@@ -15,6 +16,12 @@ interface PostOperationsProps {
 
 const PostOperations = ({ postId, user }: PostOperationsProps) => {
   const [showModal, setShowModal] = useState(false);
+  const router = useRouter();
+
+  const navigateToEdit = () => {
+    router.push(`/post/edit/${postId}`);
+  };
+
   const handleDelete = () => {
     deletePost(parseInt(postId)).then(() => {
       toast.success("Post deleted.");
@@ -33,14 +40,12 @@ const PostOperations = ({ postId, user }: PostOperationsProps) => {
   };
 
   return (
-    <div className="p-3 flex gap-2">
+    <div className="p-3 flex items-center gap-2">
       {!showModal ? (
         <>
-          <Link href={`/post/edit/${postId}`}>
-            <button className="plain-button">
-              <AiOutlineEdit size={25} />
-            </button>
-          </Link>
+          <button className="plain-button" onClick={navigateToEdit}>
+            <AiOutlineEdit size={25} />
+          </button>
           <button className="plain-button" onClick={openModal}>
             <TiDelete size={25} />
           </button>
