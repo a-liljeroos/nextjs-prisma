@@ -3,11 +3,15 @@ import React, { useState } from "react";
 import Link from "next/link";
 // types
 import { PostContent, Post as TPost } from "@types";
+// functions
+import { useIntersectionObserver } from "@clientFunctions";
 // components
 import CommentSection from "@components/comments/commentSection";
 import PostOperations from "@components/post/postOperations";
 import PageContainer from "@components/pageContainer/pageContainer";
 import Image from "next/image";
+// icons
+import { PiUserFill } from "react-icons/pi";
 // styles
 import "./post.scss";
 
@@ -23,14 +27,7 @@ const Post = ({ postId, user, isOwner, post }: PostProps) => {
     <PageContainer>
       <div className="p-4">
         <DisplayPost post={post} />
-        <div className="flex items-center justify-between py-10">
-          <PostInfo
-            author={post.author}
-            created={post.createdAt}
-            updated={post.updatedAt}
-          />
-          {isOwner && <PostOperations postId={postId} user={user} />}
-        </div>
+        <PostInfoWithCTA user={user} isOwner={isOwner} post={post} />
         <CommentSection postId={postId} />
       </div>
     </PageContainer>
@@ -237,42 +234,64 @@ const PostInfo = ({
   updated?: Date;
 }) => {
   return (
-    <div className="p-3 ">
+    <div className="p-4">
       {author && (
-        <Link href={`/${author}`}>
-          <p className="text-lg underline"> {author}</p>
-        </Link>
+        <div className="flex gap-1 items-center">
+          <span>
+            <PiUserFill size={18} color="rgb(199, 201, 80)" />
+          </span>
+          <Link href={`/${author}`}>
+            <p
+              style={{
+                fontSize: 18,
+                fontWeight: 700,
+              }}
+            >
+              {author}
+            </p>
+          </Link>
+        </div>
       )}
-      {created && (
-        <p>
-          {created.toLocaleTimeString([], {
-            hour: "2-digit",
-            minute: "2-digit",
-            hourCycle: "h23",
-          })}{" "}
-          -{" "}
-          {created.toLocaleDateString("en-GB", {
-            day: "2-digit",
-            month: "2-digit",
-            year: "numeric",
-          })}
-        </p>
-      )}
-      {updated && created !== updated && (
-        <p>
-          updated:{" "}
-          {updated.toLocaleTimeString([], {
-            hour: "2-digit",
-            minute: "2-digit",
-            hourCycle: "h23",
-          })}{" "}
-          -{" "}
-          {updated.toLocaleDateString("en-GB", {
-            day: "2-digit",
-            month: "2-digit",
-            year: "numeric",
-          })}
-        </p>
+      <div>
+        {created && (
+          <p>
+            {created.toLocaleDateString("en-GB", {
+              day: "2-digit",
+              month: "2-digit",
+              year: "numeric",
+            })}
+            {" ⎯ "}
+            {created.toLocaleTimeString([], {
+              hour: "2-digit",
+              minute: "2-digit",
+              hourCycle: "h23",
+            })}
+          </p>
+        )}
+      </div>
+    </div>
+  );
+};
+
+interface PostInfoWithCTAProps {
+  user: string;
+  isOwner: boolean;
+  post: TPost;
+}
+
+const PostInfoWithCTA = ({ user, isOwner, post }: PostInfoWithCTAProps) => {
+  const { id: postId, author, createdAt, updatedAt } = post;
+  const [isVisible, elementRef] = useIntersectionObserver();
+  return (
+    <div ref={elementRef}>
+      {isVisible && (
+        <div
+          className="flex items-center justify-between pt-4 pb-6"
+          style={{ ...postContentAnimation, animationDelay: "200ms" }}
+        >
+          <PostInfo author={author} created={createdAt} updated={updatedAt} />
+          {isOwner && <PostOperations postId={postId.toString()} user={user} />}
+        </div>
       )}
     </div>
   );
