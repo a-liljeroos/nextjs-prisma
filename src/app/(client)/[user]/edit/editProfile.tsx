@@ -8,9 +8,8 @@ import PageContainer from "@components/pageContainer/pageContainer";
 import ChangePassword from "./_components/changePassword";
 import ChangeBio from "./_components/changeBio";
 import ChangeUsername from "./_components/changeUsername";
+import GoBackButton from "@components/buttons/goBackButton";
 import ErrorMsg1 from "@components/spinner/errorMsg1";
-// icons
-import { IoCaretBackOutline } from "react-icons/io5";
 
 interface EditProfileProps {
   user: string;
@@ -22,16 +21,7 @@ const EditProfile = ({ user }: EditProfileProps) => {
   return (
     <PageContainer>
       <div className="p-4 mt-4 flex items-center">
-        <div role="button">
-          <IoCaretBackOutline
-            className="cursor-pointer"
-            size={25}
-            color="white"
-            onClick={() => {
-              window.history.back();
-            }}
-          />
-        </div>
+        <GoBackButton />
         <h1 className="ml-4 text-bold text-lg">Edit Profile</h1>
       </div>
       <div className="p-4 flex flex-col gap-2">
