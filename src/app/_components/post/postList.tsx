@@ -30,7 +30,7 @@ const PostList = ({ posts, name, animate = true }: PostListProps) => {
   const delayValues = getPoints({ a: 0.3, n: posts!.length }) || [];
 
   return (
-    <div className="posts-cont">
+    <div className="posts-cont h-full flex flex-col gap-5 rounded-lg">
       {posts && posts.length === 0 && (
         <div className="text-center p-24 select-none text-xl">No posts 🙄</div>
       )}
@@ -81,13 +81,13 @@ const ListItem = ({
   return (
     <li
       key={post.id}
-      className={`post-list-item flex items-center justify-between px-3 font-semibold 
+      className={`post-list-item flex items-center justify-between px-3 font-semibold transition backdrop-blur-sm
         ${animationClass} ${post.published ? "" : "post-list-unpublished"}`}
       style={{ animationDelay: `${delay}s` }}
     >
-      <Link href={`/${authorName}/${post.id}`}>
-        <div className="flex items-baseline">
-          <h2>{post.title}</h2>
+      <Link className="w-full" href={`/${authorName}/${post.id}`}>
+        <div className="flex items-baseline py-6 px-5 text-pretty">
+          <h2 className="post-list-item-title">{post.title}</h2>
         </div>
       </Link>
       {isOwner && (

@@ -1,34 +1,7 @@
-.posts-cont {
-  //background-color: rgb(36, 36, 36);
-  height: 100%;
-
-  display: flex;
-  flex-direction: column;
-  gap: 20px;
-  border-radius: 10px;
-  ul {
-    li {
-      transition: 150ms;
-      backdrop-filter: blur(2px);
-      font-weight: bold;
-      a {
-        div {
-          padding-block: 25px;
-          padding-inline: 20px;
-          width: 100%;
-          display: flex;
-          gap: 10px;
-          align-items: baseline;
-          h2 {
-            font-size: 1.1em;
-            text-wrap: pretty;
-            @media (max-width: 410px) {
-              font-size: 1em;
-            }
-          }
-        }
-      }
-    }
+.post-list-item-title {
+  font-size: 1.1em;
+  @media (max-width: 410px) {
+    font-size: 1em;
   }
 }
 
