@@ -8,8 +8,6 @@ import {
   getRandomArrayItem,
 } from "@functions";
 import { tailTornado } from "./tailTornado";
-// styles
-import "./Letter.scss";
 
 interface LetterProps {
   letter: string;

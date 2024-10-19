@@ -1,8 +1,9 @@
 "use client";
 import React from "react";
-
 // components
 import Letter from "./Letter";
+// styles
+import "./glitchText.scss";
 
 interface GlitchTextProps {
   text: string;

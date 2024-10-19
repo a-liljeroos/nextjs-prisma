@@ -1,3 +1,13 @@
+.glitch-text-container {
+  margin-left: 100px;
+  @media (max-width: 670px) {
+    margin-left: 70px;
+  }
+  @media (max-width: 600px) {
+    margin-left: 30px;
+  }
+}
+
 $font-size-s: 20px;
 $font-size-m: 25px;
 $font-size-l: 30px;

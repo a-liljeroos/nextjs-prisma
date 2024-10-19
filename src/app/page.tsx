@@ -8,7 +8,7 @@ export default function Home() {
   return (
     <PageContainer>
       <div className="pt-16">
-        <div className="pl-6">
+        <div className="glitch-text-container">
           <GlitchText text="  " />
           <GlitchText text="Hi       " />
           <GlitchText text="There... " />
