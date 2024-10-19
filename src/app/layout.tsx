@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import { SpeedInsights } from "@vercel/speed-insights/next";
 // auth
 import { auth } from "@serverAuth";
 import SessionProvider from "@components/SessionProvider/SessionProvider";
@@ -29,7 +30,10 @@ export default async function RootLayout({
     <html lang="en">
       <body className={mulish.className}>
         <SessionProvider session={session}>
-          <ClientLayout>{children}</ClientLayout>
+          <ClientLayout>
+            {children}
+            <SpeedInsights />
+          </ClientLayout>
         </SessionProvider>
       </body>
     </html>
