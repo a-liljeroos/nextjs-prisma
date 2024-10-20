@@ -208,6 +208,11 @@ export const getCommentsByUser = async (name: string) => {
     },
     select: {
       comments: {
+        where: {
+          post: {
+            published: true,
+          },
+        },
         select: {
           id: true,
           content: true,
