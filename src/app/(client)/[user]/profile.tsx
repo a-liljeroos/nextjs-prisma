@@ -13,7 +13,7 @@ import {
   ImageViewContextProvider,
 } from "@components/imagePreview/imagePreviewContext";
 // types
-import { ProfileFetch } from "@types";
+import { ProfileFetch, ProfileCommentFetch } from "@types";
 // components
 import { ImageView } from "@components/imagePreview/imagePreviewContext";
 import Comment from "@components/comments/commentList/comment";
@@ -153,64 +153,84 @@ const FetchComments = ({ profileInput }: FetchCommentsProps) => {
     );
   }
 
-  if (
-    isError ||
-    comments === null ||
-    comments === undefined ||
-    comments?.length === 0
-  ) {
+  if (isError || comments === null || comments === undefined) {
     return <ErrorMsg1 message="Failed to load comments." />;
   }
+
+  if (comments?.length === 0)
+    return (
+      <div className="p-2 pl-8 w-full h-40 flex items-center ">
+        The user have not made any comments.
+      </div>
+    );
 
   return (
     <div className="p-2">
       {!isLoading && (
-        <ul className="flex flex-col gap-2">
-          {comments.map((comment) => {
-            const extractedComment = {
-              id: comment.id,
-              content: comment.content,
-              createdAt: comment.createdAt,
-              contentHistory: comment.contentHistory,
-              author: { name: name, profile: { image: profile?.image } },
-            };
-            return (
-              <Comment
-                key={comment.id}
-                postId={comment.postId.toString()}
-                comment={extractedComment}
-                sessionName={name}
-                invalidateQuery={invalidateQueries}
-                postTitle={
-                  <>
-                    <div
-                      className="py-2 leading-tight"
-                      style={{ fontSize: 18 }}
-                    >
-                      <Link href={`/${comment.post.author.name}`}>
-                        <span className="py-2 font-bold text-backgroundSecondary">
-                          @{comment.post.author.name}{" "}
-                        </span>
-                      </Link>
-                      <span className="py-2 font-bold text-neutral-400">
-                        /{" "}
-                      </span>
-                      <Link
-                        href={`/${comment.post.author.name}/${comment.postId}`}
-                      >
-                        <span className="py-2 font-bold text-neutral-500 text-pretty">
-                          {comment.post.title}
-                        </span>
-                      </Link>
-                    </div>
-                    <hr className="border-neutral-700" />
-                  </>
-                }
-              />
-            );
-          })}
-        </ul>
+        <CommentList
+          comments={comments}
+          name={name}
+          profileImage={profile?.image}
+          invalidateQueries={invalidateQueries}
+        />
       )}
     </div>
+  );
+};
+
+// ------------------------------------------------------------
+
+interface CommentListProps {
+  comments: ProfileCommentFetch[];
+  name: string;
+  profileImage: string | null | undefined;
+  invalidateQueries: () => void;
+}
+
+const CommentList = ({
+  comments,
+  name,
+  profileImage,
+  invalidateQueries,
+}: CommentListProps) => {
+  return (
+    <ul className="flex flex-col gap-2">
+      {comments.map((comment) => {
+        const extractedComment = {
+          id: comment.id,
+          content: comment.content,
+          createdAt: comment.createdAt,
+          contentHistory: comment.contentHistory,
+          author: { name: name, profile: { image: profileImage } },
+        };
+        return (
+          <Comment
+            key={comment.id}
+            postId={comment.postId.toString()}
+            comment={extractedComment}
+            sessionName={name}
+            invalidateQuery={invalidateQueries}
+            postTitle={
+              <>
+                <div className="py-2 leading-tight" style={{ fontSize: 18 }}>
+                  <Link href={`/${comment.post.author.name}`}>
+                    <span className="py-2 font-bold text-backgroundSecondary">
+                      @{comment.post.author.name}{" "}
+                    </span>
+                  </Link>
+                  <span className="py-2 font-bold text-neutral-400">/ </span>
+                  <Link href={`/${comment.post.author.name}/${comment.postId}`}>
+                    <span className="py-2 font-bold text-neutral-500 text-pretty">
+                      {comment.post.title}
+                    </span>
+                  </Link>
+                </div>
+                <hr className="border-neutral-700" />
+              </>
+            }
+          />
+        );
+      })}
+    </ul>
   );
 };
