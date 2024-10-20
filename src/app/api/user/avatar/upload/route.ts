@@ -63,13 +63,22 @@ export async function POST(request: NextRequest) {
 
     const imgUrl = blob.url;
 
-    await prisma.profile.update({
+    await prisma.profile.upsert({
       where: {
         userId: userId.id,
       },
-      data: {
+      update: {
         image: imgUrl,
-      } as Prisma.ProfileUpdateInput,
+      },
+      create: {
+        user: {
+          connect: {
+            id: userId.id,
+          },
+        },
+        bio: null,
+        image: imgUrl,
+      } as Prisma.ProfileCreateInput,
     });
 
     revalidatePath(`/[user]`, "page");
