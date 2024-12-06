@@ -1,10 +1,27 @@
 import prisma, { Prisma } from "@prisma/prismaClient";
-import { Post, SearchResult, PostContent } from "@types";
+import { Post, SearchResult, DocSearchResult, PostContent } from "@types";
+import { apiRoutes } from "@/app/docs/endpoints";
 
 export const search = async (term: string): Promise<SearchResult> => {
   const posts = await searchPosts(term);
   const users = await searchUsers(term);
-  return { posts, users };
+  const docs = searchDocumentation(term);
+  return { posts, users, docs };
+};
+
+const searchDocumentation = (term: string): DocSearchResult[] => {
+  let docs: DocSearchResult[] = [];
+  const regex = /doc/i;
+  if (regex.test(term)) {
+    docs = [{ link: "/docs" }];
+  }
+  apiRoutes.forEach((route, i) => {
+    const splitRoute = route.split("/");
+    if (searchArrayWithRegex(splitRoute, term)) {
+      docs.push({ link: "/docs" + route });
+    }
+  });
+  return docs.sort((a, b) => a.link.localeCompare(b.link));
 };
 
 const searchUsers = async (term: string) => {
@@ -39,6 +56,12 @@ const searchPosts = async (term: string) => {
     return [];
   }
 };
+
+function searchArrayWithRegex(array: string[], searchTerm: string): boolean {
+  if (!searchTerm) return false;
+  const regex = new RegExp(searchTerm, "i");
+  return array.some((item) => regex.test(item));
+}
 
 const prunePost = (post: Post, term: string) => {
   term = term.toLowerCase();

@@ -1,0 +1,15 @@
+export const apiRoutes = [
+  "/api/post/postId",
+  "/api/post/edit/postId",
+  "/api/post/write",
+  "/api/post/comment/edit",
+  "/api/post/comment/write",
+  "/api/search",
+  "/api/user/avatar/upload",
+  "/api/user/login",
+  "/api/user/posts",
+  "/api/user/profile",
+  "/api/user/profile/update/bio",
+  "/api/user/profile/update/password",
+  "/api/user/profile/update/username",
+];

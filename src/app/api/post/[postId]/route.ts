@@ -62,7 +62,6 @@ export async function GET(
       ...post,
       author,
     };
-
     return NextResponse.json(response, { status: 200 });
   } catch (error) {
     console.error(error);

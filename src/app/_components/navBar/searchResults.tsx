@@ -77,6 +77,38 @@ const SearchResults = () => {
             })}
           </ResultContainer>
         )}
+        {results.docs.length > 0 && (
+          <ResultContainer header="">
+            <div>
+              <Link
+                onClick={deleteResults}
+                href={{
+                  pathname: "/docs",
+                }}
+              >
+                <h2 className="text-pretty text-xl pb-2 underline cursor-pointer">
+                  Documentation
+                </h2>
+              </Link>
+            </div>
+            {results.docs.map((doc, i) => {
+              return (
+                <ResultListItem key={i}>
+                  <Link
+                    onClick={deleteResults}
+                    href={{
+                      pathname: doc.link,
+                    }}
+                  >
+                    <div className=" w-full h-full p-2 text-black">
+                      {doc.link}
+                    </div>
+                  </Link>
+                </ResultListItem>
+              );
+            })}
+          </ResultContainer>
+        )}
       </div>
     </div>
   );

@@ -22,6 +22,7 @@
       "@actions": ["./src/app/_actions/actions.ts"],
       "@bcrypt/*": ["./src/app/_bcrypt/*"],
       "@components/*": ["./src/app/_components/*"],
+      "@docComponents/*": ["./src/app/docs/_docComponents/*"],
       "@errors/*": ["./src/app/_errors/*"],
       "@functions": ["./src/app/_functions/functions.ts"],
       "@clientFunctions": ["./src/app/_functions/clientFunctions.ts"],
