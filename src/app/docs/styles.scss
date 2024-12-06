@@ -1,0 +1,110 @@
+table {
+  @media (max-width: 450px) {
+    font-size: 13px;
+  }
+}
+
+.doc-code {
+  line-height: 1.5;
+  @media (max-width: 450px) {
+    font-size: 12px;
+    line-height: 1.3;
+  }
+}
+
+th {
+  @media (max-width: 450px) {
+    @apply sticky;
+  }
+}
+
+th,
+td {
+  @media (max-width: 450px) {
+    @apply px-0 py-0 text-sm;
+  }
+}
+
+.bg-gradient {
+  background: rgb(38, 38, 38);
+  background: -moz-linear-gradient(
+    132deg,
+    rgba(38, 38, 38, 1) 0%,
+    rgba(55, 55, 55, 1) 100%
+  );
+  background: -webkit-linear-gradient(
+    132deg,
+    rgba(38, 38, 38, 1) 0%,
+    rgba(55, 55, 55, 1) 100%
+  );
+  background: linear-gradient(
+    132deg,
+    rgba(38, 38, 38, 1) 0%,
+    rgba(55, 55, 55, 1) 100%
+  );
+  filter: progid:DXImageTransform.Microsoft.gradient(startColorstr="#262626",endColorstr="#373737",GradientType=1);
+}
+
+.noise {
+  background: linear-gradient(
+      132deg,
+      rgba(11, 11, 11, 0.775) 0%,
+      rgba(15, 15, 15, 0.773) 100%
+    ),
+    url(https://grainy-gradients.vercel.app/noise.svg);
+}
+
+.shift-right {
+  transition: 0.14s;
+  border-left: 0px solid rgba(199, 201, 80, 0.208);
+}
+
+.shift-right:hover {
+  @apply px-8;
+  border-left: 3px solid rgba(199, 201, 80, 0.208);
+  background: rgba(128, 128, 128, 0.258);
+  // previous and next siblings
+  & + .shift-right {
+    background: rgba(128, 128, 128, 0.048);
+  }
+  :has(+ &).shift-right {
+    background: rgba(128, 128, 128, 0.057);
+  }
+}
+
+#cac-button {
+  transition: 0.28s;
+}
+
+#cac-button:hover {
+  opacity: 1;
+  span {
+    user-select: none;
+  }
+  input {
+    cursor: pointer;
+    transform: scale(1.1);
+  }
+}
+
+@keyframes renderIn {
+  0% {
+    opacity: 0;
+  }
+  60% {
+    transform: translateX("-10px");
+    text-decoration: underline;
+    opacity: 1;
+  }
+  100% {
+    opacity: 1;
+    text-decoration: none;
+    transform: translateX(0);
+  }
+}
+
+#menu-board:hover {
+  #menu-highlight {
+    @apply bg-neutral-200/60;
+  }
+}

@@ -3,6 +3,7 @@ import { SearchResult } from "@types";
 const noResults: SearchResult = {
   posts: [],
   users: [],
+  docs: [],
 };
 
 const makeSearch = async (term: string): Promise<SearchResult | null> => {

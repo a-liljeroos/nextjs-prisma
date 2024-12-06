@@ -125,6 +125,63 @@ button[disabled] {
   color: rgb(212, 212, 212);
 }
 
+.transparent-button {
+  background-color: transparent;
+  border: none;
+  padding-inline: 0;
+  transition: 50ms;
+  transform: translateY(0px);
+  &:hover {
+    background-color: transparent;
+    border: none;
+  }
+  &:active {
+    background-color: transparent;
+    border: none;
+    transform: translateY(2px);
+  }
+}
+
+.pattern-bg {
+  --s: 30px; /* control the size*/
+  --c1: #585833;
+  --c2: #404132;
+  --_g: 90deg, #0000 0;
+  background: conic-gradient(from 135deg, var(--c1) var(--_g)) var(--s)
+      calc(var(--s) / 2),
+    conic-gradient(from 135deg, var(--c2) var(--_g)),
+    conic-gradient(from 135deg at 50% 0, var(--c1) var(--_g)) var(--c2);
+  background-size: calc(2 * var(--s)) var(--s);
+}
+
+.pattern-bg-shadow {
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  top: 0;
+
+  background: rgb(63, 63, 63);
+  background: -moz-linear-gradient(
+    0deg,
+    rgba(63, 63, 63, 0) 0%,
+    rgba(19, 19, 19, 0.3237410071942446) 83%,
+    rgba(18, 18, 18, 0.6786570743405276) 100%
+  );
+  background: -webkit-linear-gradient(
+    0deg,
+    rgba(63, 63, 63, 0) 0%,
+    rgba(19, 19, 19, 0.3237410071942446) 83%,
+    rgba(18, 18, 18, 0.6786570743405276) 100%
+  );
+  background: linear-gradient(
+    0deg,
+    rgba(63, 63, 63, 0) 0%,
+    rgba(19, 19, 19, 0.3237410071942446) 83%,
+    rgba(18, 18, 18, 0.6786570743405276) 100%
+  );
+  filter: progid:DXImageTransform.Microsoft.gradient(startColorstr="#3f3f3f",endColorstr="#121212",GradientType=1);
+}
+
 .fade-in {
   animation: fadeIn 0.2s ease-in-out;
 }
@@ -134,6 +191,20 @@ button[disabled] {
     opacity: 0;
   }
   to {
+    opacity: 1;
+  }
+}
+
+@keyframes slideIn {
+  0% {
+    transform: translateX(-10%) rotate(20deg);
+    opacity: 0;
+  }
+  40% {
+    opacity: 1;
+  }
+  100% {
+    transform: translateX(3px) rotate(0deg);
     opacity: 1;
   }
 }
