@@ -5,7 +5,7 @@ import { TcommentString } from "@types";
 import Docs from "@docComponents/docs";
 import Api from "@docComponents/api";
 
-export const WriteCommentDocs = () => {
+export const Page = () => {
   return (
     <Docs title="Write Comment">
       <Docs.Introduction>
@@ -67,4 +67,4 @@ export const WriteCommentDocs = () => {
   );
 };
 
-export default WriteCommentDocs;
+export default Page;
