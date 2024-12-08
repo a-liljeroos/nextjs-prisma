@@ -2,7 +2,7 @@ export const apiRoutes = [
   "/api/post/postId",
   "/api/post/edit/postId",
   "/api/post/write",
-  "/api/post/comment/edit",
+  "/api/post/comment/edit/commentId",
   "/api/post/comment/write",
   "/api/search",
   "/api/user/avatar/upload",

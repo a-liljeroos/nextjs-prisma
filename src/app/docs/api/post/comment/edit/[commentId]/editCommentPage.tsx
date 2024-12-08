@@ -5,11 +5,11 @@ import { TcommentString, TcommentContentHistoryString } from "@types";
 import Docs from "@docComponents/docs";
 import Api from "@docComponents/api";
 
-export const EditCommentDocs = ({ commentId }: { commentId: string }) => {
+export const EditCommentPage = ({ commentId }: { commentId: string }) => {
   return (
     <Docs title="Edit Comment">
       <Docs.Introduction>
-        <Api.Path path="/api/post/comment/edit" />
+        <Api.Path path="/api/post/comment/edit/[commentId]" />
         <Api.Parameter param={commentId} />
         <Api.Method method="POST" />
 
@@ -69,4 +69,4 @@ export const EditCommentDocs = ({ commentId }: { commentId: string }) => {
   );
 };
 
-export default EditCommentDocs;
+export default EditCommentPage;
