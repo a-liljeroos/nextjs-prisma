@@ -5,7 +5,7 @@
 import Docs from "@docComponents/docs";
 import Api from "@docComponents/api";
 
-export const UploadAvatarDocs = () => {
+const UploadAvatarDocs = () => {
   return (
     <Docs title="Upload Avatar">
       <Docs.Introduction>

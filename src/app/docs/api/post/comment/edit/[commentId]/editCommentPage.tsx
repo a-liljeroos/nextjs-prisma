@@ -5,7 +5,7 @@ import { TcommentString, TcommentContentHistoryString } from "@types";
 import Docs from "@docComponents/docs";
 import Api from "@docComponents/api";
 
-export const EditCommentPage = ({ commentId }: { commentId: string }) => {
+const EditCommentPage = ({ commentId }: { commentId: string }) => {
   return (
     <Docs title="Edit Comment">
       <Docs.Introduction>

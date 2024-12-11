@@ -5,7 +5,7 @@ import { TsearchResultString } from "@types";
 import Docs from "@docComponents/docs";
 import Api from "@docComponents/api";
 
-export const SearchDocs = () => {
+const SearchDocs = () => {
   return (
     <Docs title="Search">
       <Docs.Introduction>
