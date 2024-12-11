@@ -1,10 +1,9 @@
 "use client";
-
 // components
 import Docs from "@docComponents/docs";
 import Api from "@docComponents/api";
 
-export const LoginDocs = () => {
+const LoginDocs = () => {
   return (
     <Docs title="User Login">
       <Docs.Introduction>

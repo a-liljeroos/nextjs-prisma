@@ -9,7 +9,7 @@ import {
 import Docs from "@docComponents/docs";
 import Api from "@docComponents/api";
 
-export const EditPostDocs = ({ postId }: { postId: string }) => {
+const EditPostDocs = ({ postId }: { postId: string }) => {
   return (
     <Docs title="Edit post">
       <Docs.Introduction>
@@ -69,6 +69,8 @@ export const EditPostDocs = ({ postId }: { postId: string }) => {
     </Docs>
   );
 };
+
+export default EditPostDocs;
 
 const urlParams = [
   {

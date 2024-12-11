@@ -3,7 +3,7 @@
 import Docs from "@docComponents/docs";
 import Api from "@docComponents/api";
 
-export const UserPostsDocs = () => {
+const UserPostsDocs = () => {
   return (
     <Docs title="User Posts">
       <Docs.Introduction>

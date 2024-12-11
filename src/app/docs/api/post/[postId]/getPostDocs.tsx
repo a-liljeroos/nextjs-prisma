@@ -9,7 +9,7 @@ import {
 import Docs from "@docComponents/docs";
 import Api from "@docComponents/api";
 
-export const GetPostDocs = ({ postId }: { postId: string }) => {
+const GetPostDocs = ({ postId }: { postId: string }) => {
   return (
     <Docs title="Get post">
       <Docs.Introduction>
@@ -46,6 +46,8 @@ export const GetPostDocs = ({ postId }: { postId: string }) => {
     </Docs>
   );
 };
+
+export default GetPostDocs;
 
 const requestValues = [
   {
