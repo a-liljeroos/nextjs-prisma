@@ -7,6 +7,7 @@ import { PostContent, Post as TPost } from "@types";
 import { useIntersectionObserver } from "@clientFunctions";
 // components
 import CommentSection from "@components/comments/commentSection";
+import GoBackButton from "@components/buttons/goBackButton";
 import PostOperations from "@components/post/postOperations";
 import PageContainer from "@components/pageContainer/pageContainer";
 import Image from "next/image";
@@ -24,7 +25,7 @@ interface PostProps {
 
 const Post = ({ postId, user, isOwner, post }: PostProps) => {
   return (
-    <PageContainer>
+    <PageContainer backButton={true}>
       <div className="p-4">
         <DisplayPost post={post} />
         <PostInfoWithCTA user={user} isOwner={isOwner} post={post} />
