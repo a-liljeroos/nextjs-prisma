@@ -10,14 +10,11 @@ const GoBackButton = () => {
     <div
       role="button"
       className="cursor-pointer border-4 border-neutral-500 rounded-full hover:border-backgroundSecondary transition"
+      onClick={() => {
+        router.back();
+      }}
     >
-      <RxCaretLeft
-        size={25}
-        color="rgb(248, 248, 248)"
-        onClick={() => {
-          router.back();
-        }}
-      />
+      <RxCaretLeft size={25} color="rgb(248, 248, 248)" />
     </div>
   );
 };
