@@ -61,7 +61,7 @@ export const Avatar = ({
   };
 
   return (
-    <div className="relative">
+    <div className="relative rounded-full shadow-lg">
       <button
         type="button"
         className="profile-img-button"

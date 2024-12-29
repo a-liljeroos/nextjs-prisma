@@ -40,7 +40,7 @@ const Profile = ({ profile, isOwner }: ProfileProps) => {
   }
 
   return (
-    <PageContainer mainRef={mainRef}>
+    <PageContainer mainRef={mainRef} backButton={true}>
       <ImageViewContextProvider>
         <ImageView
           containerRef={mainRef}
@@ -58,7 +58,7 @@ const Profile = ({ profile, isOwner }: ProfileProps) => {
           isOwner={isOwner}
         />
         <div
-          className="profile-bio-cont bg-neutral-600"
+          className="profile-bio-cont bg-neutral-700"
           style={{ marginTop: -1 }}
         >
           <h2 className="text-backgroundSecondary text-lg text-pretty w-7/12 min-h-7">
