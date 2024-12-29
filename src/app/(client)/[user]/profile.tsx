@@ -180,6 +180,8 @@ const FetchComments = ({ profileInput }: FetchCommentsProps) => {
 
 // ------------------------------------------------------------
 
+import { useSession } from "next-auth/react";
+
 interface CommentListProps {
   comments: ProfileCommentFetch[];
   name: string;
@@ -193,6 +195,7 @@ const CommentList = ({
   profileImage,
   invalidateQueries,
 }: CommentListProps) => {
+  const { data: session } = useSession();
   return (
     <ul className="flex flex-col gap-2">
       {comments.map((comment) => {
@@ -208,7 +211,7 @@ const CommentList = ({
             key={comment.id}
             postId={comment.postId.toString()}
             comment={extractedComment}
-            sessionName={name}
+            sessionName={session?.user?.name}
             invalidateQuery={invalidateQueries}
             postTitle={
               <>
