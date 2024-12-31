@@ -21,7 +21,7 @@ const ProfileHeader = ({ profile, name, isOwner }: ProfileHeaderProps) => {
   const [avatarModal, setAvatarModal] = useState(false);
   const [blob, setBlob] = useState<string | null | undefined>(null);
   return (
-    <header className="bg-neutral-600 h-44">
+    <header className="bg-gradient-to-t from-neutral-700 to-transparent h-44">
       <div className="flex p-5">
         <Avatar
           isOwner={isOwner}
