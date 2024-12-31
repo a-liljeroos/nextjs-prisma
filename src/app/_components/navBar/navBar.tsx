@@ -103,6 +103,7 @@ const NavBarContent = ({ session }: NavBarContentProps) => {
                   href={{
                     pathname: `/${session.user?.name}`,
                   }}
+                  prefetch={true}
                 >
                   Profile
                 </Link>
