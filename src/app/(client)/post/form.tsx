@@ -7,14 +7,12 @@ import { useImageViewContext } from "@components/imagePreview/imagePreviewContex
 import { PostContent, PostContentType } from "@types";
 // icons
 import { AiOutlineEye } from "react-icons/ai";
-import { FiLock } from "react-icons/fi";
-import { FiUnlock } from "react-icons/fi";
 import { BsThreeDotsVertical } from "react-icons/bs";
-import { TiArrowSortedUp } from "react-icons/ti";
 import { TiArrowSortedDown } from "react-icons/ti";
-import { LuMove } from "react-icons/lu";
+import { TiArrowSortedUp } from "react-icons/ti";
 // components
 import Image from "next/image";
+import FormButtons from "./formButtons";
 // styles
 import "./form.scss";
 
@@ -24,17 +22,8 @@ interface PostFormProps {
 }
 
 const PostForm = ({ handleSubmit, published }: PostFormProps) => {
-  const {
-    addContentField,
-    submitLock,
-    setSubmitLock,
-    postTitle,
-    setPostTitle,
-    postContent,
-    updatePostContent,
-    showMoveButtons,
-    setShowMoveButtons,
-  } = useWritePostContext();
+  const { postTitle, setPostTitle, postContent, updatePostContent } =
+    useWritePostContext();
 
   const textareaRef = useRef<HTMLTextAreaElement>(null);
 
@@ -66,20 +55,6 @@ const PostForm = ({ handleSubmit, published }: PostFormProps) => {
         );
       }
     });
-  };
-
-  const AddFieldButton = ({ type }: { type: PostContentType }) => {
-    return (
-      <button
-        type="button"
-        className="px-1 plain-button"
-        onClick={() => {
-          addContentField(type);
-        }}
-      >
-        {type}
-      </button>
-    );
   };
 
   return (
@@ -114,51 +89,7 @@ const PostForm = ({ handleSubmit, published }: PostFormProps) => {
         }}
       />
       <DynamicFields postContent={postContent} />
-      <div className="controls flex flex-col gap-3">
-        <div className="flex flex-wrap gap-2 ">
-          <AddFieldButton type="Subheader" />
-          <AddFieldButton type="Paragraph" />
-          <AddFieldButton type="Image" />
-          <button
-            type="button"
-            className={`plain-button ${
-              showMoveButtons ? "bg-backgroundSecondary" : ""
-            }`}
-            onClick={() => setShowMoveButtons(!showMoveButtons)}
-          >
-            <LuMove color="white" size={20} />
-          </button>
-        </div>
-      </div>
-      <div className="flex gap-2 items-center">
-        <input
-          className="w-4 h-4"
-          name="published"
-          type="checkbox"
-          id="published"
-          defaultChecked={published || false}
-        />
-        <label htmlFor="published">Published</label>
-      </div>
-      <div className="flex gap-2 mt-4">
-        <button className="plain-button" type="submit" disabled={submitLock}>
-          Save
-        </button>
-        <button className="plain-button" type="button">
-          Preview
-        </button>
-        <button
-          className="plain-button"
-          type="button"
-          onClick={() => setSubmitLock(!submitLock)}
-        >
-          {submitLock ? (
-            <FiLock color="white" size={25} />
-          ) : (
-            <FiUnlock color="white" size={25} />
-          )}
-        </button>
-      </div>
+      <FormButtons published={published} />
     </form>
   );
 };
