@@ -5,6 +5,7 @@ import Link from "next/link";
 import { PostContent, Post as TPost } from "@types";
 // functions
 import { useIntersectionObserver } from "@clientFunctions";
+import { parseLinks } from "./_functions/parseLinks";
 // components
 import CommentSection from "@components/comments/commentSection";
 import GoBackButton from "@components/buttons/goBackButton";
@@ -143,6 +144,7 @@ const FirstParagraph = ({
   content: string;
   delay: number;
 }) => {
+  const contentWithLinks = parseLinks(content);
   return (
     <p
       className="pl-3 py-2 mt-6 mb-6 text-balance text-white border-l-4 border-neutral-700/70 shadow-l"
@@ -154,7 +156,14 @@ const FirstParagraph = ({
         animationDelay: `${delay}ms`,
       }}
     >
-      {content}
+      {contentWithLinks
+        ? contentWithLinks.map((item, index) => {
+            if (typeof item === "string") {
+              return <span key={index}>{item}</span>;
+            }
+            return item;
+          })
+        : content}
     </p>
   );
 };
@@ -177,6 +186,7 @@ const SubHeader = ({ content, delay }: { content: string; delay: number }) => {
 };
 
 const Paragraph = ({ content, delay }: { content: string; delay: number }) => {
+  const contentWithLinks = parseLinks(content);
   return (
     <p
       className="p-3 text-pretty"
@@ -188,7 +198,14 @@ const Paragraph = ({ content, delay }: { content: string; delay: number }) => {
         animationDelay: `${delay}ms`,
       }}
     >
-      {content}
+      {contentWithLinks
+        ? contentWithLinks.map((item, index) => {
+            if (typeof item === "string") {
+              return <span key={index}>{item}</span>;
+            }
+            return item;
+          })
+        : content}
     </p>
   );
 };
@@ -202,6 +219,7 @@ const ImageContent = ({
   description?: string;
   delay: number;
 }) => {
+  const descriptionWithLinks = parseLinks(description || "");
   return (
     <div
       className="p-3 my-2"
@@ -219,7 +237,19 @@ const ImageContent = ({
           layout="responsive"
           className="rounded-lg"
         />
-        {description && <p className="mt-2">{description}</p>}
+        {description && (
+          <p className="mt-2">
+            {" "}
+            {descriptionWithLinks
+              ? descriptionWithLinks.map((item, index) => {
+                  if (typeof item === "string") {
+                    return <span key={index}>{item}</span>;
+                  }
+                  return item;
+                })
+              : description}
+          </p>
+        )}
       </div>
     </div>
   );
