@@ -28,3 +28,11 @@ A blog site type full stack application.
 - [zod validation](https://zod.dev/)
 - [tailwind](https://tailwindcss.com/)
 - [TypeScirpt](https://www.typescriptlang.org/)
+
+#### Post form
+![post form](https://github.com/a-liljeroos/nextjs-prisma/blob/49b52c8f0863c7cfb99014e3f830b4a330ad9a0d/preview-images/form.PNG)
+
+#### Comment section
+![comment section](https://github.com/a-liljeroos/nextjs-prisma/blob/49b52c8f0863c7cfb99014e3f830b4a330ad9a0d/preview-images/comments.PNG)
+
+
