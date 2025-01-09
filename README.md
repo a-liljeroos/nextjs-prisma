@@ -1,8 +1,21 @@
 ## 🚀 NextJS - Prisma - PostgreSQL
 
-A simple application / website with credentials authentication powered by next-auth.
+A blog site type full stack application.
 
+- [Documentation](https://next-prisma-wine-pi.vercel.app/docs) - read API documentation
 - [Live preview](https://next-prisma-wine-pi.vercel.app/) - Deployed on vercel.com 🙏
+
+#### Some features
+
+- user registration with username & password
+- write/edit/delete posts with images and urls
+- write/edit/delete comments on posts
+- profile page with avatar, bio & edit options
+- change username, password, delete account
+- federated search in the navigation bar
+- randomized slot machine type welcome text animation
+- documentation framework / pages
+- responsive design
 
 ### 🧬 Using technologies
 
