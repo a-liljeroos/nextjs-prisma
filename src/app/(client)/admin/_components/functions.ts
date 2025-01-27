@@ -1,6 +1,8 @@
 "use server";
 // auth
 import { auth } from "@serverAuth";
+// types
+import { UserRoles } from "@types";
 // db
 import prisma from "@prisma/prismaClient";
 
@@ -20,7 +22,7 @@ export async function isAdmin() {
     if (!user) {
       return false;
     }
-    return user.role === "ADMIN";
+    return user.role === UserRoles.ADMIN;
   } catch (error) {
     console.error(error);
     return false;
