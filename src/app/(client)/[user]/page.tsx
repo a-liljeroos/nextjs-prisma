@@ -30,7 +30,7 @@ const ProfilePage = async ({ params }: { params: { user: string } }) => {
         id: true,
         name: true,
         email: isOwner,
-        role: isOwner,
+        role: true,
         createdAt: true,
         profile: {
           select: {
