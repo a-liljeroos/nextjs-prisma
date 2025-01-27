@@ -18,6 +18,10 @@ const AdminPage = ({ profile }: AdminPageProps) => {
           <Link href={"admin"} className="underline">
             Admin
           </Link>
+          /
+          <Link href={"admin/users"} className="underline">
+            Users
+          </Link>
         </section>
       </div>
     </PageContainer>
