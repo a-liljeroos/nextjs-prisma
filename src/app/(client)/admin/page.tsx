@@ -2,7 +2,7 @@
 import React from "react";
 import { redirect } from "next/navigation";
 // functions
-import { isAdmin } from "./_components/functions";
+import { isAdmin } from "@adminFunctions";
 // components
 import AdminPage from "./adminPage";
 

@@ -25,6 +25,7 @@
       "@docComponents/*": ["./src/app/docs/_docComponents/*"],
       "@errors/*": ["./src/app/_errors/*"],
       "@functions": ["./src/app/_functions/functions.ts"],
+      "@adminFunctions": ["./src/app/(client)/admin/_functions/functions.ts"],
       "@clientFunctions": ["./src/app/_functions/clientFunctions.ts"],
       "@crudFunctions": ["./src/app/_functions/crudFunctions.ts"],
       "@postFunctions": ["./src/app/_functions/postFunctions.ts"],
