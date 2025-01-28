@@ -44,7 +44,7 @@ const UsersTable = ({ users }: UsersProps) => {
         </tr>
       </thead>
       <tbody>
-        {users.length > 0 &&
+        {users.length > 0 ? (
           users.map((user) => (
             <tr key={user.id}>
               <td className="border px-4 py-2">{user.id}</td>
@@ -55,7 +55,14 @@ const UsersTable = ({ users }: UsersProps) => {
                 <ChangeRole role={user.role} id={user.id} />
               </td>
             </tr>
-          ))}
+          ))
+        ) : (
+          <tr>
+            <td className="border px-4 py-2" colSpan={3}>
+              No users
+            </td>
+          </tr>
+        )}
       </tbody>
     </table>
   );
