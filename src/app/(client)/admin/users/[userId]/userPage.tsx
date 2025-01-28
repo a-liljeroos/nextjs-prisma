@@ -40,30 +40,31 @@ const UserPage = ({ user }: UserPageProps) => {
   return (
     <PageContainer backButton={true}>
       <div className="p-2 pt-8">
-        <Link href={`/${user.name}`}>
-          <h1 className="text-2xl">{user.name}</h1>
-        </Link>
-        <div className="py-4 px-2 flex flex-col gap-2">
-          <p>
-            created:{" "}
-            {user.createdAt.toLocaleDateString("en-GB", {
-              hour: "2-digit",
-              minute: "2-digit",
-              second: "2-digit",
-              day: "2-digit",
-              month: "2-digit",
-              year: "numeric",
-            })}
-          </p>
-          <p>role: {user.role}</p>
-          <p>email: {user.email}</p>
-          <p className="overflow-x-auto text-ellipsis">
-            password: {user.password}
-          </p>
-        </div>
-        <section>
+        <section className="my-4">
+          <Link href={`/${user.name}`}>
+            <h1 className="text-2xl">{user.name}</h1>
+          </Link>
+          <div className="py-4 px-2 flex flex-col gap-2">
+            <p>
+              created:{" "}
+              {user.createdAt.toLocaleDateString("en-GB", {
+                hour: "2-digit",
+                minute: "2-digit",
+                second: "2-digit",
+                day: "2-digit",
+                month: "2-digit",
+                year: "numeric",
+              })}
+            </p>
+            <p>role: {user.role}</p>
+            <p>email: {user.email}</p>
+            <p className="overflow-x-auto text-ellipsis">
+              password: {user.password}
+            </p>
+          </div>
           <DeleteUser id={user.id} />
         </section>
+        <hr />
         <section className="my-4">
           <h2 className="text-lg">Posts</h2>
           <div className="p-2 overflow-x-auto">
@@ -106,6 +107,7 @@ const UserPage = ({ user }: UserPageProps) => {
             )}
           </div>
         </section>
+        <hr />
         <section className="my-4">
           <h2 className="text-lg">Comments</h2>
           <div className="p-2 overflow-x-auto">
@@ -148,6 +150,7 @@ const UserPage = ({ user }: UserPageProps) => {
             )}
           </div>
         </section>
+        <hr />
       </div>
     </PageContainer>
   );
