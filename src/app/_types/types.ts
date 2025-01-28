@@ -1,9 +1,16 @@
+export const UserRoles = {
+  ADMIN: "ADMIN",
+  USER: "USER",
+} as const;
+
+export type TUserRoles = (typeof UserRoles)[keyof typeof UserRoles];
+
 export type ProfileFetch = {
   name: string;
   id: number;
   email: string | null;
   createdAt: Date;
-  role: string;
+  role: TUserRoles;
   profile: {
     bio: string | null;
     image: string | null | undefined;
@@ -15,7 +22,7 @@ export const TprofileFetchString = `type ProfileFetch = {
     id: number;
     email: string | null;
     createdAt: Date;
-    role: string;
+    role: TUserRoles;
     profile: {
       bio: string | null;
       image: string | null | undefined;

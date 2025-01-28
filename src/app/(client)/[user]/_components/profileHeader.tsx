@@ -2,12 +2,14 @@
 import React, { useState } from "react";
 import Link from "next/link";
 // types
-import { ProfileFetch } from "@types";
+import { ProfileFetch, UserRoles } from "@types";
 // context
 import {
   useImageViewContext,
   ImageViewContextProvider,
 } from "@components/imagePreview/imagePreviewContext";
+// icons
+import { FaStar } from "react-icons/fa6";
 // components
 import { Avatar, AvatarOperations } from "./avatar";
 
@@ -35,12 +37,24 @@ const ProfileHeader = ({ profile, name, isOwner }: ProfileHeaderProps) => {
         <section className="profile-header-section">
           {!avatarModal ? (
             <div className="flex flex-col gap-2 fade-in">
-              <h1>{name}</h1>
+              <div className="flex gap-1">
+                <h1>{name}</h1>
+                {profile?.role === UserRoles.ADMIN && (
+                  <div>
+                    <FaStar size={15} color="rgb(199, 201, 80)" />
+                  </div>
+                )}
+              </div>
               {isOwner && (
-                <div>
+                <div className="flex flex-col">
                   <Link href={`/${name}/edit`}>
                     <button className="mt-2 plain-button">Edit Profile</button>
                   </Link>
+                  {profile?.role === UserRoles.ADMIN && (
+                    <Link href={`/admin`}>
+                      <button className="mt-2 plain-button">Admin</button>
+                    </Link>
+                  )}
                 </div>
               )}
             </div>

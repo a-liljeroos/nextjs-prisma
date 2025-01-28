@@ -47,6 +47,11 @@ model Profile {
   userId Int     @unique
 }
 
+enum Role {
+  ADMIN
+  USER
+}
+
 model User {
   id      Int      @id @default(autoincrement())
   comments Comment[]
@@ -56,5 +61,5 @@ model User {
   password String  @db.VarChar(255) @default("")
   posts   Post[]
   profile Profile?
-  role    String   @default("USER")
+  role    Role   @default(USER)
 }
