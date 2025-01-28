@@ -1,10 +1,14 @@
 "use client";
-import React from "react";
+import React, { useState } from "react";
 import Link from "next/link";
+import { useRouter } from "next/navigation";
+// functions
+import { deleteUser } from "@adminFunctions";
 // types
 import { TUserRoles } from "@types";
 // components
 import PageContainer from "@components/pageContainer/pageContainer";
+import toast from "react-hot-toast";
 
 interface UserPageProps {
   user: {
@@ -57,6 +61,9 @@ const UserPage = ({ user }: UserPageProps) => {
             password: {user.password}
           </p>
         </div>
+        <section>
+          <DeleteUser id={user.id} />
+        </section>
         <section className="my-4">
           <h2 className="text-lg">Posts</h2>
           <div className="p-2 overflow-x-auto">
@@ -147,3 +154,45 @@ const UserPage = ({ user }: UserPageProps) => {
 };
 
 export default UserPage;
+
+const DeleteUser = ({ id }: { id: number }) => {
+  const router = useRouter();
+  const [deleteModal, setDeleteModal] = useState(false);
+  return (
+    <div className="flex items-center gap-2 my-2">
+      <button
+        className="plain-button select-none"
+        onClick={() => setDeleteModal(!deleteModal)}
+      >
+        {deleteModal ? "Cancel" : "Delete User"}
+      </button>
+      {deleteModal && (
+        <>
+          <div className="bg-red-700/30 rounded-md">
+            <button
+              onClick={() => {
+                deleteUser(id)
+                  .then((res) => {
+                    if (res) {
+                      toast.success("User deleted.");
+                      router.push("/admin/users");
+                    }
+                  })
+                  .catch((error) => {
+                    console.error(error);
+                    toast.error("Failed to delete user.");
+                  });
+              }}
+              className="plain-button"
+            >
+              Delete
+            </button>
+          </div>
+          <p className="text-backgroundSecondary text-xs p-1 px-2 rounded underline bg-red-100/20">
+            Note: This cannot be reversed.
+          </p>
+        </>
+      )}
+    </div>
+  );
+};

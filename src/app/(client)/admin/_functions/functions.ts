@@ -114,3 +114,25 @@ export async function updateUserRole(id: number, role: TUserRoles) {
     return null;
   }
 }
+
+export async function deleteUser(id: number) {
+  const admin = await isAdmin();
+  if (admin === false) {
+    return null;
+  }
+  try {
+    const user = await prisma.user.delete({
+      where: { id: id },
+      select: {
+        id: true,
+        name: true,
+        email: true,
+        role: true,
+      },
+    });
+    return user;
+  } catch (error) {
+    console.error(error);
+    return null;
+  }
+}
