@@ -14,11 +14,8 @@ const AdminPage = ({ profile }: AdminPageProps) => {
   return (
     <PageContainer backButton={true}>
       <div className="p-2 pt-8">
-        <section className="p-2 border rounded-xl font-bold flex gap-2">
-          <Link href={"admin"} className="underline">
-            Admin
-          </Link>
-          /
+        <h1 className="text-2xl font-bold my-4 fade-in">Admin Pages 🔧</h1>
+        <section className="py-2 px-4 border-l font-bold flex gap-2">
           <Link href={"admin/users"} className="underline">
             Users
           </Link>
