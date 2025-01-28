@@ -3,7 +3,7 @@ import React, { useState } from "react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 // functions
-import { deleteUser } from "@adminFunctions";
+import { deleteUser, deletePost } from "@adminFunctions";
 // types
 import { TUserRoles } from "@types";
 // components
@@ -37,6 +37,22 @@ interface UserPageProps {
 }
 
 const UserPage = ({ user }: UserPageProps) => {
+  const router = useRouter();
+
+  const postDelete = (id: number) => {
+    deletePost(id)
+      .then((res) => {
+        if (res) {
+          toast.success("Post deleted.");
+          router.refresh();
+        }
+      })
+      .catch((error) => {
+        console.error(error);
+        toast.error("Failed to delete post.");
+      });
+  };
+
   return (
     <PageContainer backButton={true}>
       <div className="p-2 pt-8">
@@ -97,6 +113,9 @@ const UserPage = ({ user }: UserPageProps) => {
                           month: "2-digit",
                           year: "numeric",
                         })}
+                      </td>
+                      <td className="border px-4 py-2">
+                        <DeleteItem deleteFunc={() => postDelete(post.id)} />
                       </td>
                     </tr>
                   ))}
@@ -195,6 +214,39 @@ const DeleteUser = ({ id }: { id: number }) => {
             Note: This cannot be reversed.
           </p>
         </>
+      )}
+    </div>
+  );
+};
+
+import { FaRegTrashAlt } from "react-icons/fa";
+import { MdCancel } from "react-icons/md";
+
+interface DeleteItemProps {
+  deleteFunc: () => void | Promise<void>;
+}
+
+const DeleteItem = ({ deleteFunc }: DeleteItemProps) => {
+  const [deleteModal, setDeleteModal] = useState(false);
+  return (
+    <div className="flex flex-col gap-4">
+      <button
+        className="transparent-button"
+        onClick={() => setDeleteModal(!deleteModal)}
+      >
+        {deleteModal ? <MdCancel size={20} /> : <FaRegTrashAlt size={20} />}
+      </button>
+
+      {deleteModal && (
+        <button
+          className="transparent-button"
+          onClick={() => {
+            setDeleteModal(false);
+            deleteFunc();
+          }}
+        >
+          <FaRegTrashAlt size={20} color="ca4848" />
+        </button>
       )}
     </div>
   );
