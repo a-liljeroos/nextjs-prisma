@@ -3,7 +3,7 @@ import React, { useState } from "react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 // functions
-import { deleteUser, deletePost } from "@adminFunctions";
+import { deleteUser, deletePost, deleteComment } from "@adminFunctions";
 // types
 import { TUserRoles } from "@types";
 // components
@@ -50,6 +50,20 @@ const UserPage = ({ user }: UserPageProps) => {
       .catch((error) => {
         console.error(error);
         toast.error("Failed to delete post.");
+      });
+  };
+
+  const commentDelete = (id: number) => {
+    deleteComment(id)
+      .then((res) => {
+        if (res) {
+          toast.success("Comment deleted.");
+          router.refresh();
+        }
+      })
+      .catch((error) => {
+        console.error(error);
+        toast.error("Failed to delete comment.");
       });
   };
 
@@ -159,6 +173,11 @@ const UserPage = ({ user }: UserPageProps) => {
                         <Link href={`/${user.name}/${comment.post.id}`}>
                           {comment.post.title}
                         </Link>
+                      </td>
+                      <td className="border px-4 py-2">
+                        <DeleteItem
+                          deleteFunc={() => commentDelete(comment.id)}
+                        />
                       </td>
                     </tr>
                   ))}

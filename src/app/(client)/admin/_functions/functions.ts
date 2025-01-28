@@ -155,3 +155,22 @@ export async function deletePost(id: number) {
     throw new Error("Database deletion error");
   }
 }
+
+export async function deleteComment(id: number) {
+  const admin = await isAdmin();
+  if (admin === false) {
+    throw new Error("Unauthorized access");
+  }
+  try {
+    const comment = await prisma.comment.delete({
+      where: { id: id },
+      select: {
+        id: true,
+      },
+    });
+    return comment;
+  } catch (error) {
+    console.error(error);
+    throw new Error("Database deletion error");
+  }
+}
