@@ -45,6 +45,51 @@ export async function getUsers() {
   }
 }
 
+export async function getUser(id: number) {
+  const admin = await isAdmin();
+  if (admin === false) {
+    return null;
+  }
+  try {
+    const user = await prisma.user.findUnique({
+      where: { id: id },
+      select: {
+        id: true,
+        name: true,
+        email: true,
+        role: true,
+        createdAt: true,
+        password: true,
+        posts: {
+          select: {
+            id: true,
+            title: true,
+            published: true,
+            createdAt: true,
+          },
+        },
+        comments: {
+          select: {
+            id: true,
+            content: true,
+            createdAt: true,
+            post: {
+              select: {
+                id: true,
+                title: true,
+              },
+            },
+          },
+        },
+      },
+    });
+    return user;
+  } catch (error) {
+    console.error(error);
+    return null;
+  }
+}
+
 export async function updateUserRole(id: number, role: TUserRoles) {
   const admin = await isAdmin();
   if (admin === false) {
