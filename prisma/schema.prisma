@@ -98,6 +98,5 @@ model Message {
   senderId        Int       
   content         String        @db.Text
   messageType     MessageType   @default(TEXT)
-  isSeen          Boolean       @default(false)
   createdAt       DateTime      @default(now())
 }
