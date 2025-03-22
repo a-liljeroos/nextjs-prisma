@@ -13,6 +13,8 @@ import { useNavBarContext, NavBarContextProvider } from "./navBarContext";
 // components
 import Search from "@components/navBar/search";
 import SearchResults from "@components/navBar/searchResults";
+// icons
+import { PiEnvelope } from "react-icons/pi";
 // styles
 import "./navBar.scss";
 
@@ -54,6 +56,7 @@ const NavBarContent = ({ session }: NavBarContentProps) => {
   const registerRef = useRef<HTMLLIElement>(null);
   const signOutRef = useRef<HTMLLIElement>(null);
   const signInRef = useRef<HTMLLIElement>(null);
+  const directRef = useRef<HTMLLIElement>(null);
   const refs = [homeRef, profileRef, registerRef, signOutRef, signInRef];
 
   const visible = searchFocused ? "content-hidden" : "content-visible";
@@ -107,6 +110,25 @@ const NavBarContent = ({ session }: NavBarContentProps) => {
                 >
                   Profile
                 </Link>
+              </li>
+              <li
+                ref={directRef}
+                className={`${visible} p-2 cursor-pointer text-nowrap relative `}
+              >
+                <Link
+                  href={{
+                    pathname: `/direct`,
+                  }}
+                >
+                  <PiEnvelope
+                    size={28}
+                    color="rgb(49, 49, 49)"
+                    className="-translate-y-0.5"
+                  />
+                </Link>
+                {/\/direct/.test(pathname) && (
+                  <div className="border-b-2 border-background absolute w-4/6 bottom-2.5" />
+                )}
               </li>
             </>
           )}
