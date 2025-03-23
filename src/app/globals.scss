@@ -208,3 +208,18 @@ button[disabled] {
     opacity: 1;
   }
 }
+
+.openX {
+  animation: openX 0.2s ease-out forwards;
+}
+
+@keyframes openX {
+  0% {
+    transform: scaleX(0);
+    opacity: 0;
+  }
+  100% {
+    transform: scaleX(1);
+    opacity: 1;
+  }
+}

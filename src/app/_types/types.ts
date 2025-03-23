@@ -251,3 +251,34 @@ export const TprofileCommentFetchString = `type ProfileCommentFetch = {
 }`;
 
 // --------------------------------------------
+
+export type Participant = {
+  userId: number;
+  conversationId: number;
+  lastReadAt: Date | null;
+};
+
+export type ParticipantUser = {
+  name: string;
+  profile: {
+    image: string | null;
+  } | null;
+};
+
+export type ParticipantWithProfile = Participant & { user: ParticipantUser };
+
+export type Message = {
+  id: number;
+  conversationId: number;
+  senderId: number;
+  content: string;
+  messageType: "TEXT" | "IMAGE" | "VIDEO";
+  createdAt: Date;
+};
+
+export type TConversation = {
+  id: number;
+  createdAt: Date;
+  updatedAt: Date;
+  participants: ParticipantWithProfile[];
+};

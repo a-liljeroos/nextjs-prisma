@@ -4,6 +4,102 @@ import toast from "react-hot-toast";
 
 // =======================================
 
+/**
+ * url path for the default avatar in public folder
+ */
+
+export const defaultAvatar = "/default-avatar.png";
+
+// =======================================
+
+/**
+ * Formats a given date into a human-readable string.
+ *
+ * - If the date is today, it returns "today".
+ * - If the date is yesterday, it returns "yesterday".
+ * - Otherwise, it returns the date formatted as "DD/MM/YYYY" (en-GB locale).
+ *
+ * @param date - The input date to format.
+ * @returns A string representing the formatted date.
+ */
+
+export function dateOnly(date: Date) {
+  const now = new Date();
+
+  // Create date-only versions for comparisons.
+  const today = new Date(now.getFullYear(), now.getMonth(), now.getDate());
+  const yesterday = new Date(today);
+  yesterday.setDate(today.getDate() - 1);
+  const inputDate = new Date(
+    date.getFullYear(),
+    date.getMonth(),
+    date.getDate()
+  );
+
+  if (inputDate.getTime() === today.getTime()) {
+    return "today"; // Do not display a date label for today.
+  } else if (inputDate.getTime() === yesterday.getTime()) {
+    return "yesterday";
+  } else {
+    return date.toLocaleDateString("en-GB", {
+      day: "2-digit",
+      month: "2-digit",
+      year: "numeric",
+    });
+  }
+}
+
+/**
+ * Formats a given date into a human-readable string that includes the time and a date label.
+ *
+ * - If the date is today, it returns only the time in "HH:mm" format (24-hour clock).
+ * - If the date is yesterday, it appends "yesterday" to the time.
+ * - For other dates, it appends the date in "DD/MM/YYYY" format.
+ *
+ * @param date - The input date to format.
+ * @returns A formatted string combining the time and a date label.
+ */
+
+export function timeAndDate(date: Date) {
+  const now = new Date();
+
+  // Reset times for accurate date-only comparisons
+  const today = new Date(now.getFullYear(), now.getMonth(), now.getDate());
+  const yesterday = new Date(today);
+  yesterday.setDate(yesterday.getDate() - 1);
+  const inputDate = new Date(
+    date.getFullYear(),
+    date.getMonth(),
+    date.getDate()
+  );
+
+  const timeString = date.toLocaleTimeString([], {
+    hour: "2-digit",
+    minute: "2-digit",
+    hourCycle: "h23",
+  });
+
+  // If the date is today, return only the time
+  if (inputDate.getTime() === today.getTime()) {
+    return timeString;
+  }
+
+  let dateLabel;
+  if (inputDate.getTime() === yesterday.getTime()) {
+    dateLabel = "yesterday";
+  } else {
+    dateLabel = date.toLocaleDateString("en-GB", {
+      day: "2-digit",
+      month: "2-digit",
+      year: "numeric",
+    });
+  }
+
+  return `${timeString} ⎯ ${dateLabel}`;
+}
+
+// =======================================
+
 export function useWindowDimensions() {
   const hasWindow = typeof window !== "undefined";
 
