@@ -130,6 +130,23 @@ export const getUserId = async (name: string) => {
   return userId;
 };
 
+export const getClientUserId = async () => {
+  const session = await auth();
+  const user = session?.user;
+  if (!user || !user.name) {
+    throw new Error("User not found.");
+  }
+  const userId = await prisma.user.findUnique({
+    where: {
+      name: user.name,
+    },
+    select: {
+      id: true,
+    },
+  });
+  return userId;
+};
+
 export const getAuthor = async (authorId: number) => {
   const author = await prisma.user.findUnique({
     where: {
@@ -276,5 +293,37 @@ export const deleteComment = async (commentId: number) => {
   } catch (error) {
     console.error(error);
     return false;
+  }
+};
+
+/**
+ *  Check if a conversation exists between the current user and the candidate user.
+ * @param candidateUserId
+ * @returns conversationId or null
+ */
+
+export const conversationExist = async (candidateUserId: number) => {
+  try {
+    const session = await auth();
+    const currentUsername = session?.user?.name;
+    if (!currentUsername) {
+      throw new Error("User not found.");
+    }
+    const conversation = await prisma.conversation.findFirst({
+      where: {
+        AND: [
+          { participants: { some: { userId: candidateUserId } } },
+          { participants: { some: { user: { name: currentUsername } } } },
+        ],
+      },
+      select: { id: true },
+    });
+    if (!conversation) {
+      return null;
+    }
+    return conversation.id;
+  } catch (error) {
+    console.error(error);
+    return null;
   }
 };
